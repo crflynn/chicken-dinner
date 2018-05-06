@@ -1,0 +1,28 @@
+# Compiled python modules.
+__pycache__
+*.pyc
+
+# Setuptools distribution folder.
+/dist/
+
+# Python egg metadata, regenerated from source files by setuptools.
+/*.egg-info
+
+# tox testing
+.tox/
+
+# coverage
+.pytest_cache
+_cov
+.coverage
+
+# packaging
+MANIFEST
+build/
+
+# macosx
+.DS_Store
+
+# secret
+secret*
+design*
