@@ -42,6 +42,11 @@ map_to_map_name = {
     "Erangel_Main": "Erangel",
 }
 
+map_name_to_map = {
+    "Miramar": "Desert_Main",
+    "Erangel": "Erangel_Main",
+}
+
 true_false = {
     "false": False,
     "true": True,
