@@ -42,7 +42,7 @@ class PUBGCore(object):
         }
         if gzip:
             self.session.headers.update({
-                "Accept-Encoding", "gzip",
+                "Accept-Encoding": "gzip",
             })
         self.rate_limiter = RateLimiter(limit_call_count, limit_call_window)
 
@@ -50,9 +50,6 @@ class PUBGCore(object):
         if self.rate_limiter.window > 0:
             self.rate_limiter.call()
         response = self.session.get(url, params=params)
-        print(url, params)
-        print(response)
-        print(response.text)
         return response
 
     def match(self, shard, match_id):
@@ -89,5 +86,5 @@ class PUBGCore(object):
     def status(self):
         return self._get(STATUS_URL).json()
 
-    def telemetry(self, match_id):
-        pass
+    def telemetry(self, url):
+        return self._get(url).json()

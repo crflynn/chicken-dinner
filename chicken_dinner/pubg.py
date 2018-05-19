@@ -35,7 +35,7 @@ class PUBG(object):
         if season_id == "current":
             season_id = self.current_season(shard).id
         if isinstance(player_id, Player):
-            player_id = Player.id
+            player_id = player_id.id
         return PlayerSeason(self, shard, player_id, season_id)
 
     def player(self, shard, player_id):
@@ -49,3 +49,6 @@ class PUBG(object):
 
     def players_from_names(self, shard, player_names):
         return Players(self, shard, "player_names", player_names)
+
+    def telemetry(self, url):
+        return Telemetry(self, url)
