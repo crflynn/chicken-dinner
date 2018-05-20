@@ -26,4 +26,3 @@ build/
 # secret
 secret*
 design*
-*.json
