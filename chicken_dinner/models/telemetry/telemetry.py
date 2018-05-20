@@ -2,6 +2,7 @@
 import datetime
 
 from chicken_dinner.structures import CaseInsensitiveDict
+from chicken_dinner.visual.match import create_match_animation
 
 
 class Telemetry(object):
@@ -132,7 +133,7 @@ class Telemetry(object):
     def num_teams(self):
         return len(self.rosters())
 
-    def rankings(rank=None):
+    def rankings(self, rank=None):
         rankings = {}
         for event in self.telemetry[::-1]:
             if event["_T"] == "LogMatchEnd":
@@ -174,26 +175,29 @@ class Telemetry(object):
                 if location["elapsedTime"] > 0
             ]
         player_positions = {}
-        start = datetime.datetime.strptime(
-            locations[0]["_D"], "%Y-%m-%dT%H:%M:%S.%fZ"
-        )
         for location in locations:
             player = location["character"]["name"]
             if player not in player_positions:
                 player_positions[player] = []
             # (t, x, y, z)
-            timestamp = datetime.datetime.strptime(
-                location["_D"], "%Y-%m-%dT%H:%M:%S.%fZ"
-            )
-            dt = (timestamp - start).total_seconds()
             player_positions[player].append(
                 (
-                    dt,
+                    location["elapsedTime"],
                     location["character"]["location"]["x"],
                     location["character"]["location"]["y"],
                     location["character"]["location"]["z"],
                 )
             )
+        # cleanup
+        for player, positions in player_positions.items():
+            count = 0
+            last = positions[-1]
+            for pos in positions[::-1]:
+                if pos == last:
+                    count += 1
+                else:
+                    break
+            player_positions[player] = positions[:-count]
 
         return player_positions
 
@@ -246,3 +250,16 @@ class Telemetry(object):
             elapsed_time = event.get("elapsedTime", None)
             if elapsed_time is not None:
                 return elapsed_time
+
+    def started(self):
+        return self.telemetry[0]["_D"]
+
+    def killed(self):
+        deaths = self.filter_by("logplayerkill")
+        players_killed = []
+        for death in deaths:
+            players_killed.append(death["victim"]["name"])
+        return players_killed
+
+    def animation(self, filename, **kwargs):
+        return create_match_animation(self, filename, **kwargs)

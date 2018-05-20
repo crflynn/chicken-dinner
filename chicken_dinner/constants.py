@@ -47,6 +47,11 @@ map_name_to_map = {
     "Erangel": "Erangel_Main",
 }
 
+map_dimensions = {
+    "Desert_Main": [819200, 819200],
+    "Erangel_Main": [819200, 819200],
+}
+
 true_false = {
     "false": False,
     "true": True,
