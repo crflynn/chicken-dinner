@@ -51,3 +51,26 @@ true_false = {
     "false": False,
     "true": True,
 }
+
+BASE_URL = "https://api.playbattlegrounds.com"
+SHARD_URL = BASE_URL + "/shards/"
+STATUS_URL = BASE_URL + "/status"
+PLAYER_FILTERS = {
+    "player_ids": "playerIds",
+    "player_names": "playerNames",
+}
+SHARDS = [
+    "xbox-as",
+    "xbox-eu",
+    "xbox-na",
+    "xbox-oc",
+    "pc-krjp",
+    "pc-jp",
+    "pc-na",
+    "pc-eu",
+    "pc-oc",
+    "pc-kakao",
+    "pc-sea",
+    "pc-sa",
+    "pc-as",
+]

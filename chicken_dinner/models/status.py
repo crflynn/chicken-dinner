@@ -1,5 +1,5 @@
 """Status model."""
-from chicken_dinner.pubgapi.core import STATUS_URL
+from chicken_dinner.constants import STATUS_URL
 
 
 class Status(object):

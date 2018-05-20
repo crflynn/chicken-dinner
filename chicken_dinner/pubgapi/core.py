@@ -4,30 +4,11 @@ import requests
 from chicken_dinner.pubgapi.rate_limiter import DEFAULT_CALL_COUNT
 from chicken_dinner.pubgapi.rate_limiter import DEFAULT_CALL_WINDOW
 from chicken_dinner.pubgapi.rate_limiter import RateLimiter
-
-
-BASE_URL = "https://api.playbattlegrounds.com"
-SHARD_URL = BASE_URL + "/shards/"
-STATUS_URL = BASE_URL + "/status"
-PLAYER_FILTERS = {
-    "player_ids": "playerIds",
-    "player_names": "playerNames",
-}
-SHARDS = [
-    "xbox-as",
-    "xbox-eu",
-    "xbox-na",
-    "xbox-oc",
-    "pc-krjp",
-    "pc-jp",
-    "pc-na",
-    "pc-eu",
-    "pc-oc",
-    "pc-kakao",
-    "pc-sea",
-    "pc-sa",
-    "pc-as",
-]
+from chicken_dinner.constants import BASE_URL
+from chicken_dinner.constants import SHARD_URL
+from chicken_dinner.constants import STATUS_URL
+from chicken_dinner.constants import SHARDS
+from chicken_dinner.constants import PLAYER_FILTERS
 
 
 class PUBGCore(object):

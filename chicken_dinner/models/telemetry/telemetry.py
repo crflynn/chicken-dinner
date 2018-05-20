@@ -1,4 +1,6 @@
 """Telemetry class."""
+import datetime
+
 from chicken_dinner.structures import CaseInsensitiveDict
 
 
@@ -23,15 +25,15 @@ class Telemetry(object):
     # def response():
     #     return [element.to_json() for element in self.telemetry]
 
-    def filter_by(event_type=None): #, account_id=None, player_name=None):
+    def filter_by(self, event_type=None): #, account_id=None, player_name=None):
         events = None
         if event_type is not None:
             event_type = event_type.lower().replace("_", "")
             if not event_type.startswith("log"):
                 event_type = "log" + event_type
             events = [
-                event if event["_T"].lower() == event_type
-                for event in self.telemetry
+                event for event in self.telemetry
+                if event["_T"].lower() == event_type
             ]
         else:
             events = [event for event in self.telemetry]
@@ -116,12 +118,12 @@ class Telemetry(object):
         rosters = {}
         for event in self.telemetry[::-1]:
             if event["_T"] == "LogMatchEnd":
-                for player in event["characters"]
-                team = event["character"]["teamId"]
-                player = event["character"]["name"]
-                if team not in rosters:
-                    rosters[team] = []
-                rosters[team].append(player)
+                for player in event["characters"]:
+                    team = event["character"]["teamId"]
+                    player = event["character"]["name"]
+                    if team not in rosters:
+                        rosters[team] = []
+                    rosters[team].append(player)
         return rosters
 
     def rankings(rank=None):
@@ -162,8 +164,8 @@ class Telemetry(object):
         locations = self.filter_by("logplayerposition")
         if not include_pregame:
             locations = [
-                location if location["elapsedTime"] > 0
-                for location in locations
+                location for location in locations
+                if location["elapsedTime"] > 0
             ]
         player_positions = {}
         start = datetime.datetime.strptime(
@@ -188,3 +190,50 @@ class Telemetry(object):
             )
 
         return player_positions
+
+    def circle_positions(self):
+        game_states = self.filter_by("loggamestateperiodic")
+        circle_positions = {
+            "white": [],
+            "blue": [],
+            "red": [],
+        }
+        start = datetime.datetime.strptime(
+            game_states[0]["_D"], "%Y-%m-%dT%H:%M:%S.%fZ"
+        )
+        for game_state in game_states:
+            timestamp = datetime.datetime.strptime(
+                game_state["_D"], "%Y-%m-%dT%H:%M:%S.%fZ"
+            )
+            dt = (timestamp - start).total_seconds()
+            circle_positions["blue"].append(
+                (
+                    dt,
+                    game_state["gameState"]["safetyZonePosition"]["x"],
+                    game_state["gameState"]["safetyZonePosition"]["y"],
+                    game_state["gameState"]["safetyZoneRadius"],
+                )
+            )
+            circle_positions["red"].append(
+                (
+                    dt,
+                    game_state["gameState"]["redZonePosition"]["x"],
+                    game_state["gameState"]["redZonePosition"]["y"],
+                    game_state["gameState"]["redZoneRadius"],
+                )
+            )
+            circle_positions["white"].append(
+                (
+                    dt,
+                    game_state["gameState"]["poisonGasWarningPosition"]["x"],
+                    game_state["gameState"]["poisonGasWarningPosition"]["y"],
+                    game_state["gameState"]["poisonGasWarningRadius"],
+                )
+            )
+        return circle_positions
+
+    def match_length(self):
+        for event in self.telemetry[::-1]:
+            elapsed_time = event.get("elapsedTime", None)
+            if elapsed_time is not None:
+                return elapsed_time
