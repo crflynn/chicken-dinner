@@ -40,21 +40,21 @@ class Telemetry(object):
 
         return events
 
-    def accounts():
+    def accounts(self):
         accounts = []
         for event in self.telemetry:
             if event["_T"].lower() == "logplayerlogin":
                 accounts.append(event["accountId"])
         return accounts
 
-    def players():
+    def players(self):
         players = {}
         for event in self.telemetry:
             if event["_T"].lower() == "logplayercreate":
                 players[event["character"]["name"]] = event["character"]["accountId"]
         return players
 
-    def player_names():
+    def player_names(self):
         player_names = []
         for event in self.telemetry:
             if event["_T"].lower() == "logplayercreate":
@@ -114,17 +114,23 @@ class Telemetry(object):
                         damage[victim] += event["damage"]
         return damage
 
-    def rosters():
+    def rosters(self):
         rosters = {}
         for event in self.telemetry[::-1]:
             if event["_T"] == "LogMatchEnd":
                 for player in event["characters"]:
-                    team = event["character"]["teamId"]
-                    player = event["character"]["name"]
+                    team = player["teamId"]
+                    player_name = player["name"]
                     if team not in rosters:
                         rosters[team] = []
-                    rosters[team].append(player)
+                    rosters[team].append(player_name)
         return rosters
+
+    def num_players(self):
+        return len(self.player_names())
+
+    def num_teams(self):
+        return len(self.rosters())
 
     def rankings(rank=None):
         rankings = {}
@@ -139,7 +145,7 @@ class Telemetry(object):
             return rankings.get(rank, None)
         return rankings
 
-    def winner():
+    def winner(self):
         return self.rankings(rank=1)
 
     @classmethod
@@ -211,6 +217,7 @@ class Telemetry(object):
                     dt,
                     game_state["gameState"]["safetyZonePosition"]["x"],
                     game_state["gameState"]["safetyZonePosition"]["y"],
+                    game_state["gameState"]["safetyZonePosition"]["z"],
                     game_state["gameState"]["safetyZoneRadius"],
                 )
             )
@@ -219,6 +226,7 @@ class Telemetry(object):
                     dt,
                     game_state["gameState"]["redZonePosition"]["x"],
                     game_state["gameState"]["redZonePosition"]["y"],
+                    game_state["gameState"]["redZonePosition"]["z"],
                     game_state["gameState"]["redZoneRadius"],
                 )
             )
@@ -227,6 +235,7 @@ class Telemetry(object):
                     dt,
                     game_state["gameState"]["poisonGasWarningPosition"]["x"],
                     game_state["gameState"]["poisonGasWarningPosition"]["y"],
+                    game_state["gameState"]["poisonGasWarningPosition"]["z"],
                     game_state["gameState"]["poisonGasWarningRadius"],
                 )
             )
