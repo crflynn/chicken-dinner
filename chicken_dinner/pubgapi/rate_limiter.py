@@ -21,7 +21,6 @@ class RateLimiter(object):
 
     def __init__(self, calls=DEFAULT_CALL_COUNT, window=DEFAULT_CALL_WINDOW):
         """Instantiate the class."""
-        # print(calls, window)
         self.calls = calls
         self.window = window
         self.deq = deque()

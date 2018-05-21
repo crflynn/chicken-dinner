@@ -1,26 +1,43 @@
 """Single season model."""
-# flake8: noqa
 
 
 class Season(object):
-    """Season object."""
+    """Single season model.
 
-    def __init__(self, pubg, shard, season):
+    An object containing metadata about a PUBG season.
+
+    :param pubg: an instance of the class :class:`chicken_dinner.pubgapi.PUBG`
+    :param shard: the shard for the season response
+    :param data: the ``data`` payload from a season response
+    """
+
+    def __init__(self, pubg, shard, data):
         self._pubg = pubg
         self.shard = shard
-        self.data = season
+        self.data = data
 
     @property
     def id(self):
+        """The season id."""
         return self.data["id"]
 
     def is_current(self):
+        """Return True if this season is the current season."""
         return self.data["attributes"]["isCurrentSeason"]
 
     def is_offseason(self):
+        """Return True if this season is in the offseason."""
         return self.data["attributes"]["isOffseason"]
 
     def get_player(self, player_id):
-        if isinstance(season, Player):
+        """Get a player-season dataset for this season.
+
+        :param player_id: a player account id or instance of
+            :class:`chicken_dinner.models.Player` to retrieve data for this
+            season
+        :return: a :class:`chicken_dinner.models.PlayerSeason` for this
+            ``player_id``
+        """
+        if isinstance(player_id, Player):
             player_id = player_id.id
         return self._pubg.player_season(self.shard, player_id, self.id)

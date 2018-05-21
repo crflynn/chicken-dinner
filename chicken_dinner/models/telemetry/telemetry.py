@@ -2,7 +2,7 @@
 import datetime
 
 from chicken_dinner.structures import CaseInsensitiveDict
-from chicken_dinner.visual.match import create_match_animation
+from chicken_dinner.visual.playback import create_playback_animation
 
 
 class Telemetry(object):
@@ -261,5 +261,5 @@ class Telemetry(object):
             players_killed.append(death["victim"]["name"])
         return players_killed
 
-    def animation(self, filename, **kwargs):
-        return create_match_animation(self, filename, **kwargs)
+    def playback_animation(self, filename, **kwargs):
+        return create_playback_animation(self, filename, **kwargs)

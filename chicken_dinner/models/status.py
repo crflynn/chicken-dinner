@@ -3,7 +3,12 @@ from chicken_dinner.constants import STATUS_URL
 
 
 class Status(object):
-    """Status model."""
+    """Status model.
+
+    Contains information about the status of the PUBG API.
+
+    :param pubg: an instance of the :class:`chicken_dinner.pubgapi.PUBG` class
+    """
 
     def __init__(self, pubg):
         self._pubg = pubg
@@ -11,6 +16,7 @@ class Status(object):
 
     @property
     def data(self):
+        """The status data payload."""
         return self.response["data"]
 
     @property
@@ -30,6 +36,7 @@ class Status(object):
 
     @property
     def url(self):
+        """The status endpoint URL."""
         return STATUS_URL
 
     def refresh(self):

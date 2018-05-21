@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 import random
 
@@ -11,7 +12,7 @@ from chicken_dinner.constants import COLORS
 from chicken_dinner.constants import map_dimensions
 
 
-def create_match_animation(
+def create_playback_animation(
         telemetry,
         filename,
         labels=True,
@@ -43,6 +44,14 @@ def create_match_animation(
     map_name = telemetry.map_name()
     mapx, mapy = map_dimensions[map_name]
 
+    if highlight_winner:
+        if highlight_players is None:
+            highlight_players = []
+        for player in winner:
+            highlight_players.append(player)
+        highlight_players = list(set(highlight_players))
+
+
     if highlight_teams is not None:
         if highlight_players is None:
             highlight_players = []
@@ -54,12 +63,14 @@ def create_match_animation(
                     break
 
         highlight_players = list(set(highlight_players))
-        if label_highlights:
-            if label_players is None:
-                label_players = []
-            for player in highlight_players:
-                label_players.append(player)
-        label_players = list(set(label_players))
+
+    if label_highlights:
+        if label_players is None:
+            label_players = []
+        for player in highlight_players:
+            label_players.append(player)
+    label_players = list(set(label_players))
+
 
     team_colors = None
     if color_teams:
@@ -146,7 +157,7 @@ def create_match_animation(
 
     # Frame update function
     def update(frame):
-        print(frame)
+        logging.info("Processing frame {frame}".format(frame=frame))
         try:
             blue_circle.center = circles["blue"][frame][1], mapy - circles["blue"][frame][2]
             red_circle.center = circles["red"][frame][1], mapy - circles["red"][frame][2]
@@ -301,7 +312,9 @@ def create_match_animation(
     h5 = animation.to_html5_video()
 
     # Save to disk
+    logging.info("Saving file: {file}".format(file=filename))
     with open(filename, "w") as f:
         f.write(h5)
+    logging.info("Saved file.")
 
     return True

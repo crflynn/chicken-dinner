@@ -27,3 +27,6 @@ build/
 secret*
 design*
 match.html
+
+# docs
+docs/_build/

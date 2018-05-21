@@ -13,8 +13,9 @@ if __name__ == "__main__":
         zoom=True,
         labels=True,
         label_players=None,
-        highlight_teams=["shroud"],
+        # highlight_teams=["shroud"],
+        highlight_winner=True,
         size=5,
-        use_hi_res=True,
+        use_hi_res=False,
         color_teams=True
     )

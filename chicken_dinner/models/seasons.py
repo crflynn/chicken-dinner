@@ -1,10 +1,16 @@
 """Seasons model."""
-# flake8: noqa
 from .season import Season
 
 
 class Seasons(object):
-    """Seasons object."""
+    """Seasons model.
+
+    An iterable containing multiple instances of the class
+    :class:`chicken_dinner.models.Season`.
+
+    :param pubg: an instance of the class :class:`chicken_dinner.pubgapi.PUBG`
+    :param shard: the shard for the seasons response
+    """
 
     def __init__(self, pubg, shard):
         self._pubg = pubg
@@ -17,17 +23,31 @@ class Seasons(object):
 
     @property
     def data(self):
+        """The seasons' data payload."""
         return self.response["data"]
 
     @property
     def ids(self):
+        """Get a list of the season ids.
+
+        :return: a list of ``season_ids``
+        """
         return [season.id for season in self._seasons]
 
     @property
     def url(self):
+        """The url for the model response.
+
+        :return: a url string for the model's response
+        """
         return self.response["links"]["self"]
 
     def current(self):
+        """Get the current season.
+
+        :return: a :class:`chicken_dinner.models.Season` instance for the
+            current season
+        """
         for season in self._seasons[::-1]:
             if season.is_current():
                 return season

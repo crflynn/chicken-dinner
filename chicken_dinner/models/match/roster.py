@@ -1,7 +1,7 @@
 """Match roster model."""
 from .participant import Participant
 from chicken_dinner.util import camel_to_snake
-from chicken_dinner.models.constants import true_false
+from chicken_dinner.constants import true_false
 
 
 class Roster(object):
