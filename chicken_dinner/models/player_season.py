@@ -16,9 +16,9 @@ class PlayerSeason(object):
     An object containing data about a player's season data and stats.
 
     :param pubg: an instance of the class :class:`chicken_dinner.pubgapi.PUBG`
-    :param str shard: the shard for the seasons response
     :param str player_id: the player's account id
     :param str season_id: a season id for the player data
+    :param str shard: the shard for the seasons response
     """
 
     def __init__(self, pubg, player_id, season_id, shard=None):
@@ -26,6 +26,7 @@ class PlayerSeason(object):
         self._shard = shard
         self._player_id = player_id
         self._season_id = season_id
+        #: The API response for this object.
         self.response = self._pubg._core.player_season(
             player_id, season_id, shard
         )

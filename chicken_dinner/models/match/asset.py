@@ -7,7 +7,9 @@ class Asset(object):
     def __init__(self, pubg, match, data, shard=None):
         self._pubg = pubg
         self._shard = shard
+        #: The Match object for this asset
         self.match = match
+        #: The data payload associated with this asset
         self.data = data
 
     @property

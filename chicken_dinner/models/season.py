@@ -7,18 +7,19 @@ class Season(object):
     An object containing metadata about a PUBG season.
 
     :param pubg: an instance of the class :class:`chicken_dinner.pubgapi.PUBG`
-    :param shard: the shard for the season response
     :param data: the ``data`` payload from a season response
+    :param shard: the shard for the season response
     """
 
     def __init__(self, pubg, data, shard=None):
         self._pubg = pubg
         self._shard = shard
+        #: The data payload for this season
         self.data = data
 
     @property
     def shard(self):
-        """The shard for this player."""
+        """The shard for this season."""
         return self._shard or self._pubg.shard
 
     @property

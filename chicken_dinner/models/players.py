@@ -9,17 +9,20 @@ class Players(object):
     :class:`chicken_dinner.models.Player`.
 
     :param pubg: an instance of the class :class:`chicken_dinner.pubgapi.PUBG`
-    :param str shard: the shard for the seasons response
     :param str filter_type: either "player_ids" or "player_names"
     :param list filter_value: a list of ``player_ids`` or ``player_names``
         corresponding to the ``filter_type`` parameter
+    :param str shard: the shard for the seasons response
     """
 
     def __init__(self, pubg, filter_type, filter_value, shard=None):
         self._pubg = pubg
         self._shard = shard
+        #: The filter type for this Players query
         self.filter_type = filter_type
+        #: The filter value for this Players query
         self.filter_value = filter_value
+        #: The API response for this object
         self.response = self._pubg._core.players(
             filter_type, filter_value, shard
         )

@@ -7,14 +7,16 @@ class Samples(object):
     An object containing sample match data for a PUBG shard.
 
     :param pubg: an instance of the class :class:`chicken_dinner.pubgapi.PUBG`
-    :param shard: the shard for the samples response
     :param start: (optional) the timestamp from which samples are generated
+    :param shard: the shard for the samples response
     """
 
     def __init__(self, pubg, start=None, shard=None):
         self._pubg = pubg
         self._shard = shard
+        #: The start timestamp for this set of samples
         self.start = start
+        #: The API response for this object
         self.response = self._pubg._core.samples(start, shard)
 
     @property

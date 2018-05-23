@@ -17,7 +17,9 @@ class Match(object):
     def __init__(self, pubg, match_id, shard=None):
         self._pubg = pubg
         self._shard = shard
+        #: The match id for this match
         self.match_id = match_id
+        #: The API response for this object
         self.response = self._pubg._core.match(match_id, shard)
         self.roster_to_participant = {}
         self.participant_to_roster = {}
@@ -35,6 +37,7 @@ class Match(object):
             elif item["type"] == "asset":
                 self.asset = Asset(pubg, self, item, shard)
 
+        #: A list of Roster instances for this match
         self.rosters = [
             Roster(pubg, self, self.response["included"][idx], shard)
             for idx in rosters_idx
@@ -81,8 +84,13 @@ class Match(object):
         return map_to_map_name[self.data["attributes"]["mapName"]]
 
     @property
+    def map_id(self):
+        """The map id on which this match was played."""
+        return self.data["attributes"]["mapName"]
+
+    @property
     def participants(self):
-        """A list of player names who participated in this match."""
+        """A list of Participant instances for match participants."""
         return [
             participant for roster in self.rosters
             for participant in roster.participants
@@ -114,7 +122,11 @@ class Match(object):
         return self.asset.url
 
     def get_telemetry(self):
-        """Download match telemetry and create a Telemetry object instance."""
+        """Download match telemetry and create a Telemetry object instance.
+
+        :return: a :class:`chicken_dinner.models.telemetry.Telemetry` instance
+            for this match.
+        """
         return Telemetry(self._pubg, self.telemetry_url, shard=self.shard)
 
     @property
@@ -126,7 +138,7 @@ class Match(object):
 
     @property
     def winner(self):
-        """The player name(s) for the winner of this match."""
+        """The Roster instance for the winner of this match."""
         for roster in self.rosters:
             if roster.won == True:
                 return roster

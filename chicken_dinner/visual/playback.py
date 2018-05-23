@@ -35,9 +35,14 @@ def create_playback_animation(
     ):
     """Create a playback animation from telemetry data.
 
+    Using matplotlib's animation library, create an HTML5 animation saved to
+    disk relying on external ``ffmpeg`` library to create the video.
+
+    To view the animation, open the resulting file in your browser.
+
     :param telemetry: an Telemetry instance
     :param filename: a file to generate for the animation (default
-        animation.html)
+        "playback.html")
     :param bool labels: whether to label players by name
     :param int disable_labels_after: if passed, turns off player labels after
         number of seconds elapsed in game

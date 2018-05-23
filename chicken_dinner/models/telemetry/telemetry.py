@@ -18,15 +18,20 @@ class Telemetry(object):
         self._pubg = pubg
         self._shard = shard
         if telemetry_json is not None:
+            #: The API response associated with this object
             self.response = telemetry_json
         else:
             self.response = self._pubg._core.telemetry(url)
+        #: Case insensitive JSON representation of the telemetry response
         self.telemetry = CaseInsensitiveDict.from_json(self.response)
         if "common" in self.telemetry[-1]:
+            #: The platform for this game, "pc" or "xbox"
             self.platform = "pc"
         else:
             self.platform = "xbox"
+        #: Whether this game was played on PC
         self.is_pc = "pc" == self.platform
+        #: Whether this game was played on xbox
         self.is_xbox = "xbox" == self.platform
 
     @property
@@ -53,7 +58,7 @@ class Telemetry(object):
 
         return events
 
-    def accounts(self):
+    def player_ids(self):
         """The account ids of all players in the match."""
         accounts = []
         for event in self.telemetry:
@@ -265,6 +270,8 @@ class Telemetry(object):
         values being a list of tuples. Each tuple has five elements being
         (t, x, y, z, r) coordinates where t is taken from the "elapsedTime"
         field in the JSON response and r is the circle radius.
+
+        The circle colors are "white", "blue", and "red"
         """
         game_states = self.filter_by("loggamestateperiodic")
         circle_positions = {
@@ -328,11 +335,37 @@ class Telemetry(object):
             players_killed.append(death["victim"]["name"])
         return players_killed
 
-    def playback_animation(self, filename, **kwargs):
+    def playback_animation(self, filename="playback.html", **kwargs):
         """Generate a playback animation from the telemetry data.
 
         Generate an HTML5 animation using matplotlib and ffmpeg.
 
-        :param str filename: where to save the file
+        :param filename: a file to generate for the animation (default
+            "playback.html")
+        :param bool labels: whether to label players by name
+        :param int disable_labels_after: if passed, turns off player labels after
+            number of seconds elapsed in game
+        :param list label_players: a list of strings of player names that should
+            be labeled
+        :param bool dead_players: whether to mark dead players
+        :param list dead_player_labels: a list of strings of players that should
+            be labeled when dead
+        :param bool zoom: whether to zoom with the circles through the playback
+        :param float zoom_edge_buffer: how much to buffer the blue circle edge
+            when zooming
+        :param bool use_hi_res: whether to use the hi-res image, best to be set
+            to True when using zoom
+        :param bool color_teams: whether to color code different teams
+        :param list highlight_teams: a list of strings of player names whose teams
+            should be highlighted
+        :param list highlight_players: a list of strings of player names who
+            should be highlighted
+        :param str highlight_color: a color to use for highlights
+        :param bool highlight_winner: whether to highlight the winner(s)
+        :param bool label_highlights: whether to label the highlights
+        :param int end_frames: the number of extra end frames after game has been
+            completed
+        :param int size: the size of the resulting animation frame
+        :param int dpi: the dpi to use when processing the animation
         """
         return create_playback_animation(self, filename, **kwargs)

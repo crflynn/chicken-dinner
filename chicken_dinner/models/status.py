@@ -12,7 +12,8 @@ class Status(object):
 
     def __init__(self, pubg):
         self._pubg = pubg
-        self.refresh()
+        #: The API response for this object
+        self.response = self._pubg._core.status()
 
     @property
     def data(self):

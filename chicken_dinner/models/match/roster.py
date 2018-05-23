@@ -8,21 +8,24 @@ class Roster(object):
     """Roster model.
 
     :param pubg: a PUBG instance
-    :param str shard: the shard for the match associated with this roster
     :param match: the match object associated with this roster
     :param data: the data payload associated with this roster response object
+    :param str shard: the shard for the match associated with this roster
     """
-
 
     def __init__(self, pubg, match, data, shard=None):
         self._pubg = pubg
         self._shard = shard
+        #: The Match instance for this roster
         self.match = match
+        #: The data payload associated with this Roster
         self.data = data
+        #: A list of Participant instances for this roster
         self.participants = [
             Participant(pubg, match, self, match._participant_data[participant["id"]], shard)
             for participant in self.data["relationships"]["participants"]["data"]
         ]
+        #: Stats for this roster
         self.stats = {
             camel_to_snake(k): v
             for k, v in self.data["attributes"]["stats"].items()

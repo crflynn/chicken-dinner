@@ -15,9 +15,13 @@ class Participant(object):
     def __init__(self, pubg, match, roster, data, shard=None):
         self._pubg = pubg
         self._shard = shard
+        #: The Match instance associated with this participant
         self.match = match
+        #: The Roster instance associated with this participant
         self.roster = roster
+        #: The data payload associated with this participant
         self.data = data
+        #: Stats associated with this participant
         self.stats = {
             camel_to_snake(k): v
             for k, v in self.data["attributes"]["stats"].items()
@@ -79,6 +83,13 @@ class Participant(object):
         """Get a Player object for this participant."""
         return self._pubg.player(self.player_id, self.shard)
 
-    def get_current_season(self):
-        """Get a PlayerSeason object for this participant."""
-        return self._pubg.player_season(self.player_id, "current", self.shard)
+    def get_player_season(self, season_id):
+        """Get a PlayerSeason object for this participant.
+
+        :param str season_id: the season id for which to retreive data
+        """
+        return self._pubg.player_season(self.player_id, season_id, self.shard)
+
+    def get_current_player_season(self):
+        """Get a PlayerSeason object for the current season."""
+        return self.get_player_season("current")

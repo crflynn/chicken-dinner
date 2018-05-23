@@ -5,8 +5,8 @@ from .season import Season
 class Seasons(object):
     """Seasons model.
 
-    An iterable containing multiple instances of the class
-    :class:`chicken_dinner.models.Season`.
+    An iterable containing instances of the class
+    :class:`chicken_dinner.models.Season` for each season.
 
     :param pubg: an instance of the class :class:`chicken_dinner.pubgapi.PUBG`
     :param shard: the shard for the seasons response
@@ -15,6 +15,7 @@ class Seasons(object):
     def __init__(self, pubg, shard=None):
         self._pubg = pubg
         self._shard = shard
+        #: The API response for this object
         self.response = self._pubg._core.seasons(self.shard)
         self._seasons = [Season(self._pubg, s, self.shard) for s in self.data]
 
@@ -28,23 +29,17 @@ class Seasons(object):
 
     @property
     def data(self):
-        """The seasons' data payload."""
+        """The seasons' data payload from the response."""
         return self.response["data"]
 
     @property
     def ids(self):
-        """Get a list of the season ids.
-
-        :return: a list of ``season_ids``
-        """
+        """Get a list of the season ids."""
         return [season.id for season in self._seasons]
 
     @property
     def url(self):
-        """The url for the model response.
-
-        :return: a url string for the model's response
-        """
+        """The url for the model response."""
         return self.response["links"]["self"]
 
     def current(self):

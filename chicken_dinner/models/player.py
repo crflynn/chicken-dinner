@@ -9,15 +9,16 @@ class Player(object):
     An object encapsulating metadata about a PUBG player.
 
     :param pubg: an instance of the class :class:`chicken_dinner.pubgapi.PUBG`
-    :param str shard: the shard for the seasons response
     :param str player_id: the player's account id
     :param dict data: (optional) the data payload from the player response
+    :param str shard: the shard for the seasons response
     """
 
     def __init__(self, pubg, player_id, data=None, shard=None):
         self._pubg = pubg
         self._shard = shard
         if data is None:
+            #: The API response for this object.
             self.response = self._pubg._core.player(player_id, shard)
         else:
             self.response = {"data": data}
@@ -85,13 +86,13 @@ class Player(object):
         """Constructor for a player object with a data payload.
 
         :param pubg: an instance of the class :class:`chicken_dinner.pubgapi.PUBG`
-        :param str shard: the shard for the seasons response
         :param dict data: the data payload from the player response
+        :param str shard: the shard for the seasons response
         """
         return cls(pubg, data["id"], data=data, shard=shard)
 
     def get_season(self, season_id):
-        """Get a player-season response for a specific season.
+        """Get a season response for a specific season.
 
         :param season_id: a ``season_id`` or
             :class:`chicken_dinner.models.Season` object from which to get
