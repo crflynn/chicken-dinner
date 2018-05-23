@@ -15,18 +15,25 @@ class Players(object):
         corresponding to the ``filter_type`` parameter
     """
 
-    def __init__(self, pubg, shard, filter_type, filter_value):
+    def __init__(self, pubg, filter_type, filter_value, shard=None):
         self._pubg = pubg
-        self.shard = shard
+        self._shard = shard
         self.filter_type = filter_type
         self.filter_value = filter_value
         self.response = self._pubg._core.players(
             filter_type, filter_value, shard
         )
-        self._players = [Player.from_data(pubg, shard, p) for p in self.data]
+        self._players = [
+            Player.from_data(pubg, p, shard=shard) for p in self.data
+        ]
 
     def __getitem__(self, idx):
         return self._players[idx]
+
+    @property
+    def shard(self):
+        """The shard for this player."""
+        return self._shard or self._pubg.shard
 
     @property
     def data(self):
@@ -45,7 +52,7 @@ class Players(object):
 
     @property
     def url(self):
-        """The URL for the players response."""
+        """The URL for this players resource."""
         return self.response["links"]["self"]
 
     def ids_to_names(self):

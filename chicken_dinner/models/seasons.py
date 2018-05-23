@@ -12,14 +12,19 @@ class Seasons(object):
     :param shard: the shard for the seasons response
     """
 
-    def __init__(self, pubg, shard):
+    def __init__(self, pubg, shard=None):
         self._pubg = pubg
-        self.shard = shard
+        self._shard = shard
         self.response = self._pubg._core.seasons(self.shard)
-        self._seasons = [Season(self._pubg, self.shard, s) for s in self.data]
+        self._seasons = [Season(self._pubg, s, self.shard) for s in self.data]
 
     def __getitem__(self, idx):
         return self._seasons[idx]
+
+    @property
+    def shard(self):
+        """The shard for this player."""
+        return self._shard or self._pubg.shard
 
     @property
     def data(self):

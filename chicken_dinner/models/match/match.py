@@ -7,13 +7,18 @@ from chicken_dinner.constants import map_to_map_name
 
 
 class Match(object):
-    """Match object."""
+    """Match object.
 
-    def __init__(self, pubg, shard, match_id):
+    :param pubg: a PUBG instance
+    :param str match_id: the ``match_id`` for this match
+    :param str shard: the shard for this match
+    """
+
+    def __init__(self, pubg, match_id, shard=None):
         self._pubg = pubg
-        self.shard = shard
+        self._shard = shard
         self.match_id = match_id
-        self.response = self._pubg._core.match(shard, match_id)
+        self.response = self._pubg._core.match(match_id, shard)
         self.roster_to_participant = {}
         self.participant_to_roster = {}
         self._participant_data = {}
@@ -28,44 +33,56 @@ class Match(object):
             elif item["type"] == "participant":
                 self._participant_data[item["id"]] = item
             elif item["type"] == "asset":
-                self.asset = Asset(pubg, shard, item)
+                self.asset = Asset(pubg, self, item, shard)
 
         self.rosters = [
-            Roster(pubg, shard, self, self.response["included"][idx])
+            Roster(pubg, self, self.response["included"][idx], shard)
             for idx in rosters_idx
         ]
 
+    @property
+    def shard(self):
+        """The shard for this match."""
+        return self._shard or self._pubg.shard
 
     @property
     def asset_id(self):
+        """The asset id for this match."""
         return self.asset.id
 
     @property
     def data(self):
+        """The data payload from the response for this match."""
         return self.response["data"]
 
     @property
     def created_at(self):
+        """When the match was created."""
         return self.data["attributes"]["createdAt"]
 
     @property
     def duration(self):
+        """The duration of the match."""
         return self.data["attributes"]["duration"]
 
     @property
     def game_mode(self):
+        """The game mode for the match."""
         return game_mode_to_gp[self.data["attributes"]["gameMode"]]
 
     @property
     def id(self):
+        """The match id."""
         return self.data["id"]
 
     @property
     def map_name(self):
+        """The name of the map on which this match was played."""
         return map_to_map_name[self.data["attributes"]["mapName"]]
 
     @property
     def participants(self):
+        """A list of player names who participated in this match."""
         return [
             participant for roster in self.rosters
             for participant in roster.participants
@@ -73,35 +90,43 @@ class Match(object):
 
     @property
     def stats(self):
+        """Stats for this match."""
         return self.data["attributes"]["stats"]
 
     @property
     def tags(self):
+        """Tags associated with this match."""
         return self.data["attributes"]["tags"]
 
     @property
     def title_id(self):
+        """The title id associated with this match."""
         return self.data["attributes"]["titleId"]
 
     @property
     def url(self):
+        """The URL for this match resource."""
         return self.data["links"]["self"]
 
     @property
     def telemetry_url(self):
+        """The URL for the telemetry data for this match."""
         return self.asset.url
 
     def get_telemetry(self):
-        return Telemetry(self._pubg, self.shard, self._pubg._core.get(self.asset.url))
+        """Download match telemetry and create a Telemetry object instance."""
+        return Telemetry(self._pubg, self.telemetry_url, shard=self.shard)
 
     @property
     def rosters_player_names(self):
+        """A mapping of roster_ids to player names for this match."""
         return {
             roster.id: roster.player_names for roster in self.rosters
         }
 
     @property
     def winner(self):
+        """The player name(s) for the winner of this match."""
         for roster in self.rosters:
             if roster.won == True:
                 return roster

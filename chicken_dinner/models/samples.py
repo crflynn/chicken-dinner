@@ -11,11 +11,16 @@ class Samples(object):
     :param start: (optional) the timestamp from which samples are generated
     """
 
-    def __init__(self, pubg, shard, start=None):
+    def __init__(self, pubg, start=None, shard=None):
         self._pubg = pubg
-        self.shard = shard
+        self._shard = shard
         self.start = start
         self.response = self._pubg._core.samples(start, shard)
+
+    @property
+    def shard(self):
+        """The shard for this player."""
+        return self._shard or self._pubg.shard
 
     @property
     def data(self):
@@ -42,12 +47,12 @@ class Samples(object):
 
     @property
     def title_id(self):
-        """The title id for the samples."""
+        """The title id associated with the samples."""
         return self.data["attributes"]["titleId"]
 
     @property
     def url(self):
-        """A URL for the samples response."""
+        """A URL for this samples resource."""
         samples_url = SHARD_URL + self.shard + "/samples"
         if self.start is not None:
             return samples_url + "?filter[createdAt-start]=" + self.start

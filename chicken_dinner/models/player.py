@@ -14,13 +14,18 @@ class Player(object):
     :param dict data: (optional) the data payload from the player response
     """
 
-    def __init__(self, pubg, shard, player_id, data=None):
+    def __init__(self, pubg, player_id, data=None, shard=None):
         self._pubg = pubg
-        self.shard = shard
+        self._shard = shard
         if data is None:
             self.response = self._pubg._core.player(player_id, shard)
         else:
             self.response = {"data": data}
+
+    @property
+    def shard(self):
+        """The shard for this player."""
+        return self._shard or self._pubg.shard
 
     @property
     def created_at(self):
@@ -69,28 +74,29 @@ class Player(object):
 
     @property
     def url(self):
-        """The URL for the player response."""
+        """The URL for this player resource."""
         try:
             return self.data["links"]["self"]
         except IndexError as exc:
             return SHARD_URL + self.shard + "/players/" + str(self.id)
 
     @classmethod
-    def from_data(cls, pubg, shard, data):
+    def from_data(cls, pubg, data, shard=None):
         """Constructor for a player object with a data payload.
 
         :param pubg: an instance of the class :class:`chicken_dinner.pubgapi.PUBG`
         :param str shard: the shard for the seasons response
         :param dict data: the data payload from the player response
         """
-        return cls(pubg, shard, data["id"], data)
+        return cls(pubg, data["id"], data=data, shard=shard)
 
     def get_season(self, season_id):
         """Get a player-season response for a specific season.
 
         :param season_id: a ``season_id`` or
             :class:`chicken_dinner.models.Season` object from which to get
-            player-season data
+            player-season data. Use the string "current" to get the
+            current season.
         :return: a :class:`chicken_dinner.models.PlayerSeason` instance
         """
         if isinstance(season_id, Season):

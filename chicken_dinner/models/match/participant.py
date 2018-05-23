@@ -3,11 +3,18 @@ from chicken_dinner.util import camel_to_snake
 
 
 class Participant(object):
+    """Participant model.
 
+    :param pubg: a PUBG instance
+    :param match: the match object associated with this participant
+    :param roster: the roster object associated with this participant
+    :param data: the data payload from the participant response object
+    :param str shard: the shard for the match for this participant
+    """
 
-    def __init__(self, pubg, shard, match, roster, data):
+    def __init__(self, pubg, match, roster, data, shard=None):
         self._pubg = pubg
-        self.shard = shard
+        self._shard = shard
         self.match = match
         self.roster = roster
         self.data = data
@@ -17,19 +24,28 @@ class Participant(object):
         }
 
     @property
+    def shard(self):
+        """The shard for the match associated with this participant."""
+        return self._shard or self._pubg.shard
+
+    @property
     def id(self):
+        """The player's account id."""
         return self.data["id"]
 
     @property
     def participant_id(self):
+        """The match specific participant id of the player."""
         return self.data["id"]
 
     @property
     def player_id(self):
+        """The player's account id."""
         return self.data["attributes"]["stats"]["playerId"]
 
     @property
     def name(self):
+        """The player's in-game name."""
         return self.data["attributes"]["stats"]["name"]
 
     @property
@@ -38,22 +54,31 @@ class Participant(object):
 
     @property
     def teammates(self):
-        return [p for p in self.roster.participants if p.participant_id != self.participant_id]
+        """A list of participant objects for this player's teammates."""
+        return [
+            p for p in self.roster.participants
+            if p.participant_id != self.participant_id
+        ]
 
     @property
     def teammates_player_names(self):
+        """A list of player names for this player's teammates."""
         return [p.name for p in self.teammates]
 
     @property
     def teammates_player_ids(self):
+        """A list of player account ids for this player's teammates."""
         return [p.player_id for p in self.teammates]
 
     @property
     def won(self):
+        """Whether or not this player's team won the associated match."""
         return self.roster.won
 
     def get_player(self):
-        return self._pubg.player(self.shard, self.player_id)
+        """Get a Player object for this participant."""
+        return self._pubg.player(self.player_id, self.shard)
 
     def get_current_season(self):
-        return self._pubg.player_season(self.shard, self.player_id, "current")
+        """Get a PlayerSeason object for this participant."""
+        return self._pubg.player_season(self.player_id, "current", self.shard)

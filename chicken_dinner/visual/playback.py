@@ -14,7 +14,7 @@ from chicken_dinner.constants import map_dimensions
 
 def create_playback_animation(
         telemetry,
-        filename,
+        filename="playback.html",
         labels=True,
         disable_labels_after=None,
         label_players=None,
@@ -33,6 +33,37 @@ def create_playback_animation(
         size=5,
         dpi=200
     ):
+    """Create a playback animation from telemetry data.
+
+    :param telemetry: an Telemetry instance
+    :param filename: a file to generate for the animation (default
+        animation.html)
+    :param bool labels: whether to label players by name
+    :param int disable_labels_after: if passed, turns off player labels after
+        number of seconds elapsed in game
+    :param list label_players: a list of strings of player names that should
+        be labeled
+    :param bool dead_players: whether to mark dead players
+    :param list dead_player_labels: a list of strings of players that should
+        be labeled when dead
+    :param bool zoom: whether to zoom with the circles through the playback
+    :param float zoom_edge_buffer: how much to buffer the blue circle edge
+        when zooming
+    :param bool use_hi_res: whether to use the hi-res image, best to be set
+        to True when using zoom
+    :param bool color_teams: whether to color code different teams
+    :param list highlight_teams: a list of strings of player names whose teams
+        should be highlighted
+    :param list highlight_players: a list of strings of player names who
+        should be highlighted
+    :param str highlight_color: a color to use for highlights
+    :param bool highlight_winner: whether to highlight the winner(s)
+    :param bool label_highlights: whether to label the highlights
+    :param int end_frames: the number of extra end frames after game has been
+        completed
+    :param int size: the size of the resulting animation frame
+    :param int dpi: the dpi to use when processing the animation
+    """
 
     # Extract data
     positions = telemetry.player_positions()

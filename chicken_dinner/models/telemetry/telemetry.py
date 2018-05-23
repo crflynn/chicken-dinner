@@ -6,15 +6,22 @@ from chicken_dinner.visual.playback import create_playback_animation
 
 
 class Telemetry(object):
+    """Telemetry model.
 
-    def __init__(self, pubg, shard, url, telemetry_json=None):
+    :param pubg: a PUBG instance
+    :param str shard: the shard for the match associated with this telemetry
+    :param str url: the url for this telemetry
+    :param list telemetry_json: (optional) the raw telemetry response
+    """
+
+    def __init__(self, pubg, url, telemetry_json=None, shard=None):
         self._pubg = pubg
+        self._shard = shard
         if telemetry_json is not None:
             self.response = telemetry_json
         else:
             self.response = self._pubg._core.telemetry(url)
         self.telemetry = CaseInsensitiveDict.from_json(self.response)
-        self.shard = shard
         if "common" in self.telemetry[-1]:
             self.platform = "pc"
         else:
@@ -22,11 +29,16 @@ class Telemetry(object):
         self.is_pc = "pc" == self.platform
         self.is_xbox = "xbox" == self.platform
 
-    # @property
-    # def response():
-    #     return [element.to_json() for element in self.telemetry]
+    @property
+    def shard(self):
+        """The shard for this match."""
+        return self._shard or self._pubg.shard
 
     def filter_by(self, event_type=None): #, account_id=None, player_name=None):
+        """Get a list of telemetry events for a specific event type.
+
+        :param event_type: the event type to filter
+        """
         events = None
         if event_type is not None:
             event_type = event_type.lower().replace("_", "")
@@ -42,6 +54,7 @@ class Telemetry(object):
         return events
 
     def accounts(self):
+        """The account ids of all players in the match."""
         accounts = []
         for event in self.telemetry:
             if event["_T"].lower() == "logplayerlogin":
@@ -49,6 +62,7 @@ class Telemetry(object):
         return accounts
 
     def players(self):
+        """A map of player names to account ids for all players this match."""
         players = {}
         for event in self.telemetry:
             if event["_T"].lower() == "logplayercreate":
@@ -56,6 +70,7 @@ class Telemetry(object):
         return players
 
     def player_names(self):
+        """A list of player names for all match pariticipants."""
         player_names = []
         for event in self.telemetry:
             if event["_T"].lower() == "logplayercreate":
@@ -63,6 +78,14 @@ class Telemetry(object):
         return player_names
 
     def damage_done(player=None, combat_only=True, distribution=False):
+        """Damage done by each player in the match.
+
+        :param str player: a player name to filter on
+        :param bool combat_only: return only PvP damage (default True)
+        :param bool distribution: return a player to player distribution of
+            damage for the match if true. if false return total damage done
+            by each player. (default False)
+        """
         damage = {}
         for event in self.telemetry:
             if event["_T"].lower() == "logplayertakedamage":
@@ -89,6 +112,14 @@ class Telemetry(object):
         return damage
 
     def damage_taken(player=None, combat_only=True, distribution=False):
+        """Damage taken by each player in the match.
+
+        :param str player: a player name to filter on
+        :param bool combat_only: return only PvP damage (default True)
+        :param bool distribution: return a player to player distribution of
+            damage for the match if true. if false return total damage taken
+            by each player. (default False)
+        """
         damage = {}
         for event in self.telemetry:
             if event["_T"].lower() == "logplayertakedamage":
@@ -116,6 +147,7 @@ class Telemetry(object):
         return damage
 
     def rosters(self):
+        """The team rosters for the match."""
         rosters = {}
         for event in self.telemetry[::-1]:
             if event["_T"] == "LogMatchEnd":
@@ -128,12 +160,20 @@ class Telemetry(object):
         return rosters
 
     def num_players(self):
+        """Number of participants in this match."""
         return len(self.player_names())
 
     def num_teams(self):
+        """Number of teams (rosters) in this match."""
         return len(self.rosters())
 
     def rankings(self, rank=None):
+        """The rankings of each team from this match.
+
+        Returns a map of rank : [players] for each team in the match.
+
+        :param int rank: Get the specific rank number players for the match.
+        """
         rankings = {}
         for event in self.telemetry[::-1]:
             if event["_T"] == "LogMatchEnd":
@@ -147,13 +187,19 @@ class Telemetry(object):
         return rankings
 
     def winner(self):
+        """The winner(s) of the match.
+
+        Match winners as a list of player names.
+        """
         return self.rankings(rank=1)
 
     @classmethod
-    def from_json(cls, telemetry_json, pubg=None, shard=None, url=None):
-        return cls(pubg, shard, url, telemetry_json)
+    def from_json(cls, telemetry_json, pubg=None, url=None, shard=None):
+        """Construct an instance of telemetry from the json response."""
+        return cls(pubg, url, telemetry_json, shard)
 
     def map_name(self):
+        """Get the map name for PC matches. None if not PC."""
         common = self.telemetry[-1].get("common", None)
         if common is not None:
             return common["mapName"]
@@ -161,6 +207,7 @@ class Telemetry(object):
             return None
 
     def match_id(self):
+        """The match id for the match."""
         common = self.telemetry[-1].get("common", None)
         if common is not None:
             return common["matchId"]
@@ -168,6 +215,16 @@ class Telemetry(object):
             return None
 
     def player_positions(self, include_pregame=False):
+        """Get the player positions for the match.
+
+        Returns a dict of players positions with keys being player names and
+        values being a list of tuples. Each tuple has four elements being
+        (t, x, y, z) coordinates where t is taken from the "elapsedTime" field
+        in the JSON response.
+
+        :param bool include_pregame: (default False) whether to include
+            pre-game player positions.
+        """
         locations = self.filter_by("logplayerposition")
         if not include_pregame:
             locations = [
@@ -202,6 +259,13 @@ class Telemetry(object):
         return player_positions
 
     def circle_positions(self):
+        """Get the circle positions for the match.
+
+        Returns a dict of circle positions with keys being circle colors and
+        values being a list of tuples. Each tuple has five elements being
+        (t, x, y, z, r) coordinates where t is taken from the "elapsedTime"
+        field in the JSON response and r is the circle radius.
+        """
         game_states = self.filter_by("loggamestateperiodic")
         circle_positions = {
             "white": [],
@@ -246,15 +310,18 @@ class Telemetry(object):
         return circle_positions
 
     def match_length(self):
+        """The length of the match in seconds."""
         for event in self.telemetry[::-1]:
             elapsed_time = event.get("elapsedTime", None)
             if elapsed_time is not None:
                 return elapsed_time
 
     def started(self):
+        """A timestamp of when the match started."""
         return self.telemetry[0]["_D"]
 
     def killed(self):
+        """A list of player names of all killed players this match."""
         deaths = self.filter_by("logplayerkill")
         players_killed = []
         for death in deaths:
@@ -262,4 +329,10 @@ class Telemetry(object):
         return players_killed
 
     def playback_animation(self, filename, **kwargs):
+        """Generate a playback animation from the telemetry data.
+
+        Generate an HTML5 animation using matplotlib and ffmpeg.
+
+        :param str filename: where to save the file
+        """
         return create_playback_animation(self, filename, **kwargs)

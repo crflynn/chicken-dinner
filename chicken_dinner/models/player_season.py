@@ -10,8 +10,6 @@ from chicken_dinner.constants import matches_to_gp
 from chicken_dinner.util import camel_to_snake
 
 
-
-
 class PlayerSeason(object):
     """Player-season model.
 
@@ -23,12 +21,19 @@ class PlayerSeason(object):
     :param str season_id: a season id for the player data
     """
 
-    def __init__(self, pubg, shard, player_id, season_id):
+    def __init__(self, pubg, player_id, season_id, shard=None):
         self._pubg = pubg
-        self.shard = shard
+        self._shard = shard
         self._player_id = player_id
         self._season_id = season_id
-        self.response = self._pubg._core.player(player_id, season_id, shard)
+        self.response = self._pubg._core.player_season(
+            player_id, season_id, shard
+        )
+
+    @property
+    def shard(self):
+        """The shard for this player-season."""
+        return self._shard or self._pubg.shard
 
     @property
     def id(self):

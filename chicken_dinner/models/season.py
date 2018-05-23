@@ -11,10 +11,15 @@ class Season(object):
     :param data: the ``data`` payload from a season response
     """
 
-    def __init__(self, pubg, shard, data):
+    def __init__(self, pubg, data, shard=None):
         self._pubg = pubg
-        self.shard = shard
+        self._shard = shard
         self.data = data
+
+    @property
+    def shard(self):
+        """The shard for this player."""
+        return self._shard or self._pubg.shard
 
     @property
     def id(self):
@@ -40,4 +45,4 @@ class Season(object):
         """
         if isinstance(player_id, Player):
             player_id = player_id.id
-        return self._pubg.player_season(self.shard, player_id, self.id)
+        return self._pubg.player_season(player_id, self.id, self.shard)

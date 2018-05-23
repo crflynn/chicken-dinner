@@ -3,8 +3,10 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Chicken Dinner's documentation!
-==========================================
+Chicken Dinner
+==============
+
+Python PUBG JSON API Wrapper and playback visualizer.
 
 .. toctree::
     :maxdepth: 2
@@ -15,6 +17,7 @@ Welcome to Chicken Dinner's documentation!
     models/api
     models/match
     models/telemetry
+    visual/playback
     assets/maps
 
 
