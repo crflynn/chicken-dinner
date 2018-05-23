@@ -7,7 +7,14 @@ the ``PUBG`` object (and ``shard``) between themselves so that related objects
 can be generated from one another with method calls.
 
 Each of the API model objects also provides a ``response`` attribute that
-contains the deserialized JSON repsonse for the associated API call.
+contains the deserialized JSON response for the associated API call.
+
+Match Models
+------------
+
+See :doc:`/models/match` for detailed match-level models.
+
+
 
 Season Models
 -------------
@@ -36,21 +43,11 @@ Models related to player objects, stats, and metadata.
     :members:
 
 
-Match Models
-------------
-
-Models related to game matches and API samples.
-
-
-See :doc:`/models/match` for detailed match-level models.
-
-
-.. autoclass:: chicken_dinner.models.Samples
-    :members:
-
-
 Other Models
 ------------
 
 .. autoclass:: chicken_dinner.models.Status
+    :members:
+
+.. autoclass:: chicken_dinner.models.Samples
     :members:

@@ -67,7 +67,7 @@ class PUBG(object):
             corresponding to ``match_id``.
         """
         shard = shard or self.shard
-        return Match(self, shard, match_id)
+        return Match(self, match_id, shard)
 
     def samples(self, shard=None):
         """Get match samples.
@@ -116,7 +116,7 @@ class PUBG(object):
             season_id = self.current_season(shard).id
         if isinstance(player_id, Player):
             player_id = player_id.id
-        return PlayerSeason(self, shard, player_id, season_id)
+        return PlayerSeason(self, player_id, season_id, shard)
 
     def player(self, player_id, shard=None):
         """Get a player's metadata.
@@ -128,7 +128,7 @@ class PUBG(object):
             containing information about the player
         """
         shard = shard or self.shard
-        return Player(self, shard, player_id)
+        return Player(self, player_id, shard)
 
     def players(self, filter_type, filter_value, shard=None):
         """Get multiple players' metadata.
@@ -143,7 +143,7 @@ class PUBG(object):
             objects
         """
         shard = shard or self.shard
-        return Players(self, shard, filter_type, filter_value)
+        return Players(self, filter_type, filter_value, shard)
 
     def players_from_ids(self, player_ids, shard=None):
         """Get multiple players' metadata from a list of ``player_ids``.
@@ -156,7 +156,7 @@ class PUBG(object):
             objects
         """
         shard = shard or self.shard
-        return Players(self, shard, "player_ids", player_ids)
+        return Players(self, "player_ids", player_ids, shard)
 
     def players_from_names(self, player_names, shard=None):
         """Get multiple players' metadata from a list of ``player_names``.
@@ -169,7 +169,7 @@ class PUBG(object):
             objects
         """
         shard = shard or self.shard
-        return Players(self, shard, "player_names", player_names)
+        return Players(self, "player_names", player_names, shard)
 
     def telemetry(self, url):
         """Get a telemetry object from a telemetry url.

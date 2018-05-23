@@ -1,5 +1,5 @@
-PUBG API Interface
-==================
+PUBG API Model Factory
+======================
 
 The :class:`chicken_dinner.pubgapi.PUBG` class provides responses to the PUBG
 JSON API as type classes that represent the API objects, e.g. ``Season``,

@@ -95,7 +95,7 @@ class PlayerSeason(object):
                         camel_to_snake(stat): value for stat, value in stats.items()
                     }
         else:
-            group_perspective = group + "_" + perspective
+            group_perspective = group + "-" + perspective
             mode = gp_to_game_mode[group_perspective]
             stats = data[mode]
             new_stats = {
