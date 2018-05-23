@@ -67,8 +67,8 @@ class Players(object):
         return {p.name: p.id for p in self._players}
 
     def shared_matches(self):
-        """Return a set of matches in which all players participated.
+        """Return a list of matches in which all players participated.
 
-        :return: set of ``match_ids``
+        :return: list of ``match_ids``
         """
-        return set.intersection(*[set(p.match_ids) for p in self._players])
+        return list(set.intersection(*[set(p.match_ids) for p in self._players]))

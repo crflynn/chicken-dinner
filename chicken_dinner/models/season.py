@@ -1,4 +1,5 @@
 """Single season model."""
+import chicken_dinner.models.player
 
 
 class Season(object):
@@ -44,6 +45,6 @@ class Season(object):
         :return: a :class:`chicken_dinner.models.PlayerSeason` for this
             ``player_id``
         """
-        if isinstance(player_id, Player):
+        if isinstance(player_id, chicken_dinner.models.player.Player):
             player_id = player_id.id
         return self._pubg.player_season(player_id, self.id, self.shard)
