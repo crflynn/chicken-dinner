@@ -323,6 +323,39 @@ class Telemetry(object):
             )
         return circle_positions
 
+    def care_package_positions(self, land=True):
+        """Get the crate positions for the match.
+
+        Returns the crate positions for a match as a list of tuples.
+        Each tuple has four elements being
+        (t, x, y, z) coordinates where t is taken from the "elapsedTime"
+        field in the JSON response.
+        """
+        start = datetime.datetime.strptime(
+            self.filter_by("logmatchstart")[0]["_D"], "%Y-%m-%dT%H:%M:%S.%fZ"
+        )
+
+        if land:
+            care_package_spawns = self.filter_by("logcarepackageland")
+        else:
+            care_package_spawns = self.filter_by("logcarepackagespawn")
+
+        care_package_positions = []
+        for care_package in care_package_spawns:
+            package_time = datetime.datetime.strptime(
+                care_package["_D"], "%Y-%m-%dT%H:%M:%S.%fZ"
+            )
+            time_elapsed = (package_time - start).total_seconds()
+            care_package_positions.append(
+                (
+                    time_elapsed,
+                    care_package["itemPackage"]["location"]["x"],
+                    care_package["itemPackage"]["location"]["y"],
+                    care_package["itemPackage"]["location"]["z"],
+                )
+            )
+        return care_package_positions
+
     def match_length(self):
         """The length of the match in seconds."""
         for event in self.telemetry[::-1]:

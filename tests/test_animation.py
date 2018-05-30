@@ -1,6 +1,10 @@
 import json
+import logging
 
 from chicken_dinner.models.telemetry import Telemetry
+
+logger = logging.getLogger()
+logger.setLevel("INFO")
 
 if __name__ == "__main__":
     # Load temp
@@ -15,6 +19,6 @@ if __name__ == "__main__":
         # highlight_teams=["shroud"],
         highlight_winner=True,
         size=4,
-        use_hi_res=True,
+        use_hi_res=False,
         color_teams=True
     )

@@ -7,6 +7,8 @@ import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 from matplotlib import patheffects
 from matplotlib.animation import FuncAnimation
+from matplotlib.offsetbox import AnnotationBbox
+from matplotlib.offsetbox import OffsetImage
 
 from chicken_dinner.constants import COLORS
 from chicken_dinner.constants import map_dimensions
@@ -29,6 +31,7 @@ def create_playback_animation(
         highlight_color="#FFFF00",
         highlight_winner=False,
         label_highlights=True,
+        care_packages=True,
         end_frames=20,
         size=5,
         dpi=200
@@ -64,6 +67,7 @@ def create_playback_animation(
     :param str highlight_color: a color to use for highlights
     :param bool highlight_winner: whether to highlight the winner(s)
     :param bool label_highlights: whether to label the highlights
+    :param bool care_packages: whether to show care packages
     :param int end_frames: the number of extra end frames after game has been
         completed
     :param int size: the size of the resulting animation frame
@@ -77,6 +81,8 @@ def create_playback_animation(
     winner = telemetry.winner()
     killed = telemetry.killed()
     rosters = telemetry.rosters()
+    # package_spawns = telemetry.care_package_positions(land=False)
+    package_lands = telemetry.care_package_positions(land=True)
     map_name = telemetry.map_name()
     mapx, mapy = map_dimensions[map_name]
 
@@ -165,7 +171,9 @@ def create_playback_animation(
 
     blue_circle = plt.Circle((0, 0), 0, edgecolor="b", linewidth=1, fill=False)
     white_circle = plt.Circle((0, 0), 0, edgecolor="w", linewidth=1, fill=False)
-    red_circle = plt.Circle((0, 0), 0, color="r", edgecolor=None, fill=True, alpha=0.3)
+    red_circle = plt.Circle((0, 0), 0, color="r", edgecolor=None, lw=0, fill=True, alpha=0.3)
+
+    care_package_lands, = ax.plot(-10000, -10000, marker="s", c="r", markerfacecoloralt="b", fillstyle="bottom", mec="k", markeredgewidth=0.25, markersize=5, lw=0)
 
     ax.add_patch(blue_circle)
     ax.add_patch(white_circle)
@@ -189,6 +197,8 @@ def create_playback_animation(
                 updates = players, deaths, highlights, highlights_deaths, blue_circle, red_circle, white_circle
             else:
                 updates = players, deaths, blue_circle, red_circle, white_circle
+        if care_packages:
+            updates = *updates, care_package_lands
         return updates
 
     # Frame update function
@@ -247,6 +257,8 @@ def create_playback_animation(
         deaths_y = []
         highlights_deaths_x = []
         highlights_deaths_y = []
+        care_package_lands_x = []
+        care_package_lands_y = []
 
         if color_teams:
             marker_colors = []
@@ -255,6 +267,7 @@ def create_playback_animation(
             marker_colors = "w"
             death_marker_colors = "r"
 
+        t = 0
         for player, pos in positions.items():
             try:
                 # This ensures the alive winner(s) stay on the map at the end.
@@ -272,6 +285,9 @@ def create_playback_animation(
                 else:
                     positions_x.append(pos[fidx][1])
                     positions_y.append(mapy - pos[fidx][2])
+                    # Set colors
+                    if color_teams:
+                        marker_colors.append(team_colors[player])
 
                 # Update labels
                 if labels and player in label_players:
@@ -280,9 +296,11 @@ def create_playback_animation(
                     else:
                         name_labels[player].set_position((pos[fidx][1] + 10000 * xwidth/mapx, mapy - pos[fidx][2] - 10000 * ywidth/mapy))
 
-                # Set colors
-                if color_teams:
-                    marker_colors.append(team_colors[player])
+                t = max([t, pos[fidx][0]])
+                for package in package_lands:
+                    if package[0] < t:
+                        care_package_lands_x.append(package[1])
+                        care_package_lands_y.append(mapy - package[2])
             except IndexError:
                 # Set death markers
                 if player in highlight_players:
@@ -325,6 +343,9 @@ def create_playback_animation(
             if len(highlight_death_offsets) > 0:
                 highlights_deaths.set_offsets(highlight_death_offsets)
 
+        if len(care_package_lands_x) > 0:
+            care_package_lands.set_data(care_package_lands_x, care_package_lands_y)
+
         if labels:
             if highlight_players or highlight_teams:
                 updates = players, deaths, highlights, highlights_deaths, blue_circle, red_circle, white_circle, *tuple(name_labels.values())
@@ -335,6 +356,8 @@ def create_playback_animation(
                 updates = players, deaths, highlights, highlights_deaths, blue_circle, red_circle, white_circle
             else:
                 updates = players, deaths, blue_circle, red_circle, white_circle
+        if care_packages:
+            updates = *updates, care_package_lands
         return updates
 
     # Create the animation
