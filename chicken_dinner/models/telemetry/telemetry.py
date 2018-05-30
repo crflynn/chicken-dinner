@@ -403,6 +403,7 @@ class Telemetry(object):
         :param str highlight_color: a color to use for highlights
         :param bool highlight_winner: whether to highlight the winner(s)
         :param bool label_highlights: whether to label the highlights
+        :param bool care_packages: whether to show care packages
         :param int end_frames: the number of extra end frames after game has been
             completed
         :param int size: the size of the resulting animation frame

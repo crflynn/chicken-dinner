@@ -12,6 +12,13 @@ To install using pip:
 
     pip install chicken-dinner
 
+To use the playback visualization you will also need ffmpeg. You can install
+on Mac OSX using brew.
+
+.. code-block:: bash
+
+    brew install ffmpeg
+
 Usage
 -----
 
