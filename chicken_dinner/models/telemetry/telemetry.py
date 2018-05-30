@@ -203,6 +203,13 @@ class Telemetry(object):
         """Construct an instance of telemetry from the json response."""
         return cls(pubg, url, telemetry_json, shard)
 
+    @classmethod
+    def from_match_id(cls, match_id, pubg, shard=None):
+        """Construct an instance of telemetry from a match id."""
+        match = pubg.match(match_id, shard)
+        url = match.telemetry_url()
+        return cls(pubg, url, shard=shard)
+
     def map_name(self):
         """Get the map name for PC matches. None if not PC."""
         common = self.telemetry[-1].get("common", None)
