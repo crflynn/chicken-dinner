@@ -6,12 +6,16 @@ import random
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 from matplotlib import patheffects
+from matplotlib import rc
 from matplotlib.animation import FuncAnimation
 from matplotlib.offsetbox import AnnotationBbox
 from matplotlib.offsetbox import OffsetImage
 
 from chicken_dinner.constants import COLORS
 from chicken_dinner.constants import map_dimensions
+
+
+rc("animation", embed_limit=100)
 
 
 def create_playback_animation(
@@ -34,7 +38,9 @@ def create_playback_animation(
         care_packages=True,
         end_frames=20,
         size=5,
-        dpi=200
+        dpi=100,
+        interpolate=True,
+        fps=30,
     ):
     """Create a playback animation from telemetry data.
 
@@ -72,19 +78,30 @@ def create_playback_animation(
         completed
     :param int size: the size of the resulting animation frame
     :param int dpi: the dpi to use when processing the animation
+    :param bool interpolate: use linear interpolation to get frames with
+        second-interval granularity
+    :param int fps: the frames per second for the animation
     """
 
     # Extract data
     positions = telemetry.player_positions()
     circles = telemetry.circle_positions()
+    print(len(circles["blue"]))
     rankings = telemetry.rankings()
     winner = telemetry.winner()
     killed = telemetry.killed()
     rosters = telemetry.rosters()
-    # package_spawns = telemetry.care_package_positions(land=False)
+    package_spawns = telemetry.care_package_positions(land=False)
     package_lands = telemetry.care_package_positions(land=True)
     map_name = telemetry.map_name()
     mapx, mapy = map_dimensions[map_name]
+    all_times = []
+    for player, pos in positions.items():
+        for p in pos:
+            all_times.append(int(p[0]))
+    all_times = sorted(list(set(all_times)))
+
+    highlight_players = None
 
     if highlight_winner:
         if highlight_players is None:
@@ -92,7 +109,6 @@ def create_playback_animation(
         for player in winner:
             highlight_players.append(player)
         highlight_players = list(set(highlight_players))
-
 
     if highlight_teams is not None:
         if highlight_players is None:
@@ -113,7 +129,6 @@ def create_playback_animation(
             label_players.append(player)
     label_players = list(set(label_players))
 
-
     team_colors = None
     if color_teams:
         # Randomly select colors from the pre-defined palette
@@ -132,12 +147,17 @@ def create_playback_animation(
     for player, pos in positions.items():
         if len(pos) > maxlength:
             maxlength = len(pos)
-    maxlength = max([maxlength, len(circles)])
+
+    if interpolate:
+        maxlength = max(all_times)
+    else:
+        maxlength = max([maxlength, len(circles)])
+    print(maxlength)
 
     # Initialize the plot and artist objects
     fig = plt.figure(frameon=False, dpi=dpi)
     ax = fig.add_axes([0, 0, 1, 1])
-    ax.axis('off')
+    ax.axis("off")
 
     if use_hi_res:
         map_image = map_name + ".jpg"
@@ -147,33 +167,33 @@ def create_playback_animation(
     img = mpimg.imread(img_path)
     implot = ax.imshow(img, extent=[0, mapx, 0, mapy])
 
-    xdata = []
-    ydata = []
-    players = ax.scatter(-10000, -10000, marker="o", c="w", edgecolor="k", s=15, linewidths=0.5)
-    deaths = ax.scatter(-10000, -10000, marker="X", c="r", edgecolor="k", s=15, linewidths=0.5, alpha=0.5)
+    players = ax.scatter(-10000, -10000, marker="o", c="w", edgecolor="k", s=60, linewidths=1)
+    deaths = ax.scatter(-10000, -10000, marker="X", c="r", edgecolor="k", s=60, linewidths=1, alpha=0.5)
+
     if highlight_players or highlight_teams:
-        highlights = ax.scatter(-10000, -10000, marker="*", c=highlight_color, edgecolor="k", s=45, linewidths=0.5)
-        highlights_deaths = ax.scatter(-10000, -10000, marker="X", c=highlight_color, edgecolor="k", s=15, linewidths=0.5)
+        highlights = ax.scatter(-10000, -10000, marker="*", c=highlight_color, edgecolor="k", s=180, linewidths=1)
+        highlights_deaths = ax.scatter(-10000, -10000, marker="X", c=highlight_color, edgecolor="k", s=60, linewidths=1)
 
     if labels:
         if label_players is not None:
             name_labels = {
-                player_name: ax.text(0, 0, player_name, size=4)
+                player_name: ax.text(0, 0, player_name, size=8)
                 for player_name in positions if player_name in label_players
             }
         else:
             name_labels = {
-                player_name: ax.text(0, 0, player_name, size=4)
+                player_name: ax.text(0, 0, player_name, size=8)
                 for player_name in positions
             }
         for label in name_labels.values():
-            label.set_path_effects([patheffects.withStroke(linewidth=1, foreground='w')])
+            label.set_path_effects([patheffects.withStroke(linewidth=2, foreground="w")])
 
-    blue_circle = plt.Circle((0, 0), 0, edgecolor="b", linewidth=1, fill=False)
-    white_circle = plt.Circle((0, 0), 0, edgecolor="w", linewidth=1, fill=False)
+    blue_circle = plt.Circle((0, 0), 0, edgecolor="b", linewidth=2, fill=False)
+    white_circle = plt.Circle((0, 0), 0, edgecolor="w", linewidth=2, fill=False)
     red_circle = plt.Circle((0, 0), 0, color="r", edgecolor=None, lw=0, fill=True, alpha=0.3)
 
-    care_package_lands, = ax.plot(-10000, -10000, marker="s", c="r", markerfacecoloralt="b", fillstyle="bottom", mec="k", markeredgewidth=0.25, markersize=5, lw=0)
+    care_package_spawns, = ax.plot(-10000, -10000, marker="s", c="w", markerfacecoloralt="w", fillstyle="bottom", mec="k", markeredgewidth=0.5, markersize=10, lw=0)
+    care_package_lands, = ax.plot(-10000, -10000, marker="s", c="r", markerfacecoloralt="b", fillstyle="bottom", mec="k", markeredgewidth=0.5, markersize=10, lw=0)
 
     ax.add_patch(blue_circle)
     ax.add_patch(white_circle)
@@ -198,20 +218,62 @@ def create_playback_animation(
             else:
                 updates = players, deaths, blue_circle, red_circle, white_circle
         if care_packages:
-            updates = *updates, care_package_lands
+            updates = *updates, care_package_lands, care_package_spawns
         return updates
+
+    def interpolate_coords(t, coords, tidx, vidx, step=False):
+        inter = False
+        for idx, coord in enumerate(coords):
+            if coord[tidx] > t:
+                inter = True
+                break
+
+        if not inter:
+            return coords[-1][vidx]
+
+        if idx == 0:
+            return coords[0][vidx]
+        else:
+            v0 = coords[idx-1][vidx]
+            t0 = coords[idx-1][tidx]
+
+        v1 = coords[idx][vidx]
+        t1 = coords[idx][tidx]
+
+        if step:
+            return v1
+        else:
+            return v0 + (t - t0) * (v1 - v0) / (t1 - t0)
 
     # Frame update function
     def update(frame):
         logging.info("Processing frame {frame}".format(frame=frame))
         try:
-            blue_circle.center = circles["blue"][frame][1], mapy - circles["blue"][frame][2]
-            red_circle.center = circles["red"][frame][1], mapy - circles["red"][frame][2]
-            white_circle.center = circles["white"][frame][1], mapy - circles["white"][frame][2]
+            if interpolate:
+                blue_circle.center = (
+                    interpolate_coords(frame, circles["blue"], 0, 1),
+                    mapy - interpolate_coords(frame, circles["blue"], 0, 2))
+                red_circle.center = (
+                    interpolate_coords(frame, circles["red"], 0, 1, True),
+                    mapy - interpolate_coords(frame, circles["red"], 0, 2, True))
+                white_circle.center = (
+                    interpolate_coords(frame, circles["white"], 0, 1, True),
+                    mapy - interpolate_coords(frame, circles["white"], 0, 2, True))
 
-            blue_circle.set_radius(circles["blue"][frame][4])
-            red_circle.set_radius(circles["red"][frame][4])
-            white_circle.set_radius(circles["white"][frame][4])
+                blue_circle.set_radius(
+                    interpolate_coords(frame, circles["blue"], 0, 4))
+                red_circle.set_radius(
+                    interpolate_coords(frame, circles["red"], 0, 4, True))
+                white_circle.set_radius(
+                    interpolate_coords(frame, circles["white"], 0, 4, True))
+            else:
+                blue_circle.center = circles["blue"][frame][1], mapy - circles["blue"][frame][2]
+                red_circle.center = circles["red"][frame][1], mapy - circles["red"][frame][2]
+                white_circle.center = circles["white"][frame][1], mapy - circles["white"][frame][2]
+
+                blue_circle.set_radius(circles["blue"][frame][4])
+                red_circle.set_radius(circles["red"][frame][4])
+                white_circle.set_radius(circles["white"][frame][4])
         except IndexError:
             pass
 
@@ -223,11 +285,18 @@ def create_playback_animation(
 
         if zoom:
             try:
-                margin_offset = (1 + zoom_edge_buffer) * circles["blue"][frame][4]
-                xmin = max([0, circles["blue"][frame][1] - margin_offset])
-                xmax = min([mapx, circles["blue"][frame][1] + margin_offset])
-                ymin = max([0, mapy - circles["blue"][frame][2] - margin_offset])
-                ymax = min([mapy, mapy - circles["blue"][frame][2] + margin_offset])
+                if interpolate:
+                    margin_offset = (1 + zoom_edge_buffer) * interpolate_coords(frame, circles["blue"], 0, 4)
+                    xmin = max([0, interpolate_coords(frame, circles["blue"], 0, 1) - margin_offset])
+                    xmax = min([mapx, interpolate_coords(frame, circles["blue"], 0, 1) + margin_offset])
+                    ymin = max([0, mapy - interpolate_coords(frame, circles["blue"], 0, 2) - margin_offset])
+                    ymax = min([mapy, mapy - interpolate_coords(frame, circles["blue"], 0, 2) + margin_offset])
+                else:
+                    margin_offset = (1 + zoom_edge_buffer) * circles["blue"][frame][4]
+                    xmin = max([0, circles["blue"][frame][1] - margin_offset])
+                    xmax = min([mapx, circles["blue"][frame][1] + margin_offset])
+                    ymin = max([0, mapy - circles["blue"][frame][2] - margin_offset])
+                    ymax = min([mapy, mapy - circles["blue"][frame][2] + margin_offset])
 
                 # ensure full space taken by map
                 if xmax - xmin >= ymax - ymin:
@@ -259,6 +328,8 @@ def create_playback_animation(
         highlights_deaths_y = []
         care_package_lands_x = []
         care_package_lands_y = []
+        care_package_spawns_x = []
+        care_package_spawns_y = []
 
         if color_teams:
             marker_colors = []
@@ -274,17 +345,40 @@ def create_playback_animation(
                 if frame >= maxlength and player not in winner:
                     raise IndexError
                 elif frame >= maxlength and player not in killed:
-                    fidx = -1
+                    fidx = frame if interpolate else -1
                 else:
                     fidx = frame
 
-                # Update player positions
-                if player in highlight_players:
-                    highlights_x.append(pos[fidx][1])
-                    highlights_y.append(mapy - pos[fidx][2])
+                if interpolate:
+                    t = max([t, fidx])
                 else:
-                    positions_x.append(pos[fidx][1])
-                    positions_y.append(mapy - pos[fidx][2])
+                    t = max([t, pos[fidx][0]])
+
+                for package in package_spawns:
+                    if package[0] < t and package[0] > t - 60:
+                        care_package_spawns_x.append(package[1])
+                        care_package_spawns_y.append(mapy - package[2])
+                for package in package_lands:
+                    if package[0] < t:
+                        care_package_lands_x.append(package[1])
+                        care_package_lands_y.append(mapy - package[2])
+
+                # Update player positions
+                if interpolate:
+                    if fidx >= pos[-1][0] and player in killed:
+                        raise IndexError
+                    x = interpolate_coords(fidx, pos, 0, 1)
+                    y = mapy - interpolate_coords(fidx, pos, 0, 2)
+                else:
+                    x = pos[fidx][1]
+                    y = mapy - pos[fidx][2]
+
+                if player in highlight_players:
+                    highlights_x.append(x)
+                    highlights_y.append(y)
+                else:
+                    positions_x.append(x)
+                    positions_y.append(y)
                     # Set colors
                     if color_teams:
                         marker_colors.append(team_colors[player])
@@ -294,14 +388,9 @@ def create_playback_animation(
                     if disable_labels_after is not None and frame >= disable_labels_after:
                         name_labels[player].set_position((-100000, -100000))
                     else:
-                        name_labels[player].set_position((pos[fidx][1] + 10000 * xwidth/mapx, mapy - pos[fidx][2] - 10000 * ywidth/mapy))
+                        name_labels[player].set_position((x + 10000 * xwidth/mapx, y - 10000 * ywidth/mapy))
 
-                t = max([t, pos[fidx][0]])
-                for package in package_lands:
-                    if package[0] < t:
-                        care_package_lands_x.append(package[1])
-                        care_package_lands_y.append(mapy - package[2])
-            except IndexError:
+            except IndexError as exc:
                 # Set death markers
                 if player in highlight_players:
                     highlights_deaths_x.append(pos[-1][1])
@@ -317,9 +406,9 @@ def create_playback_animation(
                 # Draw dead players names
                 if labels and dead_player_labels and player in label_players:
                     name_labels[player].set_position((pos[-1][1] + 10000 * xwidth/mapx, mapy - pos[-1][2] - 10000 * ywidth/mapy))
-                    name_labels[player].set_path_effects([patheffects.withStroke(linewidth=1, foreground='gray')])
+                    name_labels[player].set_path_effects([patheffects.withStroke(linewidth=1, foreground="gray")])
                 # Offscreen if labels are off
-                elif player in label_players:
+                elif labels and player in label_players:
                     name_labels[player].set_position((-100000, -100000))
 
         player_offsets = [(x, y) for x, y in zip(positions_x, positions_y)]
@@ -346,6 +435,9 @@ def create_playback_animation(
         if len(care_package_lands_x) > 0:
             care_package_lands.set_data(care_package_lands_x, care_package_lands_y)
 
+        if len(care_package_spawns_x) > 0:
+            care_package_spawns.set_data(care_package_spawns_x, care_package_spawns_y)
+
         if labels:
             if highlight_players or highlight_teams:
                 updates = players, deaths, highlights, highlights_deaths, blue_circle, red_circle, white_circle, *tuple(name_labels.values())
@@ -357,13 +449,14 @@ def create_playback_animation(
             else:
                 updates = players, deaths, blue_circle, red_circle, white_circle
         if care_packages:
-            updates = *updates, care_package_lands
+            updates = *updates, care_package_lands, care_package_spawns
         return updates
 
     # Create the animation
     animation = FuncAnimation(
         fig, update,
         frames=range(maxlength + end_frames),
+        interval=int(1000/fps),
         init_func=init, blit=True,
     )
 

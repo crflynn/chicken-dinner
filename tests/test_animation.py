@@ -18,7 +18,11 @@ if __name__ == "__main__":
         label_players=None,
         # highlight_teams=["shroud"],
         highlight_winner=True,
-        size=4,
+        label_highlights=True,
+        size=8,
+        end_frames=60,
         use_hi_res=False,
-        color_teams=True
+        color_teams=True,
+        interpolate=True,
+        fps=30,
     )
