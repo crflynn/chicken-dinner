@@ -2,6 +2,7 @@
 import io
 from os import path
 from setuptools import setup
+from setuptools import find_packages
 
 
 here = path.abspath(path.dirname(__file__))
@@ -27,17 +28,6 @@ setup(
     author=about["__author__"],
     author_email=about["__author_email__"],
     license=about["__license__"],
-    packages=["chicken_dinner"],
-    zip_safe=False,
-    install_requires=[
-        "requests",
-    ],
-    extras_require={
-        "visual": [
-            "matplotlib",
-            "pillow",
-        ]
-    },
     classifiers=[
         "Development Status :: 4 - Beta",
         "License :: OSI Approved :: MIT License",
@@ -47,5 +37,23 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: Implementation :: CPython",
     ],
-    include_package_data=True
+    keywords="pubg api wrapper playback animation chicken dinner",
+    packages=find_packages(),
+    install_requires=[
+        "requests",
+    ],
+    extras_require={
+        "visual": [
+            "matplotlib",
+            "pillow",
+        ]
+    },
+    include_package_data=True,
+    package_data={
+        "": ["*.jpg"]
+    },
+    exclude_package_data={
+        "": ["*DS_Store"]
+    },
+    zip_safe=False,
 )

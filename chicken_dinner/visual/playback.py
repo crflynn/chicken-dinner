@@ -19,6 +19,17 @@ from chicken_dinner.constants import map_dimensions
 rc("animation", embed_limit=100)
 
 
+MAP_ASSET_PATH = os.path.join(
+    os.path.dirname(
+        os.path.dirname(
+            os.path.realpath(__file__)
+        )
+    ),
+    "assets",
+    "maps"
+)
+
+
 def create_playback_animation(
         telemetry,
         filename="playback.html",
@@ -164,7 +175,7 @@ def create_playback_animation(
         map_image = map_name + ".jpg"
     else:
         map_image = map_name + "_lowres.jpg"
-    img_path = os.path.join("chicken_dinner", "assets", "maps", map_image)
+    img_path = os.path.join(MAP_ASSET_PATH, map_image)
     img = mpimg.imread(img_path)
     implot = ax.imshow(img, extent=[0, mapx, 0, mapy])
 
