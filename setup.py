@@ -52,8 +52,5 @@ setup(
     package_data={
         "": ["*.jpg"]
     },
-    exclude_package_data={
-        "": ["*DS_Store"]
-    },
     zip_safe=False,
 )
