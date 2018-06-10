@@ -1,3 +1,4 @@
+"""Function for generating playback animations."""
 import json
 import logging
 import os
@@ -40,6 +41,7 @@ def create_playback_animation(
         size=5,
         dpi=100,
         interpolate=True,
+        interval=1,
         fps=30,
     ):
     """Create a playback animation from telemetry data.
@@ -80,13 +82,13 @@ def create_playback_animation(
     :param int dpi: the dpi to use when processing the animation
     :param bool interpolate: use linear interpolation to get frames with
         second-interval granularity
+    :param int interval: interval between gameplay frames in seconds
     :param int fps: the frames per second for the animation
     """
 
     # Extract data
     positions = telemetry.player_positions()
     circles = telemetry.circle_positions()
-    print(len(circles["blue"]))
     rankings = telemetry.rankings()
     winner = telemetry.winner()
     killed = telemetry.killed()
@@ -152,7 +154,6 @@ def create_playback_animation(
         maxlength = max(all_times)
     else:
         maxlength = max([maxlength, len(circles)])
-    print(maxlength)
 
     # Initialize the plot and artist objects
     fig = plt.figure(frameon=False, dpi=dpi)
@@ -455,7 +456,7 @@ def create_playback_animation(
     # Create the animation
     animation = FuncAnimation(
         fig, update,
-        frames=range(maxlength + end_frames),
+        frames=range(0, maxlength + end_frames, interval),
         interval=int(1000/fps),
         init_func=init, blit=True,
     )

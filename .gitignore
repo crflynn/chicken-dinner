@@ -26,7 +26,6 @@ build/
 # secret
 secret*
 design*
-match.html
 
 # docs
 docs/_build/

@@ -2,7 +2,6 @@
 import datetime
 
 from chicken_dinner.structures import CaseInsensitiveDict
-from chicken_dinner.visual.playback import create_playback_animation
 
 
 class Telemetry(object):
@@ -379,6 +378,7 @@ class Telemetry(object):
         """Generate a playback animation from the telemetry data.
 
         Generate an HTML5 animation using matplotlib and ffmpeg.
+        Requires installation via ``pip install chicken-dinner[visual]``.
 
         :param filename: a file to generate for the animation (default
             "playback.html")
@@ -408,5 +408,11 @@ class Telemetry(object):
             completed
         :param int size: the size of the resulting animation frame
         :param int dpi: the dpi to use when processing the animation
+        :param bool interpolate: use linear interpolation to get frames with
+            second-interval granularity
+        :param int interval: interval between gameplay frames in seconds
+        :param int fps: the frames per second for the animation
         """
+        from chicken_dinner.visual.playback import create_playback_animation
+
         return create_playback_animation(self, filename, **kwargs)

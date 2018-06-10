@@ -6,7 +6,12 @@ animation via the ``create_playback_animation`` function or by calling directly
 the ``playback_animation`` method from a Telemetry instance.
 
 The playback animation function depends on external python
-packages ``matplotlib`` and ``pillow``.
+packages ``matplotlib`` and ``pillow``. To install ``chicken_dinner`` with
+these extra dependencies, use
+
+.. code-block:: bash
+
+    pip install chicken-dinner[visual]
 
 In order to use the playback animation you will need to install an
 additional piece of software called ``ffmepg``. To install ``ffmpeg`` on Mac,
@@ -16,7 +21,7 @@ use brew:
 
     brew install ffmpeg
 
-For other platforms, see `here <https://github.com/adaptlearning/adapt_authoring/wiki/Installing-FFmpeg>`_.
+For other platforms, see `here <https://www.ffmpeg.org/download.html>`_
 
 Here is some example code for creating a playback animation:
 

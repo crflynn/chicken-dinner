@@ -27,21 +27,25 @@ setup(
     author=about["__author__"],
     author_email=about["__author_email__"],
     license=about["__license__"],
-    packages=['chicken_dinner'],
+    packages=["chicken_dinner"],
     zip_safe=False,
     install_requires=[
-        'requests',
-        'matplotlib',
-        'pillow'
+        "requests",
     ],
+    extras_require={
+        "visual": [
+            "matplotlib",
+            "pillow",
+        ]
+    }
     classifiers=[
-        'Development Status :: 4 - Beta',
-        'License :: OSI Approved :: MIT License',
-        'Topic :: Software Development :: Libraries :: Python Modules',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: Implementation :: CPython',
+        "Development Status :: 4 - Beta",
+        "License :: OSI Approved :: MIT License",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: Implementation :: CPython",
     ],
     include_package_data=True
 )

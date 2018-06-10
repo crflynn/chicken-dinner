@@ -1,23 +1,40 @@
 Chicken Dinner
 ==============
 
-Python PUBG JSON API Wrapper and playback visualizer.
+Python PUBG JSON API Wrapper and (optional) playback visualizer.
+
+Sample
+------
+
+.. raw:: html
+   :file: match.html
 
 Installation
 ------------
 
-To install using pip:
+To install chicken-dinner, use pip. This will install the core dependencies
+(``requests`` library) which provide functionality to the API wrapper classes.
 
 .. code-block:: bash
 
     pip install chicken-dinner
 
-To use the playback visualization you will also need ffmpeg. You can install
-on Mac OSX using brew.
+To use the playback visualizations you will need to install the library with
+extra dependencies for plotting (``matplotlib`` and ``pillow``).
+For this you can also use pip:
+
+.. code-block:: bash
+
+    pip install chicken-dinner[visual]
+
+To generate the animations you will also need ``ffmpeg`` installed on your
+machine. On Max OSX you can install ``ffmpeg`` using brew.
 
 .. code-block:: bash
 
     brew install ffmpeg
+
+You can install ffmpeg on other systems from `here <https://www.ffmpeg.org/download.html>`_.
 
 Usage
 -----
@@ -63,3 +80,6 @@ Visualizing telemetry data
     recent_match = pubg.match(recent_match_id)
     recent_match_telemetry = recent_match.get_telemetry()
     recent_match_telemetry.create_playback_animation("recent_match.html")
+
+See the `documentation <http://chicken-dinner.readthedocs.io>`_ for more
+details.

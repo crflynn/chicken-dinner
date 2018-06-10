@@ -12,17 +12,18 @@ if __name__ == "__main__":
     telemetry = Telemetry.from_json(t)
 
     telemetry.playback_animation(
-        "match.html",
+        "docs/match.html",
         zoom=True,
         labels=True,
         label_players=None,
         # highlight_teams=["shroud"],
         highlight_winner=True,
         label_highlights=True,
-        size=8,
+        size=6,
         end_frames=60,
         use_hi_res=False,
         color_teams=True,
         interpolate=True,
+        interval=2,
         fps=30,
     )
