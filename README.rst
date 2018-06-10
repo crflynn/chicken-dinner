@@ -3,12 +3,6 @@ Chicken Dinner
 
 Python PUBG JSON API Wrapper and (optional) playback visualizer.
 
-Sample
-------
-
-.. raw:: html
-   :file: match.html
-
 Installation
 ------------
 
