@@ -37,7 +37,7 @@ setup(
             "matplotlib",
             "pillow",
         ]
-    }
+    },
     classifiers=[
         "Development Status :: 4 - Beta",
         "License :: OSI Approved :: MIT License",
