@@ -4,6 +4,7 @@ from .participant import Participant
 from .roster import Roster
 from chicken_dinner.constants import game_mode_to_gp
 from chicken_dinner.constants import map_to_map_name
+from chicken_dinner.models.telemetry import Telemetry
 
 
 class Match(object):

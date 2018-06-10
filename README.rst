@@ -73,7 +73,7 @@ Visualizing telemetry data
     recent_match_id = shroud.match_ids[0]
     recent_match = pubg.match(recent_match_id)
     recent_match_telemetry = recent_match.get_telemetry()
-    recent_match_telemetry.create_playback_animation("recent_match.html")
+    recent_match_telemetry.playback_animation("recent_match.html")
 
 See the `documentation <http://chicken-dinner.readthedocs.io>`_ for more
 details.

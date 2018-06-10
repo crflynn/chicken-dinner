@@ -35,15 +35,15 @@ def create_playback_animation(
         filename="playback.html",
         labels=True,
         disable_labels_after=None,
-        label_players=None,
+        label_players=[],
         dead_players=True,
         dead_player_labels=False,
         zoom=False,
         zoom_edge_buffer=0.5,
         use_hi_res=False,
         color_teams=True,
-        highlight_teams=None,
-        highlight_players=None,
+        highlight_teams=[],
+        highlight_players=[],
         highlight_color="#FFFF00",
         highlight_winner=False,
         label_highlights=True,
@@ -114,18 +114,12 @@ def create_playback_animation(
             all_times.append(int(p[0]))
     all_times = sorted(list(set(all_times)))
 
-    highlight_players = None
-
     if highlight_winner:
-        if highlight_players is None:
-            highlight_players = []
         for player in winner:
             highlight_players.append(player)
         highlight_players = list(set(highlight_players))
 
     if highlight_teams is not None:
-        if highlight_players is None:
-            highlight_players = []
         for team_player in highlight_teams:
             for team_id, roster in rosters.items():
                 if team_player in roster:
@@ -136,8 +130,6 @@ def create_playback_animation(
         highlight_players = list(set(highlight_players))
 
     if label_highlights:
-        if label_players is None:
-            label_players = []
         for player in highlight_players:
             label_players.append(player)
     label_players = list(set(label_players))

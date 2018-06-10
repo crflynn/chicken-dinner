@@ -15,7 +15,7 @@ if __name__ == "__main__":
         "docs/match.html",
         zoom=True,
         labels=True,
-        label_players=None,
+        label_players=[],
         # highlight_teams=["shroud"],
         highlight_winner=True,
         label_highlights=True,
