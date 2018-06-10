@@ -1,4 +1,4 @@
 include README.rst
 include LICENSE.txt
 include HISTORY.rst
-include chicken_dinner/assets/maps/*.jpg
+include chicken_dinner/assets/maps/*lowres.jpg

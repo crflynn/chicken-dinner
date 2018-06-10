@@ -176,7 +176,14 @@ def create_playback_animation(
     else:
         map_image = map_name + "_lowres.jpg"
     img_path = os.path.join(MAP_ASSET_PATH, map_image)
-    img = mpimg.imread(img_path)
+    try:
+        img = mpimg.imread(img_path)
+    except FileNotFoundError:
+        raise FileNotFoundError(
+            "High resolution images not included in package.\n"
+            "Download images from https://github.com/pubg/api-assets/tree/master/Assets/Maps\n"
+            "and place in folder: " + MAP_ASSET_PATH
+        )
     implot = ax.imshow(img, extent=[0, mapx, 0, mapy])
 
     players = ax.scatter(-10000, -10000, marker="o", c="w", edgecolor="k", s=60, linewidths=1)
@@ -482,3 +489,7 @@ def create_playback_animation(
     logging.info("Saved file.")
 
     return True
+
+
+def download_hi_res_maps():
+    pass
