@@ -489,7 +489,3 @@ def create_playback_animation(
     logging.info("Saved file.")
 
     return True
-
-
-def download_hi_res_maps():
-    pass

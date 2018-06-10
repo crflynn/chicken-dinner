@@ -17,6 +17,12 @@ To install using pip:
 
     pip install chicken-dinner
 
+To be able to generate playback visualizations, use:
+
+.. code-block:: bash
+
+    pip install chicken-dinner[visual]
+
 Getting started
 ---------------
 
