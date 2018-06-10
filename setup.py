@@ -14,7 +14,7 @@ with io.open(path.join(here, "README.rst"), encoding="utf-8") as f:
 
 # import __version__ attributes
 about = {}
-with open(path.join(here, "fbm", "__version__.py")) as f:
+with open(path.join(here, "chicken_dinner", "__version__.py")) as f:
     exec(f.read(), about)
 
 
