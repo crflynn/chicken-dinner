@@ -3,6 +3,8 @@ Chicken Dinner
 
 Python PUBG JSON API Wrapper and (optional) playback visualizer.
 
+`Sample Animation<http://chicken-dinner.readthedocs.io/en/latest/sample.html>`_
+
 Installation
 ------------
 
