@@ -24,6 +24,7 @@ if __name__ == "__main__":
         use_hi_res=False,
         color_teams=True,
         interpolate=True,
+        damage=True,
         interval=2,
         fps=30,
     )

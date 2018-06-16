@@ -48,6 +48,7 @@ def create_playback_animation(
         highlight_winner=False,
         label_highlights=True,
         care_packages=True,
+        damage=True,
         end_frames=20,
         size=5,
         dpi=100,
@@ -87,6 +88,7 @@ def create_playback_animation(
     :param bool highlight_winner: whether to highlight the winner(s)
     :param bool label_highlights: whether to label the highlights
     :param bool care_packages: whether to show care packages
+    :param bool damage: whether to show PvP damage
     :param int end_frames: the number of extra end frames after game has been
         completed
     :param int size: the size of the resulting animation frame
@@ -104,6 +106,7 @@ def create_playback_animation(
     winner = telemetry.winner()
     killed = telemetry.killed()
     rosters = telemetry.rosters()
+    damages = telemetry.player_damages()
     package_spawns = telemetry.care_package_positions(land=False)
     package_lands = telemetry.care_package_positions(land=True)
     map_name = telemetry.map_name()
@@ -150,8 +153,8 @@ def create_playback_animation(
     # Get the max "frame number"
     maxlength = 0
     for player, pos in positions.items():
-        if len(pos) > maxlength:
-            maxlength = len(pos)
+        if pos[-1][0] > maxlength:
+            maxlength = pos[-1][0]
 
     if interpolate:
         maxlength = max(all_times)
@@ -206,11 +209,18 @@ def create_playback_animation(
     care_package_spawns, = ax.plot(-10000, -10000, marker="s", c="w", markerfacecoloralt="w", fillstyle="bottom", mec="k", markeredgewidth=0.5, markersize=10, lw=0)
     care_package_lands, = ax.plot(-10000, -10000, marker="s", c="r", markerfacecoloralt="b", fillstyle="bottom", mec="k", markeredgewidth=0.5, markersize=10, lw=0)
 
+    damage_idx = 0
+    damage_slots = 50
+    damage_lines = []
+    for k in range(damage_slots):
+        dline, = ax.plot(-10000, -10000, marker="x", c="r", mec="r", markeredgewidth=5, markersize=10, lw=2, markevery=[1], alpha=0.5)
+        damage_lines.append(dline)
+
     ax.add_patch(blue_circle)
     ax.add_patch(white_circle)
     ax.add_patch(red_circle)
 
-    fig.subplots_adjust(left=0,right=1,bottom=0,top=1)
+    fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
     fig.set_size_inches((size, size))
 
     ax.set_xlim([0, mapx])
@@ -230,6 +240,8 @@ def create_playback_animation(
                 updates = players, deaths, blue_circle, red_circle, white_circle
         if care_packages:
             updates = *updates, care_package_lands, care_package_spawns
+        if damage:
+            updates = *updates, *damage_lines
         return updates
 
     def interpolate_coords(t, coords, tidx, vidx, step=False):
@@ -350,12 +362,14 @@ def create_playback_animation(
             death_marker_colors = "r"
 
         t = 0
+        damage_count = 0
         for player, pos in positions.items():
             try:
+                player_max = pos[-1][0]
                 # This ensures the alive winner(s) stay on the map at the end.
-                if frame >= maxlength and player not in winner:
+                if frame >= player_max and player not in winner:
                     raise IndexError
-                elif frame >= maxlength and player not in killed:
+                elif frame >= player_max and player not in killed:
                     fidx = frame if interpolate else -1
                 else:
                     fidx = frame
@@ -384,6 +398,7 @@ def create_playback_animation(
                     x = pos[fidx][1]
                     y = mapy - pos[fidx][2]
 
+                # Update player highlights
                 if player in highlight_players:
                     highlights_x.append(x)
                     highlights_y.append(y)
@@ -401,6 +416,21 @@ def create_playback_animation(
                     else:
                         name_labels[player].set_position((x + 10000 * xwidth/mapx, y - 10000 * ywidth/mapy))
 
+                # Update player damages
+                if damage:
+                    try:
+                        for attack in damages[player]:
+                            damage_frame = int(attack[0])
+                            if damage_frame >= fidx + interval:
+                                break
+                            elif damage_frame >= fidx and damage_frame < fidx + interval:
+                                damage_line_x = [attack[1], attack[4]]
+                                damage_line_y = [mapy - attack[2], mapy - attack[5]]
+                                damage_lines[damage_count].set_data(damage_line_x, damage_line_y)
+                                damage_count += 1
+                    except KeyError:
+                        pass
+
             except IndexError as exc:
                 # Set death markers
                 if player in highlight_players:
@@ -410,9 +440,9 @@ def create_playback_animation(
                     deaths_x.append(pos[-1][1])
                     deaths_y.append(mapy - pos[-1][2])
 
-                # Set death marker colors
-                if color_teams:
-                    death_marker_colors.append(team_colors[player])
+                    # Set death marker colors
+                    if color_teams:
+                        death_marker_colors.append(team_colors[player])
 
                 # Draw dead players names
                 if labels and dead_player_labels and player in label_players:
@@ -449,6 +479,10 @@ def create_playback_animation(
         if len(care_package_spawns_x) > 0:
             care_package_spawns.set_data(care_package_spawns_x, care_package_spawns_y)
 
+        # Remove the remaining slots
+        for k in range(damage_count, damage_slots):
+            damage_lines[k].set_data([], [])
+
         if labels:
             if highlight_players or highlight_teams:
                 updates = players, deaths, highlights, highlights_deaths, blue_circle, red_circle, white_circle, *tuple(name_labels.values())
@@ -461,6 +495,8 @@ def create_playback_animation(
                 updates = players, deaths, blue_circle, red_circle, white_circle
         if care_packages:
             updates = *updates, care_package_lands, care_package_spawns
+        if damage:
+            updates = *updates, *damage_lines
         return updates
 
     # Create the animation

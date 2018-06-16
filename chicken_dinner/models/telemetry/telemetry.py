@@ -225,17 +225,67 @@ class Telemetry(object):
         else:
             return None
 
+    def player_damages(self, include_pregame=False):
+        """Get the player damages for the match.
+
+        Returns a dict of attacker players as keys and values of damage
+        attacker and victim positions with the values tuples. Each tuple has
+        seven elements being (t, x_a, y_a, z_a, x_v, y_v, y_z) coordinates
+        where a is attacker and v is victim.
+
+        :param bool include_pregame: (default False) whether to include
+            pre-game damage positions.
+        """
+        start = datetime.datetime.strptime(
+            self.filter_by("logmatchstart")[0]["_D"], "%Y-%m-%dT%H:%M:%S.%fZ"
+        )
+        damages = {}
+        attack_events = self.filter_by("logplayerattack")
+        attackers = {}
+        for event in attack_events:
+            attackers[event["attackId"]] = event["attacker"]
+
+        damage_events = self.filter_by("logplayertakedamage")
+        for event in damage_events:
+            attacker = event["attacker"]["name"]
+            if attacker != "":
+                timestamp = datetime.datetime.strptime(
+                    event["_D"], "%Y-%m-%dT%H:%M:%S.%fZ"
+                )
+                dt = (timestamp - start).total_seconds()
+                if (not include_pregame and dt < 0) or event["attackId"] == -1:
+                    continue
+                if attacker not in damages:
+                    damages[attacker] = []
+                attacker_location = attackers[event["attackId"]]["location"]
+                damages[attacker].append(
+                    (
+                        dt,
+                        attacker_location["x"],
+                        attacker_location["y"],
+                        attacker_location["z"],
+                        event["victim"]["location"]["x"],
+                        event["victim"]["location"]["y"],
+                        event["victim"]["location"]["z"],
+                    )
+                )
+        return damages
+
+
     def player_positions(self, include_pregame=False):
         """Get the player positions for the match.
 
-        Returns a dict of players positions with keys being player names and
-        values being a list of tuples. Each tuple has four elements being
-        (t, x, y, z) coordinates where t is taken from the "elapsedTime" field
-        in the JSON response.
+        Returns a dict of players positions up to death with keys being player
+        names and values being a list of tuples. Each tuple has four elements
+        being (t, x, y, z) coordinates where t is taken from the event
+        timestamps.
 
         :param bool include_pregame: (default False) whether to include
             pre-game player positions.
         """
+        start = datetime.datetime.strptime(
+            self.filter_by("logmatchstart")[0]["_D"], "%Y-%m-%dT%H:%M:%S.%fZ"
+        )
         locations = self.filter_by("logplayerposition")
         if not include_pregame:
             locations = [
@@ -243,19 +293,28 @@ class Telemetry(object):
                 if location["elapsedTime"] > 0
             ]
         player_positions = {}
+        dead = []
         for location in locations:
+            timestamp = datetime.datetime.strptime(
+                location["_D"], "%Y-%m-%dT%H:%M:%S.%fZ"
+            )
+            dt = (timestamp - start).total_seconds()
             player = location["character"]["name"]
             if player not in player_positions:
                 player_positions[player] = []
+            elif player in dead:
+                continue
             # (t, x, y, z)
             player_positions[player].append(
                 (
-                    location["elapsedTime"],
+                    dt,
                     location["character"]["location"]["x"],
                     location["character"]["location"]["y"],
                     location["character"]["location"]["z"],
                 )
             )
+            if location["character"]["ranking"] > 1:
+                dead.append(player)
         # cleanup
         for player, positions in player_positions.items():
             count = 0
@@ -404,6 +463,7 @@ class Telemetry(object):
         :param bool highlight_winner: whether to highlight the winner(s)
         :param bool label_highlights: whether to label the highlights
         :param bool care_packages: whether to show care packages
+        :param bool damage: whether to show PvP damage
         :param int end_frames: the number of extra end frames after game has been
             completed
         :param int size: the size of the resulting animation frame

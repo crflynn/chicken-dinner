@@ -77,5 +77,26 @@ Visualizing telemetry data
     recent_match_telemetry = recent_match.get_telemetry()
     recent_match_telemetry.playback_animation("recent_match.html")
 
+Recommended playback settings:
+
+.. code-block:: python
+
+    telemetry.playback_animation(
+        "match.html",
+        zoom=True,
+        labels=True,
+        label_players=[],
+        highlight_winner=True,
+        label_highlights=True,
+        size=6,
+        end_frames=60,
+        use_hi_res=False,
+        color_teams=True,
+        interpolate=True,
+        damage=True,
+        interval=2,
+        fps=30,
+    )
+
 See the `documentation <http://chicken-dinner.readthedocs.io>`_ for more
 details.
