@@ -1,6 +1,17 @@
 Chicken Dinner
 ==============
 
+|rtd| |pypi| |pyversions|
+
+.. |rtd| image:: https://img.shields.io/readthedocs/chicken-dinner.svg
+    :target: http://chicken-dinner.readthedocs.io/en/latest/
+
+.. |pypi| image:: https://img.shields.io/pypi/v/chicken-dinner.svg
+    :target: https://pypi.python.org/pypi/chicken-dinner
+
+.. |pyversions| image:: https://img.shields.io/pypi/pyversions/chicken-dinner.svg
+    :target: https://pypi.python.org/pypi/chicken-dinner
+
 Python PUBG JSON API Wrapper and (optional) playback visualizer.
 
 `Sample Animation <http://chicken-dinner.readthedocs.io/en/latest/sample.html>`_

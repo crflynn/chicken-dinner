@@ -72,6 +72,7 @@ Working with the high-level API class.
     visual/playback
     assets/maps
     sample
+    notes
 
 
 Indices and tables
