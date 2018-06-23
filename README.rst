@@ -14,7 +14,12 @@ Chicken Dinner
 
 Python PUBG JSON API Wrapper and (optional) playback visualizer.
 
-`Sample Animation <http://chicken-dinner.readthedocs.io/en/latest/sample.html>`_
+Samples
+-------
+
+* `Erangel - squads <http://chicken-dinner.readthedocs.io/en/latest/sample_erangel.html>`_
+* `Miramar - solos <http://chicken-dinner.readthedocs.io/en/latest/sample_miramar.html>`_
+* `Sanhok - duos <http://chicken-dinner.readthedocs.io/en/latest/sample_sanhok.html>`_
 
 Installation
 ------------
