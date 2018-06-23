@@ -1,5 +1,5 @@
-Sample playback animation (Miramar - solo)
-==========================================
+Sample (Miramar - solo)
+=======================
 
 (May take a few seconds to load)
 

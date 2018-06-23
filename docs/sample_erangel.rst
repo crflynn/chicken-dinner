@@ -1,5 +1,5 @@
-Sample playback animation (Erangel - squads)
-===================================
+Sample (Erangel - squads)
+=========================
 
 (May take a few seconds to load)
 

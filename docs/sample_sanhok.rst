@@ -1,5 +1,5 @@
-Sample playback animation (Sanhok - duos)
-=========================================
+Sample (Sanhok - duos)
+======================
 
 (May take a few seconds to load)
 
