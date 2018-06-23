@@ -211,7 +211,7 @@ class Telemetry(object):
 
     def map_name(self):
         """Get the map name for PC matches. None if not PC."""
-        common = self.telemetry[-1].get("common", None)
+        common = self.filter_by("logmatchstart")[0].get("common", None)
         if common is not None:
             return common["mapName"]
         else:
@@ -219,7 +219,7 @@ class Telemetry(object):
 
     def match_id(self):
         """The match id for the match."""
-        common = self.telemetry[-1].get("common", None)
+        common = self.filter_by("logmatchdefinition")[0].get("common", None)
         if common is not None:
             return common["matchId"]
         else:

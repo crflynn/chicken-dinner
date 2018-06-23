@@ -28,10 +28,11 @@ class Player(object):
         """The shard for this player."""
         return self._shard or self._pubg.shard
 
-    @property
-    def created_at(self):
-        """When the player was created."""
-        return self.data["attributes"]["createdAt"]
+    # # deprecated
+    # @property
+    # def created_at(self):
+    #     """When the player was created."""
+    #     return self.data["attributes"]["createdAt"]
 
     @property
     def data(self):
@@ -68,10 +69,11 @@ class Player(object):
         """The title_id for the data."""
         return self.data["attributes"]["titleId"]
 
-    @property
-    def updated_at(self):
-        """When this data was last updated."""
-        return self.data["attributes"]["updatedAt"]
+    # # deprecated
+    # @property
+    # def updated_at(self):
+    #     """When this data was last updated."""
+    #     return self.data["attributes"]["updatedAt"]
 
     @property
     def url(self):
