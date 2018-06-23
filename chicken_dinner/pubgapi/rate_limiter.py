@@ -46,6 +46,9 @@ class RateLimiter(object):
         """Check the deque, optionally sleep, and add a call to the window."""
         if check:
             sleep_seconds = self.check()
-            logging.info("Rate limiter sleeping for {} seconds.".format(sleep_seconds))
-            time.sleep(self.check())
+            if sleep_seconds > 0:
+                logging.info("Rate limiter sleeping for {} seconds.".format(
+                    sleep_seconds
+                ))
+                time.sleep(self.check())
         self.deq.append(time.time())

@@ -40,16 +40,19 @@ matches_to_gp = {
 map_to_map_name = {
     "Desert_Main": "Miramar",
     "Erangel_Main": "Erangel",
+    "Savage_Main": "Sanhok",
 }
 
 map_name_to_map = {
     "Miramar": "Desert_Main",
     "Erangel": "Erangel_Main",
+    "Sanhok": "Savage_Main",
 }
 
 map_dimensions = {
     "Desert_Main": [819200, 819200],
     "Erangel_Main": [819200, 819200],
+    "Savage_Main": [409600, 409600],
 }
 
 true_false = {

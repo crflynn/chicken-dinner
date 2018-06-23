@@ -56,8 +56,8 @@ class PUBGCore(object):
         if shard is None:
             raise ValueError("A shard must be provided.")
 
-    def _get(self, url, params=None):
-        if self.rate_limiter.window > 0:
+    def _get(self, url, params=None, limited=True):
+        if limited and self.rate_limiter.window > 0:
             self.rate_limiter.call()
         response = self.session.get(url, params=params)
         return response
@@ -67,6 +67,8 @@ class PUBGCore(object):
 
         Description: https://documentation.playbattlegrounds.com/en/matches-endpoint.html
 
+        Calls here do not apply to the rate limit.
+
         :param str match_id: the ``match_id`` to query
         :param str shard: (optional) the ``shard`` to use if different from
             the one used on instantiation
@@ -74,7 +76,7 @@ class PUBGCore(object):
         """
         self._check_shard(shard)
         url = SHARD_URL + self.shard + "/matches/" + match_id
-        return self._get(url).json()
+        return self._get(url, limited=False).json()
 
     def player(self, player_id, shard=None):
         """Get a response from the player endpoint.
@@ -174,7 +176,9 @@ class PUBGCore(object):
 
         Description: https://documentation.playbattlegrounds.com/en/telemetry.html
 
+        Calls here do not apply to the rate limit.
+
         :param str url: the telemetry data URL
         :return: the JSON response for the telemetry URL
         """
-        return self._get(url).json()
+        return self._get(url, limited=False).json()

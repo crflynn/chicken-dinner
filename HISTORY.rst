@@ -1,3 +1,10 @@
+0.2.1: 2018-06-22
+~~~~~~~~~~~~~~~~~
+
+* Added Sanhok (Savage_Main) map
+
+* Removed /matches and /telemetry API calls from the rate limiter per the API documentation
+
 0.2.0: 2018-06-16
 ~~~~~~~~~~~~~~~~~
 
