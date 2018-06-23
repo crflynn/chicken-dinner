@@ -8,10 +8,12 @@ Chicken Dinner
 
 Python PUBG JSON API Wrapper and playback visualizer.
 
-Sample Animation
-----------------
+Samples
+-------
 
-`View <sample.html>`_.
+* `Erangel - squads <sample_erangel.html>`_
+* `Miramar - solos <sample_miramar.html>`_
+* `Sanhok - duos <sample_sanhok.html>`_
 
 Installation
 ------------
@@ -71,7 +73,9 @@ Working with the high-level API class.
     models/telemetry
     visual/playback
     assets/maps
-    sample
+    sample_erangel
+    sample_miramar
+    sample_sanhok
     notes
 
 
