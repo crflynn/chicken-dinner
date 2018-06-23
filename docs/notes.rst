@@ -4,7 +4,7 @@ Release Notes
 Contributing
 ------------
 
-The `chicken-dinner` package is open source. If you have any
+The ``chicken-dinner`` package is open source. If you have any
 suggestions for this package (or want to add functionality yourself),
 feel free to let me know on this
 project's `GitHub page <https://github.com/crflynn/chicken-dinner>`_.
