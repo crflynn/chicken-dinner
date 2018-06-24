@@ -30,6 +30,16 @@ To be able to generate playback visualizations, use:
 
     pip install chicken-dinner[visual]
 
+To generate the animations you will also need ``ffmpeg`` installed on your
+machine. On Max OSX you can install ``ffmpeg`` using brew.
+
+.. code-block:: bash
+
+    brew install ffmpeg
+
+You can install ffmpeg on other systems from `here <https://www.ffmpeg.org/download.html>`_.
+
+
 Getting started
 ---------------
 
