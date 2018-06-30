@@ -12,6 +12,8 @@ Release History
 
 * Added package metadata access to package level
 
+* Added is_custom method to match objects
+
 0.2.1: 2018-06-22
 ~~~~~~~~~~~~~~~~~
 
