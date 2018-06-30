@@ -1,3 +1,14 @@
+0.2.2: 2018-06-30
+~~~~~~~~~~~~~~~~~
+
+* Deprecated player.attributes.createdAt and player.attributes.updatedAt per API v1.5.1
+
+* Fixed map name access in telemetry methods due to changes in API v1.5.1
+
+* Added map id method to telemetry
+
+* Added package metadata access to package level
+
 0.2.1: 2018-06-22
 ~~~~~~~~~~~~~~~~~
 
