@@ -15,7 +15,7 @@ License
 .. include:: ../LICENSE.txt
     :literal:
 
-PUBG assets (map images) owned by Bluehole and are
+PUBG assets (map images) owned by PUBG Corporation and are
 available `here <https://github.com/pubg/api-assets/tree/master/Assets/Maps>`_.
 
 .. include:: ../HISTORY.rst
