@@ -143,3 +143,8 @@ class Match(object):
         for roster in self.rosters:
             if roster.won == True:
                 return roster
+
+    @property
+    def is_custom(self):
+        """Whether or not the match is a custom match."""
+        return self.data["attributes"]["isCustomMatch"]

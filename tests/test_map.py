@@ -13,11 +13,11 @@ if __name__ == "__main__":
     shroud = pubg.players_from_names("shroud")[0]
     for match_id in shroud.match_ids:
         match = pubg.match(match_id)
-        if match.map_name in ("Desert_Main", "Miramar") and "shroud" in match.winner.player_names:
+        if "shroud" in match.winner.player_names and match.map_name in ("Desert_Main", "Miramar"):
             print(match.map_name, match_id)
             match_telemetry = match.get_telemetry()
             match_telemetry.playback_animation(
-                "miramar.html",
+                "secret.html",
                 zoom=True,
                 labels=True,
                 label_players=[],

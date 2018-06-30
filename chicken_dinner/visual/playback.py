@@ -109,8 +109,8 @@ def create_playback_animation(
     damages = telemetry.player_damages()
     package_spawns = telemetry.care_package_positions(land=False)
     package_lands = telemetry.care_package_positions(land=True)
-    map_name = telemetry.map_name()
-    mapx, mapy = map_dimensions[map_name]
+    map_id = telemetry.map_id()
+    mapx, mapy = map_dimensions[map_id]
     all_times = []
     for player, pos in positions.items():
         for p in pos:
@@ -167,9 +167,9 @@ def create_playback_animation(
     ax.axis("off")
 
     if use_hi_res:
-        map_image = map_name + ".jpg"
+        map_image = map_id + ".jpg"
     else:
-        map_image = map_name + "_lowres.jpg"
+        map_image = map_id + "_lowres.jpg"
     img_path = os.path.join(MAP_ASSET_PATH, map_image)
     try:
         img = mpimg.imread(img_path)

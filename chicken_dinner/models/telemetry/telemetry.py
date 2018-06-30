@@ -61,7 +61,7 @@ class Telemetry(object):
         """The account ids of all players in the match."""
         accounts = []
         for event in self.telemetry:
-            if event["_T"].lower() == "logplayerlogin":
+            if event["_T"] == "LogPlayerLogin":
                 accounts.append(event["accountId"])
         return accounts
 
@@ -69,7 +69,7 @@ class Telemetry(object):
         """A map of player names to account ids for all players this match."""
         players = {}
         for event in self.telemetry:
-            if event["_T"].lower() == "logplayercreate":
+            if event["_T"] == "LogPlayerCreate":
                 players[event["character"]["name"]] = event["character"]["accountId"]
         return players
 
@@ -77,7 +77,7 @@ class Telemetry(object):
         """A list of player names for all match pariticipants."""
         player_names = []
         for event in self.telemetry:
-            if event["_T"].lower() == "logplayercreate":
+            if event["_T"] == "LogPlayerCreate":
                 player_names.append(event["character"]["name"])
         return player_names
 
@@ -92,7 +92,7 @@ class Telemetry(object):
         """
         damage = {}
         for event in self.telemetry:
-            if event["_T"].lower() == "logplayertakedamage":
+            if event["_T"] == "LogPlayerTakeDamage":
                 attacker = event["attacker"]["name"]
                 if player is not None and player != attacker:
                     continue
@@ -126,7 +126,7 @@ class Telemetry(object):
         """
         damage = {}
         for event in self.telemetry:
-            if event["_T"].lower() == "logplayertakedamage":
+            if event["_T"] == "LogPlayerTakeDamage":
                 victim = event["victim"]["name"]
                 if player is not None and player != victim:
                     continue
@@ -211,19 +211,29 @@ class Telemetry(object):
 
     def map_name(self):
         """Get the map name for PC matches. None if not PC."""
-        common = self.filter_by("logmatchstart")[0].get("common", None)
-        if common is not None:
-            return common["mapName"]
-        else:
-            return None
+        for event in self.telemetry:
+            if event["_T"] == "LogMatchStart":
+                map_id = event.get("mapName", None)
+                if map_id is not None:
+                    return map_to_map_name[map_id]
+                else:
+                    return self._pubg.match(self.match_id()).map_name
+
+    def map_id(self):
+        """Get the map id for PC matches. None if not PC."""
+        for event in self.telemetry:
+            if event["_T"] == "LogMatchStart":
+                map_id = event.get("mapName", None)
+                if map_id is not None:
+                    return map_id
+                else:
+                    return self._pubg.match(self.match_id()).map_id
 
     def match_id(self):
         """The match id for the match."""
-        common = self.filter_by("logmatchdefinition")[0].get("common", None)
-        if common is not None:
-            return common["matchId"]
-        else:
-            return None
+        for event in self.telemetry:
+            if event["_T"] == "LogMatchDefinition":
+                return event["MatchId"]
 
     def player_damages(self, include_pregame=False):
         """Get the player damages for the match.
@@ -237,15 +247,15 @@ class Telemetry(object):
             pre-game damage positions.
         """
         start = datetime.datetime.strptime(
-            self.filter_by("logmatchstart")[0]["_D"], "%Y-%m-%dT%H:%M:%S.%fZ"
+            self.filter_by("LogMatchStart")[0]["_D"], "%Y-%m-%dT%H:%M:%S.%fZ"
         )
         damages = {}
-        attack_events = self.filter_by("logplayerattack")
+        attack_events = self.filter_by("LogPlayerAttack")
         attackers = {}
         for event in attack_events:
             attackers[event["attackId"]] = event["attacker"]
 
-        damage_events = self.filter_by("logplayertakedamage")
+        damage_events = self.filter_by("LogPlayerTakeDamage")
         for event in damage_events:
             attacker = event["attacker"]["name"]
             if attacker != "":
@@ -284,9 +294,9 @@ class Telemetry(object):
             pre-game player positions.
         """
         start = datetime.datetime.strptime(
-            self.filter_by("logmatchstart")[0]["_D"], "%Y-%m-%dT%H:%M:%S.%fZ"
+            self.filter_by("LogMatchStart")[0]["_D"], "%Y-%m-%dT%H:%M:%S.%fZ"
         )
-        locations = self.filter_by("logplayerposition")
+        locations = self.filter_by("LogPlayerPosition")
         if not include_pregame:
             locations = [
                 location for location in locations
@@ -338,7 +348,7 @@ class Telemetry(object):
 
         The circle colors are "white", "blue", and "red"
         """
-        game_states = self.filter_by("loggamestateperiodic")
+        game_states = self.filter_by("LogGameStatePeriodic")
         circle_positions = {
             "white": [],
             "blue": [],
@@ -390,13 +400,13 @@ class Telemetry(object):
         field in the JSON response.
         """
         start = datetime.datetime.strptime(
-            self.filter_by("logmatchstart")[0]["_D"], "%Y-%m-%dT%H:%M:%S.%fZ"
+            self.filter_by("LogMatchStart")[0]["_D"], "%Y-%m-%dT%H:%M:%S.%fZ"
         )
 
         if land:
-            care_package_spawns = self.filter_by("logcarepackageland")
+            care_package_spawns = self.filter_by("LogCarePackageLand")
         else:
-            care_package_spawns = self.filter_by("logcarepackagespawn")
+            care_package_spawns = self.filter_by("LogCarePackageSpawn")
 
         care_package_positions = []
         for care_package in care_package_spawns:
@@ -427,7 +437,7 @@ class Telemetry(object):
 
     def killed(self):
         """A list of player names of all killed players this match."""
-        deaths = self.filter_by("logplayerkill")
+        deaths = self.filter_by("LogPlayerKill")
         players_killed = []
         for death in deaths:
             players_killed.append(death["victim"]["name"])
