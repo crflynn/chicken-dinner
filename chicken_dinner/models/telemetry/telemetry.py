@@ -441,7 +441,12 @@ class Telemetry(object):
         players_killed = []
         for death in deaths:
             players_killed.append(death["victim"]["name"])
-        return players_killed
+        # Telemetry data sometimes doesn't log all deaths
+        # This is more reliable
+        players = self.player_names()
+        winner = self.winner()
+        killed = set(players_killed) | (set(players) - set(winner))
+        return list(killed)
 
     def playback_animation(self, filename="playback.html", **kwargs):
         """Generate a playback animation from the telemetry data.

@@ -12,7 +12,7 @@ if __name__ == "__main__":
     telemetry = Telemetry.from_json(t)
 
     telemetry.playback_animation(
-        "docs/match.html",
+        "secret_test.html",
         zoom=True,
         labels=True,
         label_players=[],

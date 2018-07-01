@@ -455,6 +455,9 @@ def create_playback_animation(
         player_offsets = [(x, y) for x, y in zip(positions_x, positions_y)]
         if len(player_offsets) > 0:
             players.set_offsets(player_offsets)
+        else:
+            players.set_offsets([(x, y) for x, y in zip([-100000], [-100000])])
+
         if color_teams:
             players.set_facecolors(marker_colors)
 
