@@ -2,7 +2,7 @@
 __title__ = "chicken_dinner"
 __description__ = "PUBG JSON API wrapper and playback visualizer."
 __url__ = "https://github.com/crflynn/chicken-dinner"
-__version__ = "0.2.2"
+__version__ = "0.2.3"
 __author__ = "Christopher Flynn"
 __author_email__ = "crf204@gmail.com"
 __license__ = "MIT"
