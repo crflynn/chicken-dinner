@@ -181,39 +181,39 @@ def create_playback_animation(
         )
     implot = ax.imshow(img, extent=[0, mapx, 0, mapy])
 
-    players = ax.scatter(-10000, -10000, marker="o", c="w", edgecolor="k", s=60, linewidths=1)
-    deaths = ax.scatter(-10000, -10000, marker="X", c="r", edgecolor="k", s=60, linewidths=1, alpha=0.5)
+    players = ax.scatter(-10000, -10000, marker="o", c="w", edgecolor="k", s=60, linewidths=1, zorder=20)
+    deaths = ax.scatter(-10000, -10000, marker="X", c="r", edgecolor="k", s=60, linewidths=1, alpha=0.5, zorder=10)
 
     if highlight_players or highlight_teams:
-        highlights = ax.scatter(-10000, -10000, marker="*", c=highlight_color, edgecolor="k", s=180, linewidths=1)
-        highlights_deaths = ax.scatter(-10000, -10000, marker="X", c=highlight_color, edgecolor="k", s=60, linewidths=1)
+        highlights = ax.scatter(-10000, -10000, marker="*", c=highlight_color, edgecolor="k", s=180, linewidths=1, zorder=25)
+        highlights_deaths = ax.scatter(-10000, -10000, marker="X", c=highlight_color, edgecolor="k", s=60, linewidths=1, zorder=15)
 
     if labels:
         if label_players is not None:
             name_labels = {
-                player_name: ax.text(0, 0, player_name, size=8)
+                player_name: ax.text(0, 0, player_name, size=8, zorder=19)
                 for player_name in positions if player_name in label_players
             }
         else:
             name_labels = {
-                player_name: ax.text(0, 0, player_name, size=8)
+                player_name: ax.text(0, 0, player_name, size=8, zorder=19)
                 for player_name in positions
             }
         for label in name_labels.values():
             label.set_path_effects([patheffects.withStroke(linewidth=2, foreground="w")])
 
-    blue_circle = plt.Circle((0, 0), 0, edgecolor="b", linewidth=2, fill=False)
-    white_circle = plt.Circle((0, 0), 0, edgecolor="w", linewidth=2, fill=False)
-    red_circle = plt.Circle((0, 0), 0, color="r", edgecolor=None, lw=0, fill=True, alpha=0.3)
+    blue_circle = plt.Circle((0, 0), 0, edgecolor="b", linewidth=2, fill=False, zorder=5)
+    white_circle = plt.Circle((0, 0), 0, edgecolor="w", linewidth=2, fill=False, zorder=6)
+    red_circle = plt.Circle((0, 0), 0, color="r", edgecolor=None, lw=0, fill=True, alpha=0.3, zorder=7)
 
-    care_package_spawns, = ax.plot(-10000, -10000, marker="s", c="w", markerfacecoloralt="w", fillstyle="bottom", mec="k", markeredgewidth=0.5, markersize=10, lw=0)
-    care_package_lands, = ax.plot(-10000, -10000, marker="s", c="r", markerfacecoloralt="b", fillstyle="bottom", mec="k", markeredgewidth=0.5, markersize=10, lw=0)
+    care_package_spawns, = ax.plot(-10000, -10000, marker="s", c="w", markerfacecoloralt="w", fillstyle="bottom", mec="k", markeredgewidth=0.5, markersize=10, lw=0, zorder=8)
+    care_package_lands, = ax.plot(-10000, -10000, marker="s", c="r", markerfacecoloralt="b", fillstyle="bottom", mec="k", markeredgewidth=0.5, markersize=10, lw=0, zorder=9)
 
     damage_idx = 0
     damage_slots = 50
     damage_lines = []
     for k in range(damage_slots):
-        dline, = ax.plot(-10000, -10000, marker="x", c="r", mec="r", markeredgewidth=5, markersize=10, lw=2, markevery=[1], alpha=0.5)
+        dline, = ax.plot(-10000, -10000, marker="x", c="r", mec="r", markeredgewidth=5, markersize=10, lw=2, markevery=[1], alpha=0.5, zorder=50)
         damage_lines.append(dline)
 
     ax.add_patch(blue_circle)

@@ -1,6 +1,11 @@
 Release History
 ---------------
 
+0.2.3: 2018-07-01
+~~~~~~~~~~~~~~~~~
+
+* Added zordering to plot elements for better visualizations
+
 0.2.2: 2018-06-30
 ~~~~~~~~~~~~~~~~~
 
