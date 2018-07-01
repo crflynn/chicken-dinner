@@ -1,6 +1,13 @@
 Release History
 ---------------
 
+0.2.4: 2018-07-01
+~~~~~~~~~~~~~~~~~
+
+* Bugfix for second place player markers not disappearing
+
+* Small fix to make Telemetry.killed() more reliable since API might not provide all killed events
+
 0.2.3: 2018-07-01
 ~~~~~~~~~~~~~~~~~
 
