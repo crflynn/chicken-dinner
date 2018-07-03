@@ -1,6 +1,11 @@
 Release History
 ---------------
 
+0.2.5: 2018-07-02
+~~~~~~~~~~~~~~~~~
+
+* Bugfix for empty player position lists in telemetry
+
 0.2.4: 2018-07-01
 ~~~~~~~~~~~~~~~~~
 
