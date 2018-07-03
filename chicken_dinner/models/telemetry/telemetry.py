@@ -334,7 +334,8 @@ class Telemetry(object):
                     count += 1
                 else:
                     break
-            player_positions[player] = positions[:-count]
+            if count > 0:
+                player_positions[player] = positions[:-count]
 
         return player_positions
 
