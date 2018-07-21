@@ -1,6 +1,11 @@
 Release History
 ---------------
 
+0.2.7: 2018-07-20
+~~~~~~~~~~~~~~~~~
+
+* Remove a print statement in Telemetry.player_damage()
+
 0.2.6: 2018-07-20
 ~~~~~~~~~~~~~~~~~
 

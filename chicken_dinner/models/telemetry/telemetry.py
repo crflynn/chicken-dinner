@@ -260,7 +260,6 @@ class Telemetry(object):
             try:
                 attacker = event["attacker"]["name"]
             except TypeError:
-                print(event)
                 continue
             if attacker != "":
                 timestamp = datetime.datetime.strptime(
