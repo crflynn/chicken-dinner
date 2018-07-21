@@ -153,8 +153,11 @@ def create_playback_animation(
     # Get the max "frame number"
     maxlength = 0
     for player, pos in positions.items():
-        if pos[-1][0] > maxlength:
-            maxlength = pos[-1][0]
+        try:
+            if pos[-1][0] > maxlength:
+                maxlength = pos[-1][0]
+        except IndexError:
+            continue
 
     if interpolate:
         maxlength = max(all_times)

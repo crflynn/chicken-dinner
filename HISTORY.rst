@@ -1,6 +1,12 @@
 Release History
 ---------------
 
+0.2.6: 2018-07-20
+~~~~~~~~~~~~~~~~~
+
+* Bugfix in Telemetry.player_damage() for damage events with attacker = None (knocked bleedout damage)
+* Bugfix for visualizations with players that have no telemetry positions
+
 0.2.5: 2018-07-02
 ~~~~~~~~~~~~~~~~~
 

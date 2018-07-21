@@ -257,7 +257,11 @@ class Telemetry(object):
 
         damage_events = self.filter_by("LogPlayerTakeDamage")
         for event in damage_events:
-            attacker = event["attacker"]["name"]
+            try:
+                attacker = event["attacker"]["name"]
+            except TypeError:
+                print(event)
+                continue
             if attacker != "":
                 timestamp = datetime.datetime.strptime(
                     event["_D"], "%Y-%m-%dT%H:%M:%S.%fZ"
