@@ -26,6 +26,8 @@ class Match(object):
         self.participant_to_roster = {}
         self._participant_data = {}
         rosters_idx = []
+        import json
+        print(json.dumps(self.response, indent=2))
         for idx, item in enumerate(self.response["included"]):
             if item["type"] == "roster":
                 rosters_idx.append(idx)

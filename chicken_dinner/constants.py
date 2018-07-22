@@ -63,6 +63,7 @@ true_false = {
 BASE_URL = "https://api.playbattlegrounds.com"
 SHARD_URL = BASE_URL + "/shards/"
 STATUS_URL = BASE_URL + "/status"
+TOURNAMENTS_URL = BASE_URL + "/tournaments"
 PLAYER_FILTERS = {
     "player_ids": "playerIds",
     "player_names": "playerNames",
@@ -81,6 +82,7 @@ SHARDS = [
     "pc-sea",
     "pc-sa",
     "pc-as",
+    "pc-tournament",
 ]
 
 COLORS = [

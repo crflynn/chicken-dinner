@@ -7,6 +7,7 @@ from chicken_dinner.pubgapi.rate_limiter import RateLimiter
 from chicken_dinner.constants import BASE_URL
 from chicken_dinner.constants import SHARD_URL
 from chicken_dinner.constants import STATUS_URL
+from chicken_dinner.constants import TOURNAMENTS_URL
 from chicken_dinner.constants import SHARDS
 from chicken_dinner.constants import PLAYER_FILTERS
 
@@ -182,3 +183,19 @@ class PUBGCore(object):
         :return: the JSON response for the telemetry URL
         """
         return self._get(url, limited=False).json()
+
+    def tournament(self, tournament_id):
+        """Get information about a tournament.
+
+        Description: https://documentation.playbattlegrounds.com/en/tournaments-endpoint.html#/Tournaments/get_tournaments__id_
+
+        :param str tournament_id: the tournament ID on which to retrieve data
+        """
+        return self._get(TOURNAMENTS_URL + "/" + tournament_id).json()
+
+    def tournaments(self):
+        """Get a list of tournaments.
+
+        Description: https://documentation.playbattlegrounds.com/en/tournaments-endpoint.html#/Tournaments/get_tournaments
+        """
+        return self._get(TOURNAMENTS_URL).json()
