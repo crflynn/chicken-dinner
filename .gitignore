@@ -26,6 +26,7 @@ build/
 # secret
 secret*
 design*
+test.json
 
 # docs
 docs/_build/

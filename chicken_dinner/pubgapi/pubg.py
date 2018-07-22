@@ -6,6 +6,8 @@ from chicken_dinner.models import PlayerSeason
 from chicken_dinner.models import Samples
 from chicken_dinner.models import Seasons
 from chicken_dinner.models import Status
+from chicken_dinner.models import Tournament
+from chicken_dinner.models import Tournaments
 from chicken_dinner.pubgapi.core import PUBGCore
 from chicken_dinner.pubgapi.rate_limiter import DEFAULT_CALL_COUNT
 from chicken_dinner.pubgapi.rate_limiter import DEFAULT_CALL_WINDOW
@@ -178,3 +180,14 @@ class PUBG(object):
         :return: a :class:`chicken_dinner.models.telemetry.Telemetry` object
         """
         return Telemetry(self, url)
+
+    def tournament(self, tournament_id):
+        """Get a tournament by its id.
+
+        :param str tournament_id: the tournament id for which to get data
+        """
+        return Tournament(self, tournament_id)
+
+    def tournaments(self):
+        """Get a list of tournaments."""
+        return Tournaments(self)

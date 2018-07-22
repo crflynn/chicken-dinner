@@ -5,3 +5,5 @@ from .samples import Samples
 from .season import Season
 from .seasons import Seasons
 from .status import Status
+from .tournament import Tournament
+from .tournaments import Tournaments

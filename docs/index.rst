@@ -126,6 +126,7 @@ Recommended playback settings:
     models/api
     models/match
     models/telemetry
+    models/tournament
     visual/playback
     assets/maps
     sample_erangel

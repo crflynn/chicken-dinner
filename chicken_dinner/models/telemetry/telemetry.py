@@ -1,7 +1,7 @@
 """Telemetry class."""
 import datetime
 
-from chicken_dinner.structures import CaseInsensitiveDict
+from chicken_dinner.models.telemetry.events import TelemetryEvent
 
 
 class Telemetry(object):
@@ -21,9 +21,9 @@ class Telemetry(object):
             self.response = telemetry_json
         else:
             self.response = self._pubg._core.telemetry(url)
-        #: Case insensitive JSON representation of the telemetry response
-        self.telemetry = CaseInsensitiveDict.from_json(self.response)
-        if "common" in self.telemetry[-1]:
+        #: Snake cased object-attribute models for telemetry events and objects
+        self.events = [TelemetryEvent(e) for e in self.response]
+        if getattr(self.events[-1], "common", None) is not None:
             #: The platform for this game, "pc" or "xbox"
             self.platform = "pc"
         else:
@@ -38,6 +38,10 @@ class Telemetry(object):
         """The shard for this match."""
         return self._shard or self._pubg.shard
 
+    def event_types(self):
+        """A sorted list of event type names from this telemetry."""
+        return sorted(list(set([e.event_type for e in self.events])))
+
     def filter_by(self, event_type=None): #, account_id=None, player_name=None):
         """Get a list of telemetry events for a specific event type.
 
@@ -45,40 +49,37 @@ class Telemetry(object):
         """
         events = None
         if event_type is not None:
-            event_type = event_type.lower().replace("_", "")
-            if not event_type.startswith("log"):
-                event_type = "log" + event_type
             events = [
-                event for event in self.telemetry
-                if event["_T"].lower() == event_type
+                event for event in self.events
+                if event.event_type == event_type
             ]
         else:
-            events = [event for event in self.telemetry]
+            events = [event for event in self.events]
 
         return events
 
     def player_ids(self):
         """The account ids of all players in the match."""
         accounts = []
-        for event in self.telemetry:
-            if event["_T"] == "LogPlayerLogin":
-                accounts.append(event["accountId"])
+        for event in self.events:
+            if event.event_type == "log_player_login":
+                accounts.append(event.account_id)
         return accounts
 
     def players(self):
         """A map of player names to account ids for all players this match."""
         players = {}
-        for event in self.telemetry:
-            if event["_T"] == "LogPlayerCreate":
-                players[event["character"]["name"]] = event["character"]["accountId"]
+        for event in self.events:
+            if event.event_type == "log_player_create":
+                players[event.character.name] = event.character.account_id
         return players
 
     def player_names(self):
         """A list of player names for all match pariticipants."""
         player_names = []
-        for event in self.telemetry:
-            if event["_T"] == "LogPlayerCreate":
-                player_names.append(event["character"]["name"])
+        for event in self.events:
+            if event.event_type == "log_player_create":
+                player_names.append(event.character.name)
         return player_names
 
     def damage_done(player=None, combat_only=True, distribution=False):
@@ -91,28 +92,29 @@ class Telemetry(object):
             by each player. (default False)
         """
         damage = {}
-        for event in self.telemetry:
-            if event["_T"] == "LogPlayerTakeDamage":
-                attacker = event["attacker"]["name"]
-                if player is not None and player != attacker:
-                    continue
-                if attacker == "":
+        for event in self.events:
+            if event.event_type == "log_player_take_damage":
+                try:
+                    attacker = event.attacker.name
+                except AttributeError:
                     if combat_only:
                         continue
                     else:
-                        attacker = "[" + event["damageTypeCategory"] + "]"
+                        attacker = "[" + event.damage_type_category + "]"
+                if player is not None and player != attacker:
+                    continue
                 if distribution:
                     if attacker not in damage:
                         damage[attacker] = {}
                     if victim not in damage[attacker]:
-                        damage[attacker][victim] = event["damage"]
+                        damage[attacker][victim] = event.damage
                     else:
-                        damage[attacker][victim] += event["damage"]
+                        damage[attacker][victim] += event.damage
                 else:
                     if attacker not in damage:
-                        damage[attacker] = event["damage"]
+                        damage[attacker] = event.damage
                     else:
-                        damage[attacker] += event["damage"]
+                        damage[attacker] += event.damage
         return damage
 
     def damage_taken(player=None, combat_only=True, distribution=False):
@@ -125,39 +127,40 @@ class Telemetry(object):
             by each player. (default False)
         """
         damage = {}
-        for event in self.telemetry:
-            if event["_T"] == "LogPlayerTakeDamage":
-                victim = event["victim"]["name"]
+        for event in self.events:
+            if event.event_type == "log_player_take_damage":
+                victim = event.victim.name
                 if player is not None and player != victim:
                     continue
-                attacker = event["attacker"]["name"]
-                if attacker == "":
+                try:
+                    attacker = event.attacker.name
+                except AttributeError:
                     if combat_only:
                         continue
                     else:
-                        attacker = "[" + event["damageTypeCategory"] + "]"
+                        attacker = "[" + event.damage_type_category + "]"
                 if distribution:
                     if victim not in damage:
                         damage[victim] = {}
                     if attacker not in damage[attacker]:
-                        damage[victim][attacker] = event["damage"]
+                        damage[victim][attacker] = event.damage
                     else:
-                        damage[victim][attacker] += event["damage"]
+                        damage[victim][attacker] += event.damage
                 else:
                     if victim not in damage:
-                        damage[victim] = event["damage"]
+                        damage[victim] = event.damage
                     else:
-                        damage[victim] += event["damage"]
+                        damage[victim] += event.damage
         return damage
 
     def rosters(self):
         """The team rosters for the match."""
         rosters = {}
-        for event in self.telemetry[::-1]:
-            if event["_T"] == "LogMatchEnd":
-                for player in event["characters"]:
-                    team = player["teamId"]
-                    player_name = player["name"]
+        for event in self.events[::-1]:
+            if event.event_type == "log_match_end":
+                for player in event.characters:
+                    team = player.team_id
+                    player_name = player.name
                     if team not in rosters:
                         rosters[team] = []
                     rosters[team].append(player_name)
@@ -179,13 +182,13 @@ class Telemetry(object):
         :param int rank: Get the specific rank number players for the match.
         """
         rankings = {}
-        for event in self.telemetry[::-1]:
-            if event["_T"] == "LogMatchEnd":
-                for player in event["characters"]:
-                    ranking = player["ranking"]
+        for event in self.events[::-1]:
+            if event.event_type == "log_match_end":
+                for player in event.characters:
+                    ranking = player.ranking
                     if ranking not in rankings:
                         rankings[ranking] = []
-                    rankings[ranking].append(player["name"])
+                    rankings[ranking].append(player.name)
         if rank is not None:
             return rankings.get(rank, None)
         return rankings
@@ -211,9 +214,9 @@ class Telemetry(object):
 
     def map_name(self):
         """Get the map name for PC matches. None if not PC."""
-        for event in self.telemetry:
-            if event["_T"] == "LogMatchStart":
-                map_id = event.get("mapName", None)
+        for event in self.events:
+            if event.event_type == "log_match_start":
+                map_id = getattr(event, "map_name", None)
                 if map_id is not None:
                     return map_to_map_name[map_id]
                 else:
@@ -221,9 +224,9 @@ class Telemetry(object):
 
     def map_id(self):
         """Get the map id for PC matches. None if not PC."""
-        for event in self.telemetry:
-            if event["_T"] == "LogMatchStart":
-                map_id = event.get("mapName", None)
+        for event in self.events:
+            if event.event_type == "log_match_start":
+                map_id = getattr(event, "map_name", None)
                 if map_id is not None:
                     return map_id
                 else:
@@ -231,9 +234,9 @@ class Telemetry(object):
 
     def match_id(self):
         """The match id for the match."""
-        for event in self.telemetry:
-            if event["_T"] == "LogMatchDefinition":
-                return event["MatchId"]
+        for event in self.events:
+            if event.event_type == "log_match_definition":
+                return event.match_id
 
     def player_damages(self, include_pregame=False):
         """Get the player damages for the match.
@@ -247,39 +250,40 @@ class Telemetry(object):
             pre-game damage positions.
         """
         start = datetime.datetime.strptime(
-            self.filter_by("LogMatchStart")[0]["_D"], "%Y-%m-%dT%H:%M:%S.%fZ"
+            self.filter_by("log_match_start")[0].timestamp,
+            "%Y-%m-%dT%H:%M:%S.%fZ"
         )
         damages = {}
-        attack_events = self.filter_by("LogPlayerAttack")
+        attack_events = self.filter_by("log_player_attack")
         attackers = {}
         for event in attack_events:
-            attackers[event["attackId"]] = event["attacker"]
+            attackers[event.attack_id] = event.attacker
 
-        damage_events = self.filter_by("LogPlayerTakeDamage")
+        damage_events = self.filter_by("log_player_take_damage")
         for event in damage_events:
             try:
-                attacker = event["attacker"]["name"]
-            except TypeError:
+                attacker = event.attacker.name
+            except AttributeError:
                 continue
             if attacker != "":
                 timestamp = datetime.datetime.strptime(
-                    event["_D"], "%Y-%m-%dT%H:%M:%S.%fZ"
+                    event.timestamp, "%Y-%m-%dT%H:%M:%S.%fZ"
                 )
                 dt = (timestamp - start).total_seconds()
-                if (not include_pregame and dt < 0) or event["attackId"] == -1:
+                if (not include_pregame and dt < 0) or event.attack_id == -1:
                     continue
                 if attacker not in damages:
                     damages[attacker] = []
-                attacker_location = attackers[event["attackId"]]["location"]
+                attacker_location = attackers[event.attack_id].location
                 damages[attacker].append(
                     (
                         dt,
-                        attacker_location["x"],
-                        attacker_location["y"],
-                        attacker_location["z"],
-                        event["victim"]["location"]["x"],
-                        event["victim"]["location"]["y"],
-                        event["victim"]["location"]["z"],
+                        attacker_location.x,
+                        attacker_location.y,
+                        attacker_location.z,
+                        event.victim.location.x,
+                        event.victim.location.y,
+                        event.victim.location.z,
                     )
                 )
         return damages
@@ -297,22 +301,23 @@ class Telemetry(object):
             pre-game player positions.
         """
         start = datetime.datetime.strptime(
-            self.filter_by("LogMatchStart")[0]["_D"], "%Y-%m-%dT%H:%M:%S.%fZ"
+            self.filter_by("log_match_start")[0].timestamp,
+            "%Y-%m-%dT%H:%M:%S.%fZ"
         )
-        locations = self.filter_by("LogPlayerPosition")
+        locations = self.filter_by("log_player_position")
         if not include_pregame:
             locations = [
                 location for location in locations
-                if location["elapsedTime"] > 0
+                if location.elapsed_time > 0
             ]
         player_positions = {}
         dead = []
         for location in locations:
             timestamp = datetime.datetime.strptime(
-                location["_D"], "%Y-%m-%dT%H:%M:%S.%fZ"
+                location.timestamp, "%Y-%m-%dT%H:%M:%S.%fZ"
             )
             dt = (timestamp - start).total_seconds()
-            player = location["character"]["name"]
+            player = location.character.name
             if player not in player_positions:
                 player_positions[player] = []
             elif player in dead:
@@ -321,12 +326,12 @@ class Telemetry(object):
             player_positions[player].append(
                 (
                     dt,
-                    location["character"]["location"]["x"],
-                    location["character"]["location"]["y"],
-                    location["character"]["location"]["z"],
+                    location.character.location.x,
+                    location.character.location.y,
+                    location.character.location.z,
                 )
             )
-            if location["character"]["ranking"] > 1:
+            if location.character.ranking > 1:
                 dead.append(player)
         # cleanup
         for player, positions in player_positions.items():
@@ -352,45 +357,45 @@ class Telemetry(object):
 
         The circle colors are "white", "blue", and "red"
         """
-        game_states = self.filter_by("LogGameStatePeriodic")
+        game_states = self.filter_by("log_game_state_periodic")
         circle_positions = {
             "white": [],
             "blue": [],
             "red": [],
         }
         start = datetime.datetime.strptime(
-            game_states[0]["_D"], "%Y-%m-%dT%H:%M:%S.%fZ"
+            game_states[0].timestamp, "%Y-%m-%dT%H:%M:%S.%fZ"
         )
         for game_state in game_states:
             timestamp = datetime.datetime.strptime(
-                game_state["_D"], "%Y-%m-%dT%H:%M:%S.%fZ"
+                game_state.timestamp, "%Y-%m-%dT%H:%M:%S.%fZ"
             )
             dt = (timestamp - start).total_seconds()
             circle_positions["blue"].append(
                 (
                     dt,
-                    game_state["gameState"]["safetyZonePosition"]["x"],
-                    game_state["gameState"]["safetyZonePosition"]["y"],
-                    game_state["gameState"]["safetyZonePosition"]["z"],
-                    game_state["gameState"]["safetyZoneRadius"],
+                    game_state.game_state.safety_zone_position.x,
+                    game_state.game_state.safety_zone_position.y,
+                    game_state.game_state.safety_zone_position.z,
+                    game_state.game_state.safety_zone_radius,
                 )
             )
             circle_positions["red"].append(
                 (
                     dt,
-                    game_state["gameState"]["redZonePosition"]["x"],
-                    game_state["gameState"]["redZonePosition"]["y"],
-                    game_state["gameState"]["redZonePosition"]["z"],
-                    game_state["gameState"]["redZoneRadius"],
+                    game_state.game_state.red_zone_position.x,
+                    game_state.game_state.red_zone_position.y,
+                    game_state.game_state.red_zone_position.z,
+                    game_state.game_state.red_zone_radius,
                 )
             )
             circle_positions["white"].append(
                 (
                     dt,
-                    game_state["gameState"]["poisonGasWarningPosition"]["x"],
-                    game_state["gameState"]["poisonGasWarningPosition"]["y"],
-                    game_state["gameState"]["poisonGasWarningPosition"]["z"],
-                    game_state["gameState"]["poisonGasWarningRadius"],
+                    game_state.game_state.poison_gas_warning_position.x,
+                    game_state.game_state.poison_gas_warning_position.y,
+                    game_state.game_state.poison_gas_warning_position.z,
+                    game_state.game_state.poison_gas_warning_radius,
                 )
             )
         return circle_positions
@@ -404,47 +409,48 @@ class Telemetry(object):
         field in the JSON response.
         """
         start = datetime.datetime.strptime(
-            self.filter_by("LogMatchStart")[0]["_D"], "%Y-%m-%dT%H:%M:%S.%fZ"
+            self.filter_by("log_match_start")[0].timestamp,
+            "%Y-%m-%dT%H:%M:%S.%fZ"
         )
 
         if land:
-            care_package_spawns = self.filter_by("LogCarePackageLand")
+            care_package_spawns = self.filter_by("log_care_package_land")
         else:
-            care_package_spawns = self.filter_by("LogCarePackageSpawn")
+            care_package_spawns = self.filter_by("log_care_package_spawn")
 
         care_package_positions = []
         for care_package in care_package_spawns:
             package_time = datetime.datetime.strptime(
-                care_package["_D"], "%Y-%m-%dT%H:%M:%S.%fZ"
+                care_package.timestamp, "%Y-%m-%dT%H:%M:%S.%fZ"
             )
             time_elapsed = (package_time - start).total_seconds()
             care_package_positions.append(
                 (
                     time_elapsed,
-                    care_package["itemPackage"]["location"]["x"],
-                    care_package["itemPackage"]["location"]["y"],
-                    care_package["itemPackage"]["location"]["z"],
+                    care_package.item_package.location.x,
+                    care_package.item_package.location.y,
+                    care_package.item_package.location.z,
                 )
             )
         return care_package_positions
 
     def match_length(self):
         """The length of the match in seconds."""
-        for event in self.telemetry[::-1]:
-            elapsed_time = event.get("elapsedTime", None)
+        for event in self.events[::-1]:
+            elapsed_time = getattr(event, "elapsed_time", None)
             if elapsed_time is not None:
                 return elapsed_time
 
     def started(self):
         """A timestamp of when the match started."""
-        return self.telemetry[0]["_D"]
+        return self.events[0].timestamp
 
     def killed(self):
         """A list of player names of all killed players this match."""
-        deaths = self.filter_by("LogPlayerKill")
+        deaths = self.filter_by("log_player_kill")
         players_killed = []
         for death in deaths:
-            players_killed.append(death["victim"]["name"])
+            players_killed.append(death.victim.name)
         # Telemetry data sometimes doesn't log all deaths
         # This is more reliable
         players = self.player_names()
@@ -461,21 +467,21 @@ class Telemetry(object):
         :param filename: a file to generate for the animation (default
             "playback.html")
         :param bool labels: whether to label players by name
-        :param int disable_labels_after: if passed, turns off player labels after
-            number of seconds elapsed in game
-        :param list label_players: a list of strings of player names that should
-            be labeled
+        :param int disable_labels_after: if passed, turns off player labels
+            after number of seconds elapsed in game
+        :param list label_players: a list of strings of player names that
+            should be labeled
         :param bool dead_players: whether to mark dead players
-        :param list dead_player_labels: a list of strings of players that should
-            be labeled when dead
+        :param list dead_player_labels: a list of strings of players that
+            should be labeled when dead
         :param bool zoom: whether to zoom with the circles through the playback
         :param float zoom_edge_buffer: how much to buffer the blue circle edge
             when zooming
         :param bool use_hi_res: whether to use the hi-res image, best to be set
             to True when using zoom
         :param bool color_teams: whether to color code different teams
-        :param list highlight_teams: a list of strings of player names whose teams
-            should be highlighted
+        :param list highlight_teams: a list of strings of player names whose
+            teams should be highlighted
         :param list highlight_players: a list of strings of player names who
             should be highlighted
         :param str highlight_color: a color to use for highlights
@@ -483,8 +489,8 @@ class Telemetry(object):
         :param bool label_highlights: whether to label the highlights
         :param bool care_packages: whether to show care packages
         :param bool damage: whether to show PvP damage
-        :param int end_frames: the number of extra end frames after game has been
-            completed
+        :param int end_frames: the number of extra end frames after game has
+            been completed
         :param int size: the size of the resulting animation frame
         :param int dpi: the dpi to use when processing the animation
         :param bool interpolate: use linear interpolation to get frames with

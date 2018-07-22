@@ -67,21 +67,21 @@ def create_playback_animation(
     :param filename: a file to generate for the animation (default
         "playback.html")
     :param bool labels: whether to label players by name
-    :param int disable_labels_after: if passed, turns off player labels after
-        number of seconds elapsed in game
-    :param list label_players: a list of strings of player names that should
-        be labeled
+    :param int disable_labels_after: if passed, turns off player labels
+        after number of seconds elapsed in game
+    :param list label_players: a list of strings of player names that
+        should be labeled
     :param bool dead_players: whether to mark dead players
-    :param list dead_player_labels: a list of strings of players that should
-        be labeled when dead
+    :param list dead_player_labels: a list of strings of players that
+        should be labeled when dead
     :param bool zoom: whether to zoom with the circles through the playback
     :param float zoom_edge_buffer: how much to buffer the blue circle edge
         when zooming
     :param bool use_hi_res: whether to use the hi-res image, best to be set
         to True when using zoom
     :param bool color_teams: whether to color code different teams
-    :param list highlight_teams: a list of strings of player names whose teams
-        should be highlighted
+    :param list highlight_teams: a list of strings of player names whose
+        teams should be highlighted
     :param list highlight_players: a list of strings of player names who
         should be highlighted
     :param str highlight_color: a color to use for highlights
@@ -89,8 +89,8 @@ def create_playback_animation(
     :param bool label_highlights: whether to label the highlights
     :param bool care_packages: whether to show care packages
     :param bool damage: whether to show PvP damage
-    :param int end_frames: the number of extra end frames after game has been
-        completed
+    :param int end_frames: the number of extra end frames after game has
+        been completed
     :param int size: the size of the resulting animation frame
     :param int dpi: the dpi to use when processing the animation
     :param bool interpolate: use linear interpolation to get frames with
