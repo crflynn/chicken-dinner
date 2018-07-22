@@ -15,6 +15,7 @@ class TelemetryObject(object):
     to snake-cased key names.
 
     :param data: the JSON object data associated with the telemetry object
+    :param reference: the key from the parent object that refernces this object
     """
 
     def __init__(self, data, reference):
