@@ -1,6 +1,12 @@
 Release History
 ---------------
 
+0.3.1: 2018-07-22
+~~~~~~~~~~~~~~~~~
+
+* Updates to the latest version of Miramar map image
+* Provide a function for locally updating and downloading official PUBG map images, including hi-res versions
+
 0.3.0: 2018-07-22
 ~~~~~~~~~~~~~~~~~
 

@@ -170,7 +170,10 @@ def create_playback_animation(
     ax.axis("off")
 
     if use_hi_res:
-        map_image = map_id + ".jpg"
+        if map_id == "Savage_Main":
+            map_image = map_id + ".png"
+        else:
+            map_image = map_id + ".jpg"
     else:
         map_image = map_id + "_lowres.jpg"
     img_path = os.path.join(MAP_ASSET_PATH, map_image)
