@@ -190,6 +190,7 @@ class PUBGCore(object):
         Description: https://documentation.playbattlegrounds.com/en/tournaments-endpoint.html#/Tournaments/get_tournaments__id_
 
         :param str tournament_id: the tournament ID on which to retrieve data
+        :return: the JSON response for the tournament id
         """
         return self._get(TOURNAMENTS_URL + "/" + tournament_id).json()
 
@@ -197,5 +198,7 @@ class PUBGCore(object):
         """Get a list of tournaments.
 
         Description: https://documentation.playbattlegrounds.com/en/tournaments-endpoint.html#/Tournaments/get_tournaments
+
+        :return: the JSON response for the tournaments endpoint
         """
         return self._get(TOURNAMENTS_URL).json()
