@@ -10,6 +10,11 @@ generate ``Match`` instances associated with the respective tournament. See
 ``Match`` instances can then be used to create ``Telemetry`` instances.
 See :doc:`/models/telemetry` for more details on telemetry.
 
+.. note::
+
+    * Tournament resources must use the ``pc-tournament`` shard.
+
+
 .. autoclass:: chicken_dinner.models.Tournaments
     :members:
 
