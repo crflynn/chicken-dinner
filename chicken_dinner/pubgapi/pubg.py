@@ -185,13 +185,13 @@ class PUBG(object):
         """Get a tournament by its id.
 
         :param str tournament_id: the tournament id for which to get data
-        :return: a :class:`chicken_dinner.models.telemetry.Tournament` object
+        :return: a :class:`chicken_dinner.models.tournament.Tournament` object
         """
         return Tournament(self, tournament_id)
 
     def tournaments(self):
         """Get a list of tournaments.
 
-        :return: a :class:`chicken_dinner.models.telemetry.Tournaments` object
+        :return: a :class:`chicken_dinner.models.tournament.Tournaments` object
         """
         return Tournaments(self)
