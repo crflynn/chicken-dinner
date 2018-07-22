@@ -1,6 +1,13 @@
 Release History
 ---------------
 
+0.3.0: 2018-07-22
+~~~~~~~~~~~~~~~~~
+
+* Add support for tournament endpoints
+* Provide Tournaments and Tournament objects
+* Add better telemetry support with TelemetryEvent and TelemetryObject classes
+
 0.2.7: 2018-07-20
 ~~~~~~~~~~~~~~~~~
 
