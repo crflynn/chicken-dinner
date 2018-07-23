@@ -38,7 +38,10 @@ class PUBGCore(object):
                 "Accept-Encoding": "gzip",
             })
         self.rate_limiter = RateLimiter(limit_call_count, limit_call_window)
-        self.shard = shard
+        if (shard and shard in SHARDS) or shard is None:
+            self.shard = shard
+        else:
+            raise ValueError("Invalid shard provided.")
 
     @property
     def api_key(self):
