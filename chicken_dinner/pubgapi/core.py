@@ -38,7 +38,10 @@ class PUBGCore(object):
                 "Accept-Encoding": "gzip",
             })
         self.rate_limiter = RateLimiter(limit_call_count, limit_call_window)
-        self.shard = shard
+        if shard is None or shard in SHARDS:
+            self.shard = shard
+        else:
+            raise ValueError("Invalid shard provided.")
 
     @property
     def api_key(self):
@@ -56,6 +59,10 @@ class PUBGCore(object):
         shard = shard or self.shard
         if shard is None:
             raise ValueError("A shard must be provided.")
+        elif shard not in SHARDS:
+            raise ValueError("Invalid shard provided.")
+        else:
+            return shard
 
     def _get(self, url, params=None, limited=True):
         if limited and self.rate_limiter.window > 0:
@@ -75,8 +82,8 @@ class PUBGCore(object):
             the one used on instantiation
         :return: the json response from ``/{shard}/matches/{match_id}``
         """
-        self._check_shard(shard)
-        url = SHARD_URL + self.shard + "/matches/" + match_id
+        shard = self._check_shard(shard)
+        url = SHARD_URL + shard + "/matches/" + match_id
         return self._get(url, limited=False).json()
 
     def player(self, player_id, shard=None):
@@ -89,8 +96,8 @@ class PUBGCore(object):
             the one used on instantiation
         :return: the JSON response from ``/{shard}/players/{player_id}``
         """
-        self._check_shard(shard)
-        url = SHARD_URL + self.shard + "/players/" + str(player_id)
+        shard = self._check_shard(shard)
+        url = SHARD_URL + shard + "/players/" + str(player_id)
         return self._get(url).json()
 
     def player_season(self, player_id, season_id, shard=None):
@@ -105,8 +112,8 @@ class PUBGCore(object):
         :return: the JSON response from
             ``/{shard}/players/{player_id}/seasons/{season_id}``
         """
-        self._check_shard(shard)
-        url = SHARD_URL + self.shard + "/players/" + str(player_id)
+        shard = self._check_shard(shard)
+        url = SHARD_URL + shard + "/players/" + str(player_id)
         url = url + "/seasons/" + str(season_id)
         return self._get(url).json()
 
@@ -122,14 +129,14 @@ class PUBGCore(object):
             the one used on instantiation
         :return: the response from the ``/{shard}/players`` endpoint
         """
-        self._check_shard(shard)
+        shard = self._check_shard(shard)
         if filter_type not in PLAYER_FILTERS:
             raise ValueError("Filter type must be in " + str(PLAYER_FILTERS))
         if isinstance(filter_value, list):
             filter_value = ",".join(filter_value)
 
         params = {"filter[" + PLAYER_FILTERS[filter_type] + "]": filter_value}
-        url = SHARD_URL + self.shard + "/players"
+        url = SHARD_URL + shard + "/players"
         return self._get(url, params).json()
 
     def samples(self, start=None, shard=None):
@@ -143,8 +150,8 @@ class PUBGCore(object):
             the one used on instantiation
         :return: the JSON response from the ``/{shard}/samples`` endpoint
         """
-        self._check_shard(shard)
-        url = SHARD_URL + self.shard + "/samples"
+        shard = self._check_shard(shard)
+        url = SHARD_URL + shard + "/samples"
         params = {}
         if start is not None:
             params = {"filter[createdAt-start]": start}
@@ -159,8 +166,8 @@ class PUBGCore(object):
             the one used on instantiation
         :return: the JSON response from the ``/{shard}/seasons`` endpoint.
         """
-        self._check_shard(shard)
-        url = SHARD_URL + self.shard + "/seasons"
+        shard = self._check_shard(shard)
+        url = SHARD_URL + shard + "/seasons"
         return self._get(url).json()
 
     def status(self):

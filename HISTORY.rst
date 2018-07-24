@@ -1,6 +1,11 @@
 Release History
 ---------------
 
+0.3.2: 2018-07-23
+~~~~~~~~~~~~~~~~~
+
+* Bugfix for overriding initial shard selection in PUBGCore (thanks to `CemuUser8 <https://github.com/CemuUser8>`_)
+
 0.3.1: 2018-07-22
 ~~~~~~~~~~~~~~~~~
 
