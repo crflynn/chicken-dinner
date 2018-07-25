@@ -28,10 +28,7 @@ class TelemetryEvent(object):
             elif k in ("_D", "_T", "_V"):
                 setattr(self, k, v)
             elif k == "blueZoneCustomOptions":  # serialized json
-                if len(v) > 2:  # more than just '[]'
-                    setattr(self, camel_to_snake(k), TelemetryObject(json.loads(v), k))
-                else:
-                    setattr(self, camel_to_snake(k), json.loads(v))
+                setattr(self, camel_to_snake(k), [TelemetryObject(e, k) for e in json.loads(v)])
             else:
                 setattr(self, camel_to_snake(k), v)
 
