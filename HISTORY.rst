@@ -1,6 +1,14 @@
 Release History
 ---------------
 
+0.3.3: 2018-07-24
+~~~~~~~~~~~~~~~~~
+
+* Fix for missing import statement in telemetry.py
+* Bugfix for blueZoneCustomOptions in TelemetryEvent.__init__()
+* Bugfix for Telemetry.damage_done() and Telemetry.damage_taken() functions
+* Allow events to be index-accessible in the Telemetry object
+
 0.3.2: 2018-07-23
 ~~~~~~~~~~~~~~~~~
 
