@@ -6,6 +6,7 @@ import time
 
 DEFAULT_CALL_COUNT = 10
 DEFAULT_CALL_WINDOW = 60
+SLEEP_BUFFER = 2
 
 
 class RateLimiter(object):
@@ -15,9 +16,6 @@ class RateLimiter(object):
     timestamps of recent calls within the window. It can check against the
     limit and add calls to the deque of calls.
     """
-
-    # A fixed time in seconds to add to all sleeps as a safety buffer.
-    buffer_time = 2
 
     def __init__(self, calls=DEFAULT_CALL_COUNT, window=DEFAULT_CALL_WINDOW):
         """Instantiate the class."""
@@ -38,7 +36,7 @@ class RateLimiter(object):
                     break
         # If at the limit still, store the required wait time.
         if len(self.deq) >= self.calls:
-            return self.deq[0] - (time.time() - self.window) + self.buffer_time
+            return self.deq[0] - (time.time() - self.window) + SLEEP_BUFFER
         else:
             return 0
 
@@ -47,8 +45,8 @@ class RateLimiter(object):
         if check:
             sleep_seconds = self.check()
             if sleep_seconds > 0:
-                logging.info("Rate limiter sleeping for {} seconds.".format(
-                    sleep_seconds
+                logging.warning("Rate limiter sleeping for {} seconds.".format(
+                    str(int(sleep_seconds))
                 ))
                 time.sleep(self.check())
         self.deq.append(time.time())

@@ -1,6 +1,13 @@
 Release History
 ---------------
 
+0.3.2: xxxx-xx-xx
+~~~~~~~~~~~~~~~~~
+
+* PUBGCore now sleeps for rate limited requests (assuming the self imposed rate limiter fails)
+* Rate limited sleeps (PUBGCore and RateLimiter classes) now log at WARNING level
+* PUBGCore now raises RequestException for all non-200 responses except with 429 where it will sleep and try once more
+
 0.3.2: 2018-07-23
 ~~~~~~~~~~~~~~~~~
 

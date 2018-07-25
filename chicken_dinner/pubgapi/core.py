@@ -1,8 +1,13 @@
 # flake8: noqa
+import logging
+import time
+
 import requests
+from requests.exceptions import RequestException
 
 from chicken_dinner.pubgapi.rate_limiter import DEFAULT_CALL_COUNT
 from chicken_dinner.pubgapi.rate_limiter import DEFAULT_CALL_WINDOW
+from chicken_dinner.pubgapi.rate_limiter import SLEEP_BUFFER
 from chicken_dinner.pubgapi.rate_limiter import RateLimiter
 from chicken_dinner.constants import BASE_URL
 from chicken_dinner.constants import SHARD_URL
@@ -67,7 +72,28 @@ class PUBGCore(object):
     def _get(self, url, params=None, limited=True):
         if limited and self.rate_limiter.window > 0:
             self.rate_limiter.call()
+
         response = self.session.get(url, params=params)
+
+        try:
+            response.raise_for_status()
+        except RequestException as exc:
+            if response.status_code == 429:
+                reset_time = response.headers["X-RateLimit-Reset"]
+                reset_duration = int(reset_time) - time.time() + SLEEP_BUFFER
+                logging.warning(
+                    "Rate limited by API. Sleeping for " +
+                    str(int(reset_duration)) + " seconds."
+                )
+                time.sleep(reset_duration)
+            else:
+                raise exc
+            response = self.session.get(url, params=params)
+            response.raise_for_status()
+
+        self._rate_limit_remaining = response.headers["X-RateLimit-Remaining"]
+        self._rate_limit_reset = response.headers["X-RateLimit-Reset"]
+        logging.debug(response.headers)
         return response
 
     def match(self, match_id, shard=None):
