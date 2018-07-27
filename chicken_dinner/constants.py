@@ -315,7 +315,7 @@ item_to_item_name = {
     "Item_Weapon_VSS_C": "VSS",
     "Item_Weapon_Win1894_C": "Win94",
     "Item_Weapon_Winchester_C": "S1897",
-	"Item_Weapon_FNFal_C": "SLR"
+    "Item_Weapon_FNFal_C": "SLR"
 }
 
 
@@ -435,7 +435,7 @@ damage_causer_to_name = {
     "WeapVSS_C": "VSS",
     "WeapWin94_C": "Win94",
     "WeapWinchester_C": "S1897",
-	"WeapFNFal_C": "SLR",
+    "WeapFNFal_C": "SLR",
 }
 
 
