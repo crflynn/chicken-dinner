@@ -1,6 +1,11 @@
 Release History
 ---------------
 
+0.4.1: 2018-07-28
+~~~~~~~~~~~~~~~~~
+
+* Fixed a bug that prevented the status method from returning because it is unauthenticated and has no limit headers
+
 0.4.0: 2018-07-28
 ~~~~~~~~~~~~~~~~~
 

@@ -106,10 +106,11 @@ class PUBGCore(object):
             response = self.session.get(url, params=params)
             response.raise_for_status()
 
-        delta = self._get_rate_limit_delta(response)
+        if url != STATUS_URL:
+            delta = self._get_rate_limit_delta(response)
 
-        self._rate_limit_reset = time.time() + delta
-        self._rate_limit_remaining = int(response.headers["X-RateLimit-Remaining"])
+            self._rate_limit_reset = time.time() + delta
+            self._rate_limit_remaining = int(response.headers["X-RateLimit-Remaining"])
 
         return response
 
@@ -239,7 +240,7 @@ class PUBGCore(object):
 
         :return: the JSON response from the ``/status`` endpoint.
         """
-        return self._get(STATUS_URL).json()
+        return self._get(STATUS_URL, limited=False).json()
 
     def telemetry(self, url):
         """Download the telemetry data.
