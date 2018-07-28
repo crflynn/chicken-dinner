@@ -50,7 +50,7 @@ setup(
     },
     include_package_data=True,
     package_data={
-        "": ["*lowres.jpg"]
+        "": ["*lowres.jpg", "dictionary.json"]
     },
     zip_safe=False,
 )
