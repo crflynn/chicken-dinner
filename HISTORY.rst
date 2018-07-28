@@ -16,7 +16,7 @@ Release History
 * PUBGCore (and PUBG) now sleeps automatically for rate limited requests
 * Rate limited sleeps now log at WARNING level
 * PUBGCore now raises RequestException for all non-200 responses except with 429 where it will sleep and try once (and only once) more
-* rate_limit_count and rate_limit_window parameters are now removed from the PUBG and PUBGCore classes
+* rate_limit_count and rate_limit_window parameters are now removed from the PUBG and PUBGCore classes as limits are now inferred from response headers
 
 0.3.3: 2018-07-24
 ~~~~~~~~~~~~~~~~~
