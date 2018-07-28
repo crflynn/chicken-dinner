@@ -50,8 +50,6 @@ class PUBGCore(object):
         # Set some defaults to ensure the first API call is attempted
         self._rate_limit_remaining = 10
         self._rate_limit_reset = 0
-        self._api_key_limit_count = None
-        self._api_key_limit_window = None
 
     @property
     def api_key(self):
