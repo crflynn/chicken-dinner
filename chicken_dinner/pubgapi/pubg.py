@@ -10,8 +10,6 @@ from chicken_dinner.models import Tournament
 from chicken_dinner.models import Tournaments
 from chicken_dinner.models.telemetry import Telemetry
 from chicken_dinner.pubgapi.core import PUBGCore
-from chicken_dinner.pubgapi.rate_limiter import DEFAULT_CALL_COUNT
-from chicken_dinner.pubgapi.rate_limiter import DEFAULT_CALL_WINDOW
 
 
 class PUBG(object):
@@ -22,16 +20,10 @@ class PUBG(object):
         instance
     :param bool gzip: (default=*True*) whether to gzip the responses. Responses
         are automatically unzipped by the underlying ``requests`` library.
-    :param int limit_call_count: (optional) your api key rate limit count
-    :param int limit_call_window: (optional) your api key rate limit window
     """
 
-    def __init__(self, api_key, shard=None, gzip=True,
-                 limit_call_count=DEFAULT_CALL_COUNT,
-                 limit_call_window=DEFAULT_CALL_WINDOW):
-        self._core = PUBGCore(
-            api_key, shard, gzip, limit_call_count, limit_call_window
-        )
+    def __init__(self, api_key, shard=None, gzip=True):
+        self._core = PUBGCore(api_key, shard, gzip)
 
     @property
     def api_key(self):
