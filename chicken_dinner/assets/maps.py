@@ -6,7 +6,6 @@ import requests
 
 
 logger = logging.getLogger()
-logger.setLevel("INFO")
 
 
 MAPS_URL = "https://api.github.com/repos/pubg/api-assets/contents/Assets/Maps?ref=master"
@@ -22,8 +21,9 @@ MAP_ASSET_PATH = os.path.join(
 )
 
 
-def update_maps(include_hi_res=True):
+def update_maps():
     """Update the maps local to this package."""
+    logger.setLevel("INFO")
     response = requests.get(MAPS_URL).json()
     map_files = [f["download_url"] for f in response]
 
