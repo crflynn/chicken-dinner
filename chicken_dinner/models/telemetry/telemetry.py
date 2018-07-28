@@ -2,6 +2,7 @@
 import datetime
 
 from chicken_dinner.constants import map_to_map_name
+from chicken_dinner.constants import map_name_to_map
 from chicken_dinner.models.telemetry.events import TelemetryEvent
 
 
@@ -9,21 +10,25 @@ class Telemetry(object):
     """Telemetry model.
 
     :param pubg: a PUBG instance
-    :param str shard: the shard for the match associated with this telemetry
     :param str url: the url for this telemetry
     :param list telemetry_json: (optional) the raw telemetry response
+    :param str shard: the shard for the match associated with this telemetry
+    :param bool map_assets: whether to map asset ids to named values, e.g.
+        map ``Item_Weapon_AK47_C`` to ``AKM``.
     """
 
-    def __init__(self, pubg, url, telemetry_json=None, shard=None):
+    def __init__(self, pubg, url, telemetry_json=None, shard=None, map_assets=False):
         self._pubg = pubg
         self._shard = shard
+        #: Whether asset ids are mapped to names
+        self.map_assets = map_assets
         if telemetry_json is not None:
             #: The API response associated with this object
             self.response = telemetry_json
         else:
             self.response = self._pubg._core.telemetry(url)
         #: Snake cased object-attribute models for telemetry events and objects
-        self.events = [TelemetryEvent(e) for e in self.response]
+        self.events = [TelemetryEvent(e, map_assets) for e in self.response]
         if getattr(self.events[-1], "common", None) is not None:
             #: The platform for this game, "pc" or "xbox"
             self.platform = "pc"
@@ -46,7 +51,7 @@ class Telemetry(object):
         """A sorted list of event type names from this telemetry."""
         return sorted(list(set([e.event_type for e in self.events])))
 
-    def filter_by(self, event_type=None): #, account_id=None, player_name=None):
+    def filter_by(self, event_type=None):
         """Get a list of telemetry events for a specific event type.
 
         :param event_type: the event type to filter
@@ -243,7 +248,7 @@ class Telemetry(object):
             if event.event_type == "log_match_start":
                 map_id = getattr(event, "map_name", None)
                 if map_id is not None:
-                    return map_to_map_name[map_id]
+                    return map_to_map_name.get(map_id, map_id)
                 else:
                     return self._pubg.match(self.match_id()).map_name
 
@@ -253,7 +258,7 @@ class Telemetry(object):
             if event.event_type == "log_match_start":
                 map_id = getattr(event, "map_name", None)
                 if map_id is not None:
-                    return map_id
+                    return map_name_to_map.get(map_id, map_id)
                 else:
                     return self._pubg.match(self.match_id()).map_id
 

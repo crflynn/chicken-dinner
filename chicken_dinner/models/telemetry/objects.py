@@ -1,6 +1,7 @@
 """Telemetry objects."""
 import json
 
+from chicken_dinner.constants import asset_map
 from chicken_dinner.util import camel_to_snake
 from chicken_dinner.util import remove_from_dict
 
@@ -18,16 +19,22 @@ class TelemetryObject(object):
     :param reference: the key from the parent object that refernces this object
     """
 
-    def __init__(self, data, reference):
+    def __init__(self, data, reference, map_assets=False):
         #: The key name that references this object
         self.reference = camel_to_snake(reference)
         for k, v in data.items():
             if isinstance(v, dict):
-                setattr(self, camel_to_snake(k), TelemetryObject(v, k))
+                setattr(self, camel_to_snake(k), TelemetryObject(v, k, map_assets))
             elif isinstance(v, list) and len(v) > 0 and isinstance(v[0], dict):
-                setattr(self, camel_to_snake(k), [TelemetryObject(e, k) for e in v])
+                setattr(self, camel_to_snake(k), [TelemetryObject(e, k, map_assets) for e in v])
             else:
-                setattr(self, camel_to_snake(k), v)
+                if map_assets:
+                    if isinstance(v, list):
+                        setattr(self, camel_to_snake(k), [asset_map.get(e, e) for e in v])
+                    else:
+                        setattr(self, camel_to_snake(k), asset_map.get(v, v))
+                else:
+                    setattr(self, camel_to_snake(k), v)
 
     def __getitem__(self, key):
         return getattr(self, camel_to_snake(key))
