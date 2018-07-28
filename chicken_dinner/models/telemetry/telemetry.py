@@ -1,6 +1,8 @@
 """Telemetry class."""
 import datetime
 
+from chicken_dinner.constants import map_to_map_name
+from chicken_dinner.constants import map_name_to_map
 from chicken_dinner.models.telemetry.events import TelemetryEvent
 
 
@@ -8,21 +10,25 @@ class Telemetry(object):
     """Telemetry model.
 
     :param pubg: a PUBG instance
-    :param str shard: the shard for the match associated with this telemetry
     :param str url: the url for this telemetry
     :param list telemetry_json: (optional) the raw telemetry response
+    :param str shard: the shard for the match associated with this telemetry
+    :param bool map_assets: whether to map asset ids to named values, e.g.
+        map ``Item_Weapon_AK47_C`` to ``AKM``.
     """
 
-    def __init__(self, pubg, url, telemetry_json=None, shard=None):
+    def __init__(self, pubg, url, telemetry_json=None, shard=None, map_assets=False):
         self._pubg = pubg
         self._shard = shard
+        #: Whether asset ids are mapped to names
+        self.map_assets = map_assets
         if telemetry_json is not None:
             #: The API response associated with this object
             self.response = telemetry_json
         else:
             self.response = self._pubg._core.telemetry(url)
         #: Snake cased object-attribute models for telemetry events and objects
-        self.events = [TelemetryEvent(e) for e in self.response]
+        self.events = [TelemetryEvent(e, map_assets) for e in self.response]
         if getattr(self.events[-1], "common", None) is not None:
             #: The platform for this game, "pc" or "xbox"
             self.platform = "pc"
@@ -33,6 +39,9 @@ class Telemetry(object):
         #: Whether this game was played on xbox
         self.is_xbox = "xbox" == self.platform
 
+    def __getitem__(self, key):
+        return self.events[key]
+
     @property
     def shard(self):
         """The shard for this match."""
@@ -42,7 +51,7 @@ class Telemetry(object):
         """A sorted list of event type names from this telemetry."""
         return sorted(list(set([e.event_type for e in self.events])))
 
-    def filter_by(self, event_type=None): #, account_id=None, player_name=None):
+    def filter_by(self, event_type=None):
         """Get a list of telemetry events for a specific event type.
 
         :param event_type: the event type to filter
@@ -82,7 +91,7 @@ class Telemetry(object):
                 player_names.append(event.character.name)
         return player_names
 
-    def damage_done(player=None, combat_only=True, distribution=False):
+    def damage_done(self, player=None, combat_only=True, distribution=False):
         """Damage done by each player in the match.
 
         :param str player: a player name to filter on
@@ -91,33 +100,44 @@ class Telemetry(object):
             damage for the match if true. if false return total damage done
             by each player. (default False)
         """
+        start = datetime.datetime.strptime(
+            self.filter_by("log_match_start")[0].timestamp,
+            "%Y-%m-%dT%H:%M:%S.%fZ"
+        )
         damage = {}
-        for event in self.events:
-            if event.event_type == "log_player_take_damage":
-                try:
-                    attacker = event.attacker.name
-                except AttributeError:
-                    if combat_only:
-                        continue
-                    else:
-                        attacker = "[" + event.damage_type_category + "]"
-                if player is not None and player != attacker:
+        damage_events = self.filter_by("log_player_take_damage")
+        for event in damage_events:
+            timestamp = datetime.datetime.strptime(
+                event.timestamp, "%Y-%m-%dT%H:%M:%S.%fZ"
+            )
+            dt = (timestamp - start).total_seconds()
+            if dt < 0 or event.attack_id == -1:
+                continue
+            victim = event.victim.name
+            try:
+                attacker = event.attacker.name
+            except AttributeError:
+                if combat_only:
                     continue
-                if distribution:
-                    if attacker not in damage:
-                        damage[attacker] = {}
-                    if victim not in damage[attacker]:
-                        damage[attacker][victim] = event.damage
-                    else:
-                        damage[attacker][victim] += event.damage
                 else:
-                    if attacker not in damage:
-                        damage[attacker] = event.damage
-                    else:
-                        damage[attacker] += event.damage
+                    attacker = "[" + event.damage_type_category + "]"
+            if player is not None and player != attacker:
+                continue
+            if distribution:
+                if attacker not in damage:
+                    damage[attacker] = {}
+                if victim not in damage[attacker]:
+                    damage[attacker][victim] = event.damage
+                else:
+                    damage[attacker][victim] += event.damage
+            else:
+                if attacker not in damage:
+                    damage[attacker] = event.damage
+                else:
+                    damage[attacker] += event.damage
         return damage
 
-    def damage_taken(player=None, combat_only=True, distribution=False):
+    def damage_taken(self, player=None, combat_only=True, distribution=False):
         """Damage taken by each player in the match.
 
         :param str player: a player name to filter on
@@ -126,31 +146,41 @@ class Telemetry(object):
             damage for the match if true. if false return total damage taken
             by each player. (default False)
         """
+        start = datetime.datetime.strptime(
+            self.filter_by("log_match_start")[0].timestamp,
+            "%Y-%m-%dT%H:%M:%S.%fZ"
+        )
         damage = {}
-        for event in self.events:
-            if event.event_type == "log_player_take_damage":
-                victim = event.victim.name
-                if player is not None and player != victim:
+        damage_events = self.filter_by("log_player_take_damage")
+        for event in damage_events:
+            timestamp = datetime.datetime.strptime(
+                event.timestamp, "%Y-%m-%dT%H:%M:%S.%fZ"
+            )
+            dt = (timestamp - start).total_seconds()
+            if dt < 0 or event.attack_id == -1:
+                continue
+            victim = event.victim.name
+            if player is not None and player != victim:
+                continue
+            try:
+                attacker = event.attacker.name
+            except AttributeError:
+                if combat_only:
                     continue
-                try:
-                    attacker = event.attacker.name
-                except AttributeError:
-                    if combat_only:
-                        continue
-                    else:
-                        attacker = "[" + event.damage_type_category + "]"
-                if distribution:
-                    if victim not in damage:
-                        damage[victim] = {}
-                    if attacker not in damage[attacker]:
-                        damage[victim][attacker] = event.damage
-                    else:
-                        damage[victim][attacker] += event.damage
                 else:
-                    if victim not in damage:
-                        damage[victim] = event.damage
-                    else:
-                        damage[victim] += event.damage
+                    attacker = "[" + event.damage_type_category + "]"
+            if distribution:
+                if victim not in damage:
+                    damage[victim] = {}
+                if attacker not in damage[victim]:
+                    damage[victim][attacker] = event.damage
+                else:
+                    damage[victim][attacker] += event.damage
+            else:
+                if victim not in damage:
+                    damage[victim] = event.damage
+                else:
+                    damage[victim] += event.damage
         return damage
 
     def rosters(self):
@@ -218,7 +248,7 @@ class Telemetry(object):
             if event.event_type == "log_match_start":
                 map_id = getattr(event, "map_name", None)
                 if map_id is not None:
-                    return map_to_map_name[map_id]
+                    return map_to_map_name.get(map_id, map_id)
                 else:
                     return self._pubg.match(self.match_id()).map_name
 
@@ -228,7 +258,7 @@ class Telemetry(object):
             if event.event_type == "log_match_start":
                 map_id = getattr(event, "map_name", None)
                 if map_id is not None:
-                    return map_id
+                    return map_name_to_map.get(map_id, map_id)
                 else:
                     return self._pubg.match(self.match_id()).map_id
 
@@ -287,7 +317,6 @@ class Telemetry(object):
                     )
                 )
         return damages
-
 
     def player_positions(self, include_pregame=False):
         """Get the player positions for the match.
@@ -498,6 +527,13 @@ class Telemetry(object):
         :param int interval: interval between gameplay frames in seconds
         :param int fps: the frames per second for the animation
         """
-        from chicken_dinner.visual.playback import create_playback_animation
+        try:
+            from chicken_dinner.visual.playback import create_playback_animation
+        except ModuleNotFoundError as exc:
+            print(
+                "Use `pip install chicken_dinner[visual]` "
+                "for visualization dependencies."
+            )
+            raise exc
 
         return create_playback_animation(self, filename, **kwargs)

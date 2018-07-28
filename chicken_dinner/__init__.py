@@ -10,12 +10,12 @@ from .__version__ import __copyright__
 
 
 __all__ = (
-    __version__,
-    __description__,
-    __url__,
-    __title__,
-    __author__,
-    __author_email__,
-    __license__,
-    __copyright__,
+    "__version__",
+    "__description__",
+    "__url__",
+    "__title__",
+    "__author__",
+    "__author_email__",
+    "__license__",
+    "__copyright__",
 )

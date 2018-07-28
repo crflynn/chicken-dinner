@@ -1,6 +1,7 @@
 """Telemetry events."""
 import json
 
+from chicken_dinner.constants import asset_map
 from chicken_dinner.models.telemetry.objects import TelemetryObject
 from chicken_dinner.util import camel_to_snake
 from chicken_dinner.util import remove_from_dict
@@ -19,21 +20,24 @@ class TelemetryEvent(object):
     :param data: the JSON object data associated with the telemetry event
     """
 
-    def __init__(self, data):
+    def __init__(self, data, map_assets=False):
         for k, v in data.items():
             if isinstance(v, dict):
-                setattr(self, camel_to_snake(k), TelemetryObject(v, k))
+                setattr(self, camel_to_snake(k), TelemetryObject(v, k, map_assets))
             elif isinstance(v, list):
-                setattr(self, camel_to_snake(k), [TelemetryObject(e, k) for e in v])
+                setattr(self, camel_to_snake(k), [TelemetryObject(e, k, map_assets) for e in v])
             elif k in ("_D", "_T", "_V"):
-                setattr(self, k, v)
-            elif k == "blueZoneCustomOptions":  # serialized json
-                if len(v) > 2:  # more than just '[]'
-                    setattr(self, camel_to_snake(k), TelemetryObject(json.loads(v), k))
+                if map_assets:
+                    setattr(self, k, asset_map.get(v, v))
                 else:
-                    setattr(self, camel_to_snake(k), json.loads(v))
+                    setattr(self, k, v)
+            elif k == "blueZoneCustomOptions":  # serialized json
+                setattr(self, camel_to_snake(k), [TelemetryObject(e, k, map_assets) for e in json.loads(v)])
             else:
-                setattr(self, camel_to_snake(k), v)
+                if map_assets:
+                    setattr(self, camel_to_snake(k), asset_map.get(v, v))
+                else:
+                    setattr(self, camel_to_snake(k), v)
 
     @property
     def event_type(self):

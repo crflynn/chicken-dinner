@@ -1,8 +1,4 @@
 """Player-season stats model."""
-import re
-
-from chicken_dinner.constants import GROUPS
-from chicken_dinner.constants import PERSPECTIVES
 from chicken_dinner.constants import game_mode_to_gp
 from chicken_dinner.constants import gp_to_game_mode
 from chicken_dinner.constants import gp_to_matches

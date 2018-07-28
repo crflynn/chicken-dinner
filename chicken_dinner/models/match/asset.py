@@ -2,7 +2,13 @@
 
 
 class Asset(object):
+    """Match asset model.
 
+    :param pubg: a ``PUBG`` instance
+    :param match: a ``Match`` instance associated with this asset
+    :param data: the data payload for this asset
+    :param str shard: the shard for this match
+    """
 
     def __init__(self, pubg, match, data, shard=None):
         self._pubg = pubg

@@ -1,5 +1,5 @@
-Telemetry
-=========
+Telemetry Models
+================
 
 The ``chicken_dinner`` package provides several objects for interfacing with
 PUBG match telemetry data, events, and objects.

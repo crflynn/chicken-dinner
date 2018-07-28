@@ -1,12 +1,27 @@
 Release History
 ---------------
 
-0.3.2: xxxx-xx-xx
+0.4.0: xxxx-xx-xx
 ~~~~~~~~~~~~~~~~~
 
+* Fixed a visual bug where dead highlighted labeled players' markers would persist after death
+* Moved the map update module from visual to assets
+* Added item id mapping dictionary in chicken_dinner/assets/dictionary.json
+* Added item mapping dictionary update module in chicken_dinner.assets.dictionary
+* Fixed chicken_dinner.__all__
+* Added some missing imports
+* Added optional ``map_assets`` boolean to Telemetry related builders/constructors which maps asset ids to asset names
 * PUBGCore now sleeps for rate limited requests (assuming the self imposed rate limiter fails)
 * Rate limited sleeps (PUBGCore and RateLimiter classes) now log at WARNING level
 * PUBGCore now raises RequestException for all non-200 responses except with 429 where it will sleep and try once more
+
+0.3.3: 2018-07-24
+~~~~~~~~~~~~~~~~~
+
+* Fix for missing import statement in telemetry.py
+* Bugfix for blueZoneCustomOptions in TelemetryEvent.__init__()
+* Bugfix for Telemetry.damage_done() and Telemetry.damage_taken() functions
+* Allow events to be index-accessible in the Telemetry object
 
 0.3.2: 2018-07-23
 ~~~~~~~~~~~~~~~~~

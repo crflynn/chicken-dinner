@@ -1,4 +1,4 @@
-# flake8: noqa
+"""PUBG API JSON wrapper."""
 import logging
 import time
 
@@ -9,7 +9,6 @@ from chicken_dinner.pubgapi.rate_limiter import DEFAULT_CALL_COUNT
 from chicken_dinner.pubgapi.rate_limiter import DEFAULT_CALL_WINDOW
 from chicken_dinner.pubgapi.rate_limiter import SLEEP_BUFFER
 from chicken_dinner.pubgapi.rate_limiter import RateLimiter
-from chicken_dinner.constants import BASE_URL
 from chicken_dinner.constants import SHARD_URL
 from chicken_dinner.constants import STATUS_URL
 from chicken_dinner.constants import TOURNAMENTS_URL
@@ -50,6 +49,7 @@ class PUBGCore(object):
 
     @property
     def api_key(self):
+        """The API key being used."""
         return self._api_key
 
     @api_key.setter

@@ -2,6 +2,7 @@ import logging
 
 from chicken_dinner.pubgapi import PUBG
 from .secret import api_key
+# from tests.secret import api_key
 
 
 logger = logging.getLogger()
@@ -10,6 +11,7 @@ logger.setLevel("INFO")
 
 if __name__ == "__main__":
     # api_key = "your_api_key"
+    # pubg = PUBG(api_key, "xbox-na")
     pubg = PUBG(api_key, "pc-na")
     player = "badshroud"
     shroud = pubg.players_from_names(player)[0]
@@ -20,6 +22,7 @@ if __name__ == "__main__":
         if player in match.winner.player_names:# and match.map_name in ("Desert_Main", "Miramar"):
             print(match.map_name, match_id)
             match_telemetry = match.get_telemetry()
+            # break
             match_telemetry.playback_animation(
                 "secret.html",
                 zoom=True,
