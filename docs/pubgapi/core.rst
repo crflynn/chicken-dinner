@@ -29,5 +29,6 @@ on instantiating the ``PUBGCore`` class.
     altogether, but if a 429 response does occur, the client will sleep and
     attempt *one* retry before raising an exception.
 
+
 .. autoclass:: chicken_dinner.pubgapi.PUBGCore
     :members:
