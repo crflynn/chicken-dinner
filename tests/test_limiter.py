@@ -10,6 +10,7 @@ logger = logging.getLogger()
 logger.setLevel("DEBUG")
 
 pubg = PUBG(api_key, "pc-tournament")
+print(pubg.api_key_limits())
 for k in range(6):
     tournaments = pubg.tournaments()
 for k in range(5):
