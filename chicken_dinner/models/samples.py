@@ -1,4 +1,5 @@
 """Shard samples model."""
+from chicken_dinner.constants import SHARD_URL
 
 
 class Samples(object):

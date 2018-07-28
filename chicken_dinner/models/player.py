@@ -1,6 +1,7 @@
 """Individual player model."""
-# flake8: noqa
 from .season import Season
+
+from chicken_dinner.constants import SHARD_URL
 
 
 class Player(object):
