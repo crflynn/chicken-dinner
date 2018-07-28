@@ -1,15 +1,25 @@
-# flake8: noqa
-import requests
+"""PUBG API JSON wrapper."""
+import datetime
+import logging
+import time
 
-from chicken_dinner.pubgapi.rate_limiter import DEFAULT_CALL_COUNT
-from chicken_dinner.pubgapi.rate_limiter import DEFAULT_CALL_WINDOW
-from chicken_dinner.pubgapi.rate_limiter import RateLimiter
-from chicken_dinner.constants import BASE_URL
+import requests
+from requests.exceptions import RequestException
+
 from chicken_dinner.constants import SHARD_URL
 from chicken_dinner.constants import STATUS_URL
 from chicken_dinner.constants import TOURNAMENTS_URL
 from chicken_dinner.constants import SHARDS
 from chicken_dinner.constants import PLAYER_FILTERS
+
+
+SLEEP_BUFFER = 2
+MONTHNAMES = [
+    None,  # placeholder index
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+]
+UTC = datetime.timezone(datetime.timedelta(0))
 
 
 class PUBGCore(object):
@@ -24,27 +34,26 @@ class PUBGCore(object):
     :param str shard: (optional) the shard to use in all requests for this
         instance
     :param bool gzip: (optional) compress responses as gzip
-    :param int limit_call_count: (optional) your api key rate limit count
-    :param int limit_call_window: (optional) your api key rate limit window
     """
 
-    def __init__(self, api_key, shard=None, gzip=True,
-                 limit_call_count=DEFAULT_CALL_COUNT,
-                 limit_call_window=DEFAULT_CALL_WINDOW):
+    def __init__(self, api_key, shard=None, gzip=True):
         self.session = requests.Session()
         self.api_key = api_key
         if gzip:
             self.session.headers.update({
                 "Accept-Encoding": "gzip",
             })
-        self.rate_limiter = RateLimiter(limit_call_count, limit_call_window)
         if shard is None or shard in SHARDS:
             self.shard = shard
         else:
             raise ValueError("Invalid shard provided.")
+        # Set some defaults to ensure the first API call is attempted
+        self._rate_limit_remaining = 10
+        self._rate_limit_reset = 0
 
     @property
     def api_key(self):
+        """The API key being used."""
         return self._api_key
 
     @api_key.setter
@@ -65,10 +74,63 @@ class PUBGCore(object):
             return shard
 
     def _get(self, url, params=None, limited=True):
-        if limited and self.rate_limiter.window > 0:
-            self.rate_limiter.call()
+        if limited:
+            reset_time = self._rate_limit_reset - time.time()
+            if self._rate_limit_remaining == 0 and reset_time > 0:
+                sleep_duration = reset_time + SLEEP_BUFFER
+                logging.warning(
+                    "Rate limited by PUBGCore. Sleeping for " +
+                    str(int(sleep_duration)) + " seconds."
+                )
+                time.sleep(sleep_duration)
+
         response = self.session.get(url, params=params)
+        logging.debug(response.headers)
+
+        try:
+            response.raise_for_status()
+        except RequestException as exc:
+            if response.status_code == 429:
+                reset_time = self._get_rate_limit_delta(response)
+                sleep_duration = int(reset_time) + SLEEP_BUFFER
+                logging.warning(
+                    "Rate limited by API (429). Sleeping for " +
+                    str(int(sleep_duration)) + " seconds."
+                )
+                time.sleep(sleep_duration)
+            else:
+                raise exc
+            # Try again and just raise on failure because something else
+            # must be wrong. Hard failures should be handled by end-user
+            # gracefully.
+            response = self.session.get(url, params=params)
+            response.raise_for_status()
+
+        delta = self._get_rate_limit_delta(response)
+
+        self._rate_limit_reset = time.time() + delta
+        self._rate_limit_remaining = int(response.headers["X-RateLimit-Remaining"])
+
         return response
+
+    def _get_rate_limit_delta(self, response):
+        server_datetime = response.headers["Date"].split(" ")
+        server_hms = server_datetime[4].split(":")
+
+        server_time = datetime.datetime(
+            year=int(server_datetime[3]),
+            month=MONTHNAMES.index(server_datetime[2]),
+            day=int(server_datetime[1]),
+            hour=int(server_hms[0]),
+            minute=int(server_hms[1]),
+            second=int(server_hms[2]),
+            tzinfo=UTC
+        ).timestamp()
+
+        reset_time = int(response.headers["X-RateLimit-Reset"])
+        delta = reset_time - server_time
+
+        return delta
 
     def match(self, match_id, shard=None):
         """Get a response from the match endpoint.

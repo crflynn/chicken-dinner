@@ -22,7 +22,7 @@ if __name__ == "__main__":
         if player in match.winner.player_names:# and match.map_name in ("Desert_Main", "Miramar"):
             print(match.map_name, match_id)
             match_telemetry = match.get_telemetry()
-            break
+            # break
             match_telemetry.playback_animation(
                 "secret.html",
                 zoom=True,

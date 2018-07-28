@@ -18,5 +18,17 @@ automatically between consecutive requests to prevent hitting the rate limit.
 If you have an API key with a higher rate limit you can provide the parameters
 on instantiating the ``PUBGCore`` class.
 
+.. warning::
+
+    *(new in 0.4.0)* PUBGCore (and PUBG) instances provide a built-in rate
+    limiter which sleeps based on the API call being made and the rate limit
+    information contained in the response headers. When rate limited, these
+    classes will emit a warning to the console.
+
+    PUBGCore will attempt to avoid 429 (rate limited) responses
+    altogether, but if a 429 response does occur, the client will sleep and
+    attempt *one* retry before raising an exception.
+
+
 .. autoclass:: chicken_dinner.pubgapi.PUBGCore
     :members:

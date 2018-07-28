@@ -1,4 +1,4 @@
-# flake8: noqa
+"""PUBG model-API interface."""
 from chicken_dinner.models.match import Match
 from chicken_dinner.models import Player
 from chicken_dinner.models import Players
@@ -8,9 +8,8 @@ from chicken_dinner.models import Seasons
 from chicken_dinner.models import Status
 from chicken_dinner.models import Tournament
 from chicken_dinner.models import Tournaments
+from chicken_dinner.models.telemetry import Telemetry
 from chicken_dinner.pubgapi.core import PUBGCore
-from chicken_dinner.pubgapi.rate_limiter import DEFAULT_CALL_COUNT
-from chicken_dinner.pubgapi.rate_limiter import DEFAULT_CALL_WINDOW
 
 
 class PUBG(object):
@@ -21,19 +20,14 @@ class PUBG(object):
         instance
     :param bool gzip: (default=*True*) whether to gzip the responses. Responses
         are automatically unzipped by the underlying ``requests`` library.
-    :param int limit_call_count: (optional) your api key rate limit count
-    :param int limit_call_window: (optional) your api key rate limit window
     """
 
-    def __init__(self, api_key, shard=None, gzip=True,
-                 limit_call_count=DEFAULT_CALL_COUNT,
-                 limit_call_window=DEFAULT_CALL_WINDOW):
-        self._core = PUBGCore(
-            api_key, shard, gzip, limit_call_count, limit_call_window
-        )
+    def __init__(self, api_key, shard=None, gzip=True):
+        self._core = PUBGCore(api_key, shard, gzip)
 
     @property
     def api_key(self):
+        """The API key being used."""
         return self._core.api_key
 
     @api_key.setter
@@ -42,6 +36,7 @@ class PUBG(object):
 
     @property
     def shard(self):
+        """The current shard being used."""
         return self._core.shard
 
     @shard.setter
@@ -173,10 +168,12 @@ class PUBG(object):
         shard = shard or self.shard
         return Players(self, "player_names", player_names, shard)
 
-    def telemetry(self, url):
+    def telemetry(self, url, map_assets=False):
         """Get a telemetry object from a telemetry url.
 
         :param str url: the url for the telemetry data
+        :param bool map_assets: whether to map asset ids to named values, e.g.
+            map ``Item_Weapon_AK47_C`` to ``AKM``.
         :return: a :class:`chicken_dinner.models.telemetry.Telemetry` object
         """
         return Telemetry(self, url)

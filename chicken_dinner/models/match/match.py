@@ -1,6 +1,5 @@
 """Match model."""
 from .asset import Asset
-from .participant import Participant
 from .roster import Roster
 from chicken_dinner.constants import game_mode_to_gp
 from chicken_dinner.constants import map_to_map_name
@@ -122,9 +121,11 @@ class Match(object):
         """The URL for the telemetry data for this match."""
         return self.asset.url
 
-    def get_telemetry(self):
+    def get_telemetry(self, map_assets=False):
         """Download match telemetry and create a Telemetry object instance.
 
+        :param bool map_assets: whether to map asset ids to named values, e.g.
+            map ``Item_Weapon_AK47_C`` to ``AKM``.
         :return: a :class:`chicken_dinner.models.telemetry.Telemetry` instance
             for this match.
         """
@@ -141,7 +142,7 @@ class Match(object):
     def winner(self):
         """The Roster instance for the winner of this match."""
         for roster in self.rosters:
-            if roster.won == True:
+            if roster.won:
                 return roster
 
     @property

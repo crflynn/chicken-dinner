@@ -1,0 +1,11 @@
+[flake8]
+ignore = D401,E501
+exclude =
+    .git,
+    __pycache__,
+    */__init__.py
+    docs/,
+    build,
+    dist
+    tests
+max-complexity = 12

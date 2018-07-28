@@ -1,5 +1,4 @@
 """Function for generating playback animations."""
-import json
 import logging
 import os
 import random
@@ -9,8 +8,6 @@ import matplotlib.pyplot as plt
 from matplotlib import patheffects
 from matplotlib import rc
 from matplotlib.animation import FuncAnimation
-from matplotlib.offsetbox import AnnotationBbox
-from matplotlib.offsetbox import OffsetImage
 
 from chicken_dinner.constants import COLORS
 from chicken_dinner.constants import map_dimensions
@@ -55,7 +52,7 @@ def create_playback_animation(
         interpolate=True,
         interval=1,
         fps=30,
-    ):
+):
     """Create a playback animation from telemetry data.
 
     Using matplotlib's animation library, create an HTML5 animation saved to
@@ -185,7 +182,7 @@ def create_playback_animation(
             "Download images from https://github.com/pubg/api-assets/tree/master/Assets/Maps\n"
             "and place in folder: " + MAP_ASSET_PATH
         )
-    implot = ax.imshow(img, extent=[0, mapx, 0, mapy])
+    ax.imshow(img, extent=[0, mapx, 0, mapy])
 
     players = ax.scatter(-10000, -10000, marker="o", c="w", edgecolor="k", s=60, linewidths=1, zorder=20)
     deaths = ax.scatter(-10000, -10000, marker="X", c="r", edgecolor="k", s=60, linewidths=1, alpha=0.5, zorder=10)
@@ -215,7 +212,6 @@ def create_playback_animation(
     care_package_spawns, = ax.plot(-10000, -10000, marker="s", c="w", markerfacecoloralt="w", fillstyle="bottom", mec="k", markeredgewidth=0.5, markersize=10, lw=0, zorder=8)
     care_package_lands, = ax.plot(-10000, -10000, marker="s", c="r", markerfacecoloralt="b", fillstyle="bottom", mec="k", markeredgewidth=0.5, markersize=10, lw=0, zorder=9)
 
-    damage_idx = 0
     damage_slots = 50
     damage_lines = []
     for k in range(damage_slots):
@@ -263,8 +259,8 @@ def create_playback_animation(
         if idx == 0:
             return coords[0][vidx]
         else:
-            v0 = coords[idx-1][vidx]
-            t0 = coords[idx-1][tidx]
+            v0 = coords[idx - 1][vidx]
+            t0 = coords[idx - 1][tidx]
 
         v1 = coords[idx][vidx]
         t1 = coords[idx][tidx]
@@ -420,7 +416,7 @@ def create_playback_animation(
                     if disable_labels_after is not None and frame >= disable_labels_after:
                         name_labels[player].set_position((-100000, -100000))
                     else:
-                        name_labels[player].set_position((x + 10000 * xwidth/mapx, y - 10000 * ywidth/mapy))
+                        name_labels[player].set_position((x + 10000 * xwidth / mapx, y - 10000 * ywidth / mapy))
 
                 # Update player damages
                 if damage:
@@ -452,7 +448,7 @@ def create_playback_animation(
 
                 # Draw dead players names
                 if labels and dead_player_labels and player in label_players:
-                    name_labels[player].set_position((pos[-1][1] + 10000 * xwidth/mapx, mapy - pos[-1][2] - 10000 * ywidth/mapy))
+                    name_labels[player].set_position((pos[-1][1] + 10000 * xwidth / mapx, mapy - pos[-1][2] - 10000 * ywidth / mapy))
                     name_labels[player].set_path_effects([patheffects.withStroke(linewidth=1, foreground="gray")])
                 # Offscreen if labels are off
                 elif labels and player in label_players:
@@ -462,7 +458,7 @@ def create_playback_animation(
         if len(player_offsets) > 0:
             players.set_offsets(player_offsets)
         else:
-            players.set_offsets([(x, y) for x, y in zip([-100000], [-100000])])
+            players.set_offsets([(-100000, -100000)])
 
         if color_teams:
             players.set_facecolors(marker_colors)
@@ -477,6 +473,8 @@ def create_playback_animation(
             highlight_offsets = [(x, y) for x, y in zip(highlights_x, highlights_y)]
             if len(highlight_offsets) > 0:
                 highlights.set_offsets(highlight_offsets)
+            else:
+                highlights.set_offsets([(-100000, -100000)])
 
             highlight_death_offsets = [(x, y) for x, y in zip(highlights_deaths_x, highlights_deaths_y)]
             if len(highlight_death_offsets) > 0:
@@ -512,7 +510,7 @@ def create_playback_animation(
     animation = FuncAnimation(
         fig, update,
         frames=range(0, maxlength + end_frames, interval),
-        interval=int(1000/fps),
+        interval=int(1000 / fps),
         init_func=init, blit=True,
     )
 

@@ -128,7 +128,7 @@ Recommended playback settings:
     models/telemetry
     models/tournament
     visual/playback
-    assets/maps
+    assets/assets
     sample_erangel
     sample_miramar
     sample_sanhok
