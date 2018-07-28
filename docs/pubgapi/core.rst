@@ -15,8 +15,6 @@ the :class:`chicken_dinner.pubgapi.PUBG` class.
 Developer api keys come with a rate limit of 10 API calls per 60 seconds. The
 ``PUBGCore`` class provides a (blocking) built-in rate limiter that sleeps
 automatically between consecutive requests to prevent hitting the rate limit.
-If you have an API key with a higher rate limit you can provide the parameters
-on instantiating the ``PUBGCore`` class.
 
 .. warning::
 
