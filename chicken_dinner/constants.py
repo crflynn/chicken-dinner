@@ -1,4 +1,7 @@
 """Constants and reference maps from pythonic names to pubg api names."""
+import json
+
+from chicken_dinner.assets.dictionary import DICTIONARY_PATH
 
 
 PERSPECTIVES = ("tpp", "fpp")
@@ -59,6 +62,8 @@ true_false = {
     "false": False,
     "true": True,
 }
+
+asset_map = json.load(open(DICTIONARY_PATH, "r"))
 
 BASE_URL = "https://api.playbattlegrounds.com"
 SHARD_URL = BASE_URL + "/shards/"
