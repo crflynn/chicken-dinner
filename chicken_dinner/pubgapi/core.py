@@ -106,7 +106,7 @@ class PUBGCore(object):
             response = self.session.get(url, params=params)
             response.raise_for_status()
 
-        if url != STATUS_URL:
+        if limited and url != STATUS_URL:
             delta = self._get_rate_limit_delta(response)
 
             self._rate_limit_reset = time.time() + delta

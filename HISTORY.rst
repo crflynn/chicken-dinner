@@ -1,6 +1,11 @@
 Release History
 ---------------
 
+0.4.2: 2018-07-30
+~~~~~~~~~~~~~~~~~
+
+* Fixed a bug in which rate limited headers should only be checked on responses to rate limited endpoints
+
 0.4.1: 2018-07-28
 ~~~~~~~~~~~~~~~~~
 
