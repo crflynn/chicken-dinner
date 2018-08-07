@@ -1,6 +1,11 @@
 Release History
 ---------------
 
+0.4.3: 2018-08-07
+~~~~~~~~~~~~~~~~~
+
+* Remove the unused game mode to game/perspective mappings from Match.game_mode attribute and PlayerSeason.game_mode_stats() method so that event modes (e.g. acpfpp) can be returned
+
 0.4.2: 2018-07-30
 ~~~~~~~~~~~~~~~~~
 
