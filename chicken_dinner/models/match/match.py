@@ -1,7 +1,6 @@
 """Match model."""
 from .asset import Asset
 from .roster import Roster
-from chicken_dinner.constants import game_mode_to_gp
 from chicken_dinner.constants import map_to_map_name
 from chicken_dinner.models.telemetry import Telemetry
 
@@ -71,7 +70,7 @@ class Match(object):
     @property
     def game_mode(self):
         """The game mode for the match."""
-        return game_mode_to_gp[self.data["attributes"]["gameMode"]]
+        return self.data["attributes"]["gameMode"]
 
     @property
     def id(self):

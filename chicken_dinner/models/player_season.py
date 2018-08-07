@@ -1,6 +1,4 @@
 """Player-season stats model."""
-from chicken_dinner.constants import game_mode_to_gp
-from chicken_dinner.constants import gp_to_game_mode
 from chicken_dinner.constants import gp_to_matches
 from chicken_dinner.constants import matches_to_gp
 from chicken_dinner.util import camel_to_snake
@@ -75,25 +73,24 @@ class PlayerSeason(object):
         new_stats = {}
         if group is None and perspective is None:
             for mode, stats in data.items():
-                new_stats[game_mode_to_gp[mode]] = {
+                new_stats[mode] = {
                     camel_to_snake(stat): value for stat, value in stats.items()
                 }
         elif group is None and perspective is not None:
             for mode, stats in data.items():
                 if perspective in mode:
-                    new_stats[game_mode_to_gp[mode]] = {
+                    new_stats[mode] = {
                         camel_to_snake(stat): value for stat, value in stats.items()
                     }
         elif group is not None and perspective is None:
             for mode, stats in data.items():
                 if group in mode:
-                    new_stats[game_mode_to_gp[mode]] = {
+                    new_stats[mode] = {
                         camel_to_snake(stat): value for stat, value in stats.items()
                     }
         else:
             group_perspective = group + "-" + perspective
-            mode = gp_to_game_mode[group_perspective]
-            stats = data[mode]
+            stats = data[group_perspective]
             new_stats = {
                 camel_to_snake(stat): value for stat, value in stats.items()
             }
