@@ -31,7 +31,7 @@ Here is some example code for creating a playback animation:
 
 
     api_key = "MY_API_KEY"
-    pubg = PUBG(api_key, "pc-na")
+    pubg = PUBG(api_key, "steam")
 
     me = pubg.players_from_names("my_username")[0]
     last_match_id = me.match_ids[0]
@@ -50,7 +50,7 @@ Alternately you can use the ``create_playback_animation()`` function.
 
 
     api_key = "MY_API_KEY"
-    pubg = PUBG(api_key, "pc-na")
+    pubg = PUBG(api_key, "steam")
 
     me = pubg.players_from_names("my_username")[0]
     last_match_id = me.match_ids[0]

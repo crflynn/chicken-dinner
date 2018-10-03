@@ -11,6 +11,7 @@ from chicken_dinner.constants import STATUS_URL
 from chicken_dinner.constants import TOURNAMENTS_URL
 from chicken_dinner.constants import SHARDS
 from chicken_dinner.constants import PLAYER_FILTERS
+from chicken_dinner.constants import TRANSITION_SEASON
 
 
 SLEEP_BUFFER = 2
@@ -169,13 +170,19 @@ class PUBGCore(object):
         Endpoints: https://documentation.playbattlegrounds.com/en/players-endpoint.html
 
         :param str player_id: the PUBG ``player_id`` (account id) to query
-        :param str season: the ``season_id`` to query
+        :param str season_id: the ``season_id`` to query
         :param str shard: (optional) the ``shard`` to use if different from
             the one used on instantiation
         :return: the JSON response from
             ``/{shard}/players/{player_id}/seasons/{season_id}``
         """
         shard = self._check_shard(shard)
+        platform_region = shard.split("-")
+        if platform_region[0] == "pc" and season_id >= TRANSITION_SEASON:
+            if platform_region[-1] == "kakao":
+                shard = "kakao"
+            else:
+                shard = "steam"
         url = SHARD_URL + shard + "/players/" + str(player_id)
         url = url + "/seasons/" + str(season_id)
         return self._get(url).json()

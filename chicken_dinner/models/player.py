@@ -47,7 +47,7 @@ class Player(object):
 
     @property
     def match_ids(self):
-        """A list of the player's most recent match ids."""
+        """A list of the player's most recent match ids (most recent first)."""
         return [match["id"] for match in self.data["relationships"]["matches"]["data"]]
 
     @property

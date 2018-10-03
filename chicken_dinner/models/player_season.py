@@ -1,6 +1,7 @@
 """Player-season stats model."""
 from chicken_dinner.constants import gp_to_matches
 from chicken_dinner.constants import matches_to_gp
+from chicken_dinner.constants import TRANSITION_SEASON
 from chicken_dinner.util import camel_to_snake
 
 
@@ -17,6 +18,13 @@ class PlayerSeason(object):
 
     def __init__(self, pubg, player_id, season_id, shard=None):
         self._pubg = pubg
+        # Change the shard to steam/kakao if pc season 2018-10 or later
+        platform_region = shard.split("-")
+        if platform_region[0] == "pc" and season_id >= TRANSITION_SEASON:
+            if platform_region[-1] == "kakao":
+                shard = "kakao"
+            else:
+                shard = "steam"
         self._shard = shard
         self._player_id = player_id
         self._season_id = season_id

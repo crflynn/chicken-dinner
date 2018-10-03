@@ -12,7 +12,7 @@ logger.setLevel("INFO")
 if __name__ == "__main__":
     # api_key = "your_api_key"
     # pubg = PUBG(api_key, "xbox-na")
-    pubg = PUBG(api_key, "pc-na")
+    pubg = PUBG(api_key, "steam")
     player = "badshroud"
     shroud = pubg.players_from_names(player)[0]
     print(shroud)
