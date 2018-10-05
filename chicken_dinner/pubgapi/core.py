@@ -183,6 +183,7 @@ class PUBGCore(object):
                 shard = "kakao"
             else:
                 shard = "steam"
+            logging.info("Using shard " + shard + ".")
         url = SHARD_URL + shard + "/players/" + str(player_id)
         url = url + "/seasons/" + str(season_id)
         return self._get(url).json()

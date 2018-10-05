@@ -94,7 +94,7 @@ SHARDS = [
 ]
 
 # First season in which pc games are consolidated into one shard
-TRANSITION_SEASON = "division.bro.official.2018-10"
+TRANSITION_SEASON = "division.bro.official.pc-2018-01"
 
 COLORS = [
     "#fc3f3f",
