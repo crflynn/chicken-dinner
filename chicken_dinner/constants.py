@@ -82,13 +82,19 @@ SHARDS = [
     "pc-jp",
     "pc-na",
     "pc-eu",
+    "pc-ru",
     "pc-oc",
     "pc-kakao",
     "pc-sea",
     "pc-sa",
     "pc-as",
     "pc-tournament",
+    "steam",
+    "kakao",
 ]
+
+# First season in which pc games are consolidated into one shard
+TRANSITION_SEASON = "division.bro.official.pc-2018-01"
 
 COLORS = [
     "#fc3f3f",

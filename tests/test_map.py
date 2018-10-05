@@ -13,7 +13,7 @@ if __name__ == "__main__":
     # api_key = "your_api_key"
     # pubg = PUBG(api_key, "xbox-na")
     pubg = PUBG(api_key, "pc-na")
-    player = "badshroud"
+    player = "shroud"
     shroud = pubg.players_from_names(player)[0]
     print(shroud)
     print(shroud.match_ids)
@@ -34,6 +34,7 @@ if __name__ == "__main__":
                 size=6,
                 end_frames=60,
                 use_hi_res=False,
+                use_no_text=True,
                 color_teams=True,
                 interpolate=True,
                 damage=True,
