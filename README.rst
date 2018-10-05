@@ -58,7 +58,7 @@ Working with the low-level API class.
     from chicken_dinner.pubgapi import PUBGCore
 
     api_key = "your_api_key"
-    pubgcore = PUBGCore(api_key, "steam")
+    pubgcore = PUBGCore(api_key, "pc-na")
     shroud = pubgcore.players("player_names", "shroud")
     print(shroud)
 
@@ -71,7 +71,7 @@ Working with the high-level API class.
     from chicken_dinner.pubgapi import PUBG
 
     api_key = "your_api_key"
-    pubg = PUBG(api_key, "steam")
+    pubg = PUBG(api_key, "pc-na")
     shroud = pubg.players_from_names("shroud")[0]
     shroud_season = shroud.get_current_season()
     squad_fpp_stats = shroud_season.game_mode_stats("squad", "fpp")
@@ -86,7 +86,7 @@ Visualizing telemetry data
     from chicken_dinner.pubgapi import PUBG
 
     api_key = "your_api_key"
-    pubg = PUBG(api_key, "steam")
+    pubg = PUBG(api_key, "pc-na")
     shroud = pubg.players_from_names("shroud")[0]
     recent_match_id = shroud.match_ids[0]
     recent_match = pubg.match(recent_match_id)
