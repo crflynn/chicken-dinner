@@ -32,6 +32,9 @@ def update_maps():
         logging.info("Downloading " + filename)
 
         response = requests.get(map_file)
+
+        # Sanhok/Savage names are inconsistent
+        filename = filename.replace("Sanhok", "Savage")
         path = os.path.join(MAP_ASSET_PATH, filename)
 
         with open(path, "wb") as img:

@@ -30,3 +30,6 @@ test.json
 
 # docs
 docs/_build/
+
+# intellij
+.idea/

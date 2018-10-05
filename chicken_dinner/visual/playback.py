@@ -38,6 +38,7 @@ def create_playback_animation(
         zoom=False,
         zoom_edge_buffer=0.5,
         use_hi_res=False,
+        use_no_text=False,
         color_teams=True,
         highlight_teams=[],
         highlight_players=[],
@@ -76,6 +77,8 @@ def create_playback_animation(
         when zooming
     :param bool use_hi_res: whether to use the hi-res image, best to be set
         to True when using zoom
+    :param bool use_no_text: whether to use the image with no text for
+        town/location names
     :param bool color_teams: whether to color code different teams
     :param list highlight_teams: a list of strings of player names whose
         teams should be highlighted
@@ -166,13 +169,22 @@ def create_playback_animation(
     ax = fig.add_axes([0, 0, 1, 1])
     ax.axis("off")
 
+    if use_no_text:
+        no_text = "_No_Text"
+    else:
+        no_text = ""
+
+    # Savage high res is png for some reason; rest are jpg
     if use_hi_res:
         if map_id == "Savage_Main":
-            map_image = map_id + ".png"
+            if use_no_text:
+                map_image = map_id + no_text + "_High_Res.jpg"
+            else:
+                map_image = map_id + no_text + "_High_Res.png"
         else:
-            map_image = map_id + ".jpg"
+            map_image = map_id + no_text + "_High_Res.jpg"
     else:
-        map_image = map_id + "_lowres.jpg"
+        map_image = map_id + no_text + "_Low_Res.jpg"
     img_path = os.path.join(MAP_ASSET_PATH, map_image)
     try:
         img = mpimg.imread(img_path)

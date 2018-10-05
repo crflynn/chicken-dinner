@@ -1,6 +1,14 @@
 Release History
 ---------------
 
+0.5.0: 2018-10-05
+~~~~~~~~~~~~~~~~~
+
+* Updated map assets and asset dictionary
+* Include no-text map assets and provide option in visualization to use them
+* Added pc-ru, steam, and kakao shards
+* PUBGCore now switches to steam and kakao shard when querying player-seasons pc-2018-01 or later
+
 0.4.3: 2018-08-07
 ~~~~~~~~~~~~~~~~~
 
