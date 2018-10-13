@@ -32,7 +32,7 @@ def create_playback_animation(
         filename="playback.html",
         labels=True,
         disable_labels_after=None,
-        label_players=[],
+        label_players=None,
         dead_players=True,
         dead_player_labels=False,
         zoom=False,
@@ -40,8 +40,8 @@ def create_playback_animation(
         use_hi_res=False,
         use_no_text=False,
         color_teams=True,
-        highlight_teams=[],
-        highlight_players=[],
+        highlight_teams=None,
+        highlight_players=None,
         highlight_color="#FFFF00",
         highlight_winner=False,
         label_highlights=True,
@@ -117,6 +117,12 @@ def create_playback_animation(
             all_times.append(int(p[0]))
     all_times = sorted(list(set(all_times)))
 
+    if label_players is None:
+        label_players = []
+
+    if highlight_players is None:
+        highlight_players = []
+
     if highlight_winner:
         for player in winner:
             highlight_players.append(player)
@@ -135,6 +141,7 @@ def create_playback_animation(
     if label_highlights:
         for player in highlight_players:
             label_players.append(player)
+
     label_players = list(set(label_players))
 
     team_colors = None
@@ -199,9 +206,8 @@ def create_playback_animation(
     players = ax.scatter(-10000, -10000, marker="o", c="w", edgecolor="k", s=60, linewidths=1, zorder=20)
     deaths = ax.scatter(-10000, -10000, marker="X", c="r", edgecolor="k", s=60, linewidths=1, alpha=0.5, zorder=10)
 
-    if highlight_players or highlight_teams:
-        highlights = ax.scatter(-10000, -10000, marker="*", c=highlight_color, edgecolor="k", s=180, linewidths=1, zorder=25)
-        highlights_deaths = ax.scatter(-10000, -10000, marker="X", c=highlight_color, edgecolor="k", s=60, linewidths=1, zorder=15)
+    highlights = ax.scatter(-10000, -10000, marker="*", c=highlight_color, edgecolor="k", s=180, linewidths=1, zorder=25)
+    highlights_deaths = ax.scatter(-10000, -10000, marker="X", c=highlight_color, edgecolor="k", s=60, linewidths=1, zorder=15)
 
     if labels:
         if label_players is not None:
@@ -227,7 +233,7 @@ def create_playback_animation(
     damage_slots = 50
     damage_lines = []
     for k in range(damage_slots):
-        dline, = ax.plot(-10000, -10000, marker="x", c="r", mec="r", markeredgewidth=5, markersize=10, lw=2, markevery=[1], alpha=0.5, zorder=50)
+        dline, = ax.plot(-10000, -10000, marker="x", c="r", mec="r", markeredgewidth=5, markevery=-1, markersize=10, lw=2, alpha=0.5, zorder=50)
         damage_lines.append(dline)
 
     ax.add_patch(blue_circle)
@@ -446,6 +452,10 @@ def create_playback_animation(
                         pass
 
             except IndexError as exc:
+                # Sometimes players have no positions
+                if len(pos) == 0:
+                    pos = [(1, -10000, -10000, -10000)]
+
                 # Set death markers
                 if player in highlight_players:
                     highlights_deaths_x.append(pos[-1][1])
