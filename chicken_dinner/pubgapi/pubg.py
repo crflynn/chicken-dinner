@@ -66,16 +66,18 @@ class PUBG(object):
         shard = shard or self.shard
         return Match(self, match_id, shard)
 
-    def samples(self, shard=None):
+    def samples(self, start=None, shard=None):
         """Get match samples.
 
+        :param str start: (optional) the start timestamp from which to get
+            samples
         :param str shard: (optional) the shard to use if different from the
             instance shard
         :return: a :class:`chicken_dinner.models.Samples` object containing
             match samples.
         """
         shard = shard or self.shard
-        return Samples(self, shard)
+        return Samples(self, start, shard)
 
     def seasons(self, shard=None):
         """Get an iterable of PUBG seasons.

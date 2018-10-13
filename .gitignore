@@ -27,6 +27,7 @@ build/
 secret*
 design*
 test.json
+debug*
 
 # docs
 docs/_build/

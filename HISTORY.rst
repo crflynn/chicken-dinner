@@ -1,6 +1,14 @@
 Release History
 ---------------
 
+0.5.1: 2018-10-13
+~~~~~~~~~~~~~~~~~
+
+* Fixed the PUBG.samples() method
+* Fixed a bug that caused the playback animation to fail when a player recorded no positions in a match
+* Removed mutable default args from the playback animation function
+* Fixed an issue with the markevery argument for the matplotlib lines that act as damage indicators
+
 0.5.0: 2018-10-05
 ~~~~~~~~~~~~~~~~~
 
