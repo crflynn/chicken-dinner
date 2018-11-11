@@ -1,6 +1,12 @@
 Release History
 ---------------
 
+0.6.0: 2018-11-11
+~~~~~~~~~~~~~~~~~
+
+* Added support for leaderboards endpoint
+* Added support for lifetime stats endpoint
+
 0.5.1: 2018-10-13
 ~~~~~~~~~~~~~~~~~
 
