@@ -1,3 +1,4 @@
+from .leaderboard import Leaderboard
 from .player_season import PlayerSeason
 from .player import Player
 from .players import Players

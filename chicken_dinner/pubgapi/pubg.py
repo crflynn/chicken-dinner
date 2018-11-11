@@ -1,5 +1,6 @@
 """PUBG model-API interface."""
 from chicken_dinner.models.match import Match
+from chicken_dinner.models import Leaderboard
 from chicken_dinner.models import Player
 from chicken_dinner.models import Players
 from chicken_dinner.models import PlayerSeason
@@ -53,6 +54,34 @@ class PUBG(object):
         """
         shard = shard or self.shard
         return Seasons(self, shard).current()
+
+    def leaderboard(self, game_mode, shard=None):
+        """Get a leaderboard for a game mode.
+
+        :param str game_mode: the game mode for which to fetch the leaderboard
+        :param str shard: (optional) the shard to use if different from the
+            instance shard
+        :return: a :class:`chicken_dinner.models.Leaderboard` object
+            containing information about top players for the specified
+            game mode
+        """
+        shard = shard or self.shard
+        return Leaderboard(self, game_mode, shard)
+
+    def lifetime(self, player_id, shard=None):
+        """Get a player's information for their player lifetime.
+
+        :param str player_id: the player's account id
+        :param str shard: (optional) the shard to use if different from the
+            instance shard
+        :return: a :class:`chicken_dinner.models.PlayerSeason` object
+            containing information about statistics for a player's
+            lifetime performance
+        """
+        shard = shard or self.shard
+        if isinstance(player_id, Player):
+            player_id = player_id.id
+        return PlayerSeason(self, player_id, "lifetime", shard)
 
     def match(self, match_id, shard=None):
         """Get match info by ``match_id``.
