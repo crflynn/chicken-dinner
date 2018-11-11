@@ -33,6 +33,9 @@ Player Models
 
 Models related to player objects, stats, and metadata.
 
+.. autoclass:: chicken_dinner.models.Leaderboard
+    :members:
+
 .. autoclass:: chicken_dinner.models.Player
     :members:
 

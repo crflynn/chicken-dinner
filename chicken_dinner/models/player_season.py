@@ -7,7 +7,7 @@ from chicken_dinner.util import camel_to_snake
 class PlayerSeason(object):
     """Player-season model.
 
-    An object containing data about a player's season data and stats.
+    An object containing data about a player's season (or lifetime) data and stats.
 
     :param pubg: an instance of the class :class:`chicken_dinner.pubgapi.PUBG`
     :param str player_id: the player's account id
@@ -21,9 +21,13 @@ class PlayerSeason(object):
         self._player_id = player_id
         self._season_id = season_id
         #: The API response for this object.
-        self.response = self._pubg._core.player_season(
-            player_id, season_id, shard
-        )
+        self.response = None
+        if season_id == "lifetime":
+            self.response = self._pubg._core.lifetime(player_id, shard)
+        else:
+            self.response = self._pubg._core.player_season(
+                player_id, season_id, shard
+            )
 
     @property
     def shard(self):

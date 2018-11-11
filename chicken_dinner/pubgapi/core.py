@@ -134,6 +134,34 @@ class PUBGCore(object):
 
         return delta
 
+    def leaderboard(self, game_mode, shard=None):
+        """Get a response from the leaderboards endpoint.
+
+        Description: https://documentation.pubg.com/en/leaderboards-endpoint.html
+
+        :param str game_mode: the PUBG game mode to query
+        :param str shard: (optional) the ``shard`` to use if different from
+            the one used on instantiation
+        :return: the json response from ``/{shard}/leaderboards/{game_mode}``
+        """
+        shard = self._check_shard(shard)
+        url = SHARD_URL + shard + "/leaderboards/" + game_mode
+        return self._get(url).json()
+
+    def lifetime(self, player_id, shard=None):
+        """Get a response from the lifetime stats endpoint.
+
+        Description: https://documentation.pubg.com/en/lifetime-stats.html
+
+        :param str player_id: the PUBG ``player_id`` (account id) to query
+        :param str shard: (optional) the ``shard`` to use if different from
+            the one used on instantiation
+        :return: the json response from ``/{shard}/players/{player_id}/seasons/lifetime``
+        """
+        shard = self._check_shard(shard)
+        url = SHARD_URL + shard + "/players/" + player_id + "/seasons/lifetime"
+        return self._get(url).json()
+
     def match(self, match_id, shard=None):
         """Get a response from the match endpoint.
 

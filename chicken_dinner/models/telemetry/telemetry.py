@@ -508,6 +508,8 @@ class Telemetry(object):
             when zooming
         :param bool use_hi_res: whether to use the hi-res image, best to be set
             to True when using zoom
+        :param bool use_no_text: whether to use the image with no text for
+            town/location names
         :param bool color_teams: whether to color code different teams
         :param list highlight_teams: a list of strings of player names whose
             teams should be highlighted
