@@ -74,24 +74,32 @@ PLAYER_FILTERS = {
     "player_names": "playerNames",
 }
 SHARDS = [
+    # platform
+    "kakao",
+    "psn",
+    "steam",
+    "xbox"
+    # platform-region
+    "pc-as",
+    "pc-eu",
+    "pc-jp",
+    "pc-kakao",
+    "pc-krjp",
+    "pc-na",
+    "pc-oc",
+    "pc-ru",
+    "pc-sa",
+    "pc-sea",
+    "pc-tournament",
+    "psn-as",
+    "psn-eu",
+    "psn-na",
+    "psn-oc",
     "xbox-as",
     "xbox-eu",
     "xbox-na",
     "xbox-oc",
     "xbox-sa",
-    "pc-krjp",
-    "pc-jp",
-    "pc-na",
-    "pc-eu",
-    "pc-ru",
-    "pc-oc",
-    "pc-kakao",
-    "pc-sea",
-    "pc-sa",
-    "pc-as",
-    "pc-tournament",
-    "steam",
-    "kakao",
 ]
 
 # First season in which pc games are consolidated into one shard
