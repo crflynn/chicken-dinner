@@ -1,6 +1,11 @@
 Release History
 ---------------
 
+0.6.1: 2018-12-09
+~~~~~~~~~~~~~~~~~
+
+* Added support for Playstation (PSN) shards
+
 0.6.0: 2018-11-11
 ~~~~~~~~~~~~~~~~~
 
