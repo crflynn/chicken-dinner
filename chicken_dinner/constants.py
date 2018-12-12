@@ -44,18 +44,21 @@ map_to_map_name = {
     "Desert_Main": "Miramar",
     "Erangel_Main": "Erangel",
     "Savage_Main": "Sanhok",
+    "DihorOtok_Main": "Vikendi",
 }
 
 map_name_to_map = {
     "Miramar": "Desert_Main",
     "Erangel": "Erangel_Main",
     "Sanhok": "Savage_Main",
+    "Vikendi": "DihorOtok_Main",
 }
 
 map_dimensions = {
     "Desert_Main": [819200, 819200],
     "Erangel_Main": [819200, 819200],
     "Savage_Main": [409600, 409600],
+    "DihorOtok_Main": [614400, 614400],
 }
 
 true_false = {

@@ -35,6 +35,8 @@ def update_maps():
 
         # Sanhok/Savage names are inconsistent
         filename = filename.replace("Sanhok", "Savage")
+        # Vikendi badly named files in repo
+        filename = filename.replace(".png.png", ".png")
         path = os.path.join(MAP_ASSET_PATH, filename)
 
         with open(path, "wb") as img:
