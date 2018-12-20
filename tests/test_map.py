@@ -12,14 +12,15 @@ logger.setLevel("INFO")
 if __name__ == "__main__":
     # api_key = "your_api_key"
     # pubg = PUBG(api_key, "xbox-na")
-    pubg = PUBG(api_key, "pc-na")
+    pubg = PUBG(api_key, "steam")
     player = "shroud"
     shroud = pubg.players_from_names(player)[0]
     print(shroud)
     print(shroud.match_ids)
     for match_id in shroud.match_ids:
         match = pubg.match(match_id)
-        if player in match.winner.player_names:# and match.map_name in ("Desert_Main", "Miramar"):
+        print(match.map_name)
+        if match.map_name in ("DihorOtok_Main", "Vikendi"):
             print(match.map_name, match_id)
             match_telemetry = match.get_telemetry()
             # break

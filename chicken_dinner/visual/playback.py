@@ -181,17 +181,23 @@ def create_playback_animation(
     else:
         no_text = ""
 
-    # Savage high res is png for some reason; rest are jpg
+    # Sahnok (Savage_Main) high res is png for some reason; rest are jpg
+    # Also Vikendi (DihorOtok_Main) is all png
     if use_hi_res:
         if map_id == "Savage_Main":
             if use_no_text:
                 map_image = map_id + no_text + "_High_Res.jpg"
             else:
                 map_image = map_id + no_text + "_High_Res.png"
+        elif map_id == "DihorOtok_Main":
+            map_image = map_id + no_text + "_High_Res.png"
         else:
             map_image = map_id + no_text + "_High_Res.jpg"
     else:
-        map_image = map_id + no_text + "_Low_Res.jpg"
+        if map_id == "DihorOtok_Main":
+            map_image = map_id + no_text + "_Low_Res.png"
+        else:
+            map_image = map_id + no_text + "_Low_Res.jpg"
     img_path = os.path.join(MAP_ASSET_PATH, map_image)
     try:
         img = mpimg.imread(img_path)

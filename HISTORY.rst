@@ -1,6 +1,12 @@
 Release History
 ---------------
 
+0.7.0: 2018-12-20
+~~~~~~~~~~~~~~~~~
+
+* Added support for Vikendi
+* Fixed a bug with TelemetryObjects for damageCauserAdditionalInfo
+
 0.6.1: 2018-12-09
 ~~~~~~~~~~~~~~~~~
 
