@@ -41,6 +41,7 @@ setup(
     packages=find_packages(),
     install_requires=[
         "requests",
+        "click",
     ],
     extras_require={
         "visual": [
@@ -53,4 +54,7 @@ setup(
         "": ["*lowres.jpg", "dictionary.json"]
     },
     zip_safe=False,
+    entry_points = {
+        "console_scripts": ["chicken-dinner=chicken_dinner.cli:cli"],
+    }
 )

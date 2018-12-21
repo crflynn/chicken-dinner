@@ -10,6 +10,7 @@ name = "pypi"
 requests = "*"
 matplotlib = "*"
 pillow = "*"
+click = "*"
 
 
 [dev-packages]
@@ -22,3 +23,4 @@ sphinx-autobuild = "*"
 sphinx-rtd-theme = "*"
 twine = "*"
 "flake8" = "*"
+"e1839a8" = {path = ".", editable = true}
