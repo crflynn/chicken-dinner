@@ -25,6 +25,7 @@ Samples
 * `Erangel - squads <sample_erangel.html>`_
 * `Miramar - solos <sample_miramar.html>`_
 * `Sanhok - duos <sample_sanhok.html>`_
+* `Vikendi - solos <sample_vikendi.html>`_
 
 Installation
 ------------
@@ -132,6 +133,7 @@ Recommended playback settings:
     sample_erangel
     sample_miramar
     sample_sanhok
+    sample_vikendi
     notes
 
 

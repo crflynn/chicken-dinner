@@ -25,7 +25,13 @@ class TelemetryEvent(object):
             if isinstance(v, dict):
                 setattr(self, camel_to_snake(k), TelemetryObject(v, k, map_assets))
             elif isinstance(v, list):
-                setattr(self, camel_to_snake(k), [TelemetryObject(e, k, map_assets) for e in v])
+                try:
+                    setattr(self, camel_to_snake(k), [TelemetryObject(e, k, map_assets) for e in v])
+                except AttributeError:  # Sometimes the list is just a list of strings (damageCauserAdditionalInfo)
+                    if map_assets:
+                        setattr(self, camel_to_snake(k), [asset_map.get(e, e) for e in v])
+                    else:
+                        setattr(self, camel_to_snake(k), v)
             elif k in ("_D", "_T", "_V"):
                 if map_assets:
                     setattr(self, k, asset_map.get(v, v))
