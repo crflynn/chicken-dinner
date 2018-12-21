@@ -21,7 +21,7 @@ if __name__ == "__main__":
         match = pubg.match(match_id)
         print(match.map_name)
         print(match.winner)
-        if player in match.winner.player_names and match.map_name in ("DihorOtok_Main", "Vikendi"):
+        if player in match.winner.player_names and match.map_name in ("Desert_Main", "Miramar"):
             print(match.map_name, match_id)
             match_telemetry = match.get_telemetry()
             # break
