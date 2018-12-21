@@ -13,14 +13,14 @@ if __name__ == "__main__":
     # api_key = "your_api_key"
     # pubg = PUBG(api_key, "xbox-na")
     pubg = PUBG(api_key, "steam")
-    player = "shroud"
+    player = "chocoTaco"
     shroud = pubg.players_from_names(player)[0]
     print(shroud)
     print(shroud.match_ids)
     for match_id in shroud.match_ids:
         match = pubg.match(match_id)
         print(match.map_name)
-        if match.map_name in ("DihorOtok_Main", "Vikendi"):
+        if match.map_name not in ("DihorOtok_Main", "Vikendi"):
             print(match.map_name, match_id)
             match_telemetry = match.get_telemetry()
             # break
@@ -42,4 +42,5 @@ if __name__ == "__main__":
                 interval=2,
                 fps=30,
             )
+            print(match.map_name, match_id)
             break
