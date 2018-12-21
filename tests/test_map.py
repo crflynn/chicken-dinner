@@ -20,7 +20,8 @@ if __name__ == "__main__":
     for match_id in shroud.match_ids:
         match = pubg.match(match_id)
         print(match.map_name)
-        if match.map_name not in ("DihorOtok_Main", "Vikendi"):
+        print(match.winner)
+        if player in match.winner.player_names and match.map_name in ("DihorOtok_Main", "Vikendi"):
             print(match.map_name, match_id)
             match_telemetry = match.get_telemetry()
             # break
@@ -36,7 +37,7 @@ if __name__ == "__main__":
                 end_frames=60,
                 use_hi_res=False,
                 use_no_text=True,
-                color_teams=True,
+                color_teams=False,
                 interpolate=True,
                 damage=True,
                 interval=2,

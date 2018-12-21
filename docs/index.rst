@@ -132,6 +132,7 @@ Recommended playback settings:
     sample_erangel
     sample_miramar
     sample_sanhok
+    sample_vikendi
     notes
 
 
