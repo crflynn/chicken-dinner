@@ -3,11 +3,19 @@ import os
 import click
 
 from chicken_dinner.pubgapi import PUBG
+from chicken_dinner.assets.maps import update_maps
+from chicken_dinner.assets.dictionary import update_dictionary
 
 
 @click.group()
 def cli():
     pass
+
+
+@click.command()
+def assets():
+    update_maps()
+    update_dictionary()
 
 
 @click.command()
@@ -52,3 +60,4 @@ def replay(api_key, shard, wins_only, latest, size, player_name):
 
 
 cli.add_command(replay, name="replay")
+cli.add_command(assets, name="assets")
