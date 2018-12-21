@@ -1,6 +1,12 @@
 Release History
 ---------------
 
+0.7.1: 2018-12-20
+~~~~~~~~~~~~~~~~~
+
+* Fixed map asset file naming with Miramar
+* Decreased package size by excluding no-text images
+
 0.7.0: 2018-12-20
 ~~~~~~~~~~~~~~~~~
 
