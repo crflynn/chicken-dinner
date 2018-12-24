@@ -14,8 +14,20 @@ def cli():
 
 @click.command()
 def assets():
+    click.echo(click.style("Updating maps", fg="yellow"))
     update_maps()
+    click.echo(click.style("Updating asset dictionary", fg="yellow"))
     update_dictionary()
+
+
+@click.command()
+def leaderboard():
+    pass
+
+
+@click.command()
+def stats():
+    pass
 
 
 @click.command()
@@ -24,6 +36,7 @@ def assets():
 @click.option("-w", "--wins-only", is_flag=True, help="wins only")
 @click.option("-l", "--latest", is_flag=True, help="latest match")
 @click.option("-s", "--size", default=6, help="render size")
+# TODO path
 @click.argument("player_name")
 def replay(api_key, shard, wins_only, latest, size, player_name):
     pubg = PUBG(api_key, shard)
@@ -61,3 +74,5 @@ def replay(api_key, shard, wins_only, latest, size, player_name):
 
 cli.add_command(replay, name="replay")
 cli.add_command(assets, name="assets")
+cli.add_command(leaderboard, name="leaderboard")
+cli.add_command(stats, name="stats")
