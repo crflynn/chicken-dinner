@@ -40,7 +40,7 @@ class Leaderboard(object):
 
     @property
     def url(self):
-        """A URL for this player-season resource."""
+        """A URL for this leaderboard resource."""
         return self.response["links"]["self"]
 
     @property
