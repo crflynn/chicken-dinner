@@ -81,6 +81,7 @@ SHARDS = [
     "kakao",
     "psn",
     "steam",
+    "tournament",
     "xbox"
     # platform-region
     "pc-as",
