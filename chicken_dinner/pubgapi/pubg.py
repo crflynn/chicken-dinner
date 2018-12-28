@@ -156,7 +156,7 @@ class PUBG(object):
             containing information about the player
         """
         shard = shard or self.shard
-        return Player(self, player_id, shard)
+        return Player(self, player_id, shard=shard)
 
     def players(self, filter_type, filter_value, shard=None):
         """Get multiple players' metadata.

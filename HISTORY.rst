@@ -1,6 +1,16 @@
 Release History
 ---------------
 
+0.7.3: 2018-12-27
+~~~~~~~~~~~~~~~~~
+
+* Add tournament platform shard
+
+0.7.2: 2018-12-24
+~~~~~~~~~~~~~~~~~
+
+* Fix for Player signature mismatch in PUBG class
+
 0.7.1: 2018-12-20
 ~~~~~~~~~~~~~~~~~
 
