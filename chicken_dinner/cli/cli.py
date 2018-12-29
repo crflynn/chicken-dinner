@@ -36,9 +36,9 @@ def assets():
 
     usage: $ chicken-dinner assets
     """
-    click.echo(click.style("Updating maps", fg="yellow"))
+    click.secho("Updating maps", fg="yellow")
     update_maps()
-    click.echo(click.style("Updating asset dictionary", fg="yellow"))
+    click.secho("Updating asset dictionary", fg="yellow")
     update_dictionary()
 
 
@@ -53,7 +53,7 @@ def leaderboard(api_key, shard, game_mode):
     """
     pubg = get_pubg(api_key, shard)
     leaderboards = pubg.leaderboard(game_mode=game_mode)
-    click.echo(json.dumps(leaderboards.data))
+    click.secho(json.dumps(leaderboards.data))
     # TODO endpoint still looks broken
 
 
@@ -80,8 +80,8 @@ def stats(api_key, shard, lifetime, group, perspective, player_name):
     game_modes_stats = defaultdict(list)
     for game_mode, game_mode_stats in player_season_stats.items():
         for stat, value in game_mode_stats.items():
-            if len(game_modes_stats["Stats"]) < len(game_mode_stats.keys()):
-                game_modes_stats["Stats"].append(stat)
+            if len(game_modes_stats["stats"]) < len(game_mode_stats.keys()):
+                game_modes_stats["stats"].append(stat)
             game_modes_stats[game_mode].append(value)
     click.echo()
     click.echo(tabulate(game_modes_stats, headers="keys"))
@@ -113,9 +113,9 @@ def replay(api_key, shard, wins_only, latest, size, path, verbose, player_name):
         if wins_only and player_name not in match.winner.player_names:
             continue
         else:
-            click.echo(click.style("Downloading: " + match_id, fg="yellow"))
+            click.secho("Downloading: " + match_id, fg="yellow")
             match_telemetry = match.get_telemetry()
-            click.echo(click.style("Rendering: " + match_id, fg="yellow"))
+            click.secho("Rendering: " + match_id, fg="yellow")
             filename = os.path.join(
                 path,
                 player_name + "_" + match.created_at.replace("-", "").replace(":", "") + "_" + match_id + ".html"
@@ -136,7 +136,7 @@ def replay(api_key, shard, wins_only, latest, size, path, verbose, player_name):
                 interval=2,
                 fps=30,
             )
-            click.echo(click.style("Saved: " + filename, fg="green"))
+            click.secho("Saved: " + filename, fg="green")
             if latest:
                 break
 
