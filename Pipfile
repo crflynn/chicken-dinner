@@ -11,6 +11,7 @@ requests = "*"
 matplotlib = "*"
 pillow = "*"
 click = "*"
+tabulate = "*"
 
 
 [dev-packages]

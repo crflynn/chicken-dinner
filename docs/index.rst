@@ -130,6 +130,7 @@ Recommended playback settings:
     models/tournament
     visual/playback
     assets/assets
+    cli/cli
     sample_erangel
     sample_miramar
     sample_sanhok

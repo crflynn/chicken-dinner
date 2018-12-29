@@ -20,6 +20,12 @@ directory:
 
     python -m chicken_dinner.assets.maps
 
+Starting in v0.8.0, they can also be downloaded using the chicken-dinner CLI:
+
+.. code-block:: bash
+
+    chicken-dinner assets
+
 Asset Dictionary
 ----------------
 
@@ -34,6 +40,12 @@ directory:
 .. code-block:: bash
 
     python -m chicken_dinner.assets.dictionary
+
+Starting in v0.8.0, they can also be downloaded using the chicken-dinner CLI:
+
+.. code-block:: bash
+
+    chicken-dinner assets
 
 This mapping can be imported manually from the ``constants`` module using
 

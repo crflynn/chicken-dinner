@@ -7,17 +7,14 @@ from setuptools import find_packages
 
 here = path.abspath(path.dirname(__file__))
 
-
 # io.open for py27
 with io.open(path.join(here, "README.rst"), encoding="utf-8") as f:
     long_description = f.read()
-
 
 # import __version__ attributes
 about = {}
 with open(path.join(here, "chicken_dinner", "__version__.py")) as f:
     exec(f.read(), about)
-
 
 setup(
     name=about["__title__"],
@@ -42,6 +39,7 @@ setup(
     install_requires=[
         "requests",
         "click",
+        "tabulate",
     ],
     extras_require={
         "visual": [
@@ -54,7 +52,7 @@ setup(
         "": ["*lowres.jpg", "dictionary.json"]
     },
     zip_safe=False,
-    entry_points = {
+    entry_points={
         "console_scripts": ["chicken-dinner=chicken_dinner.cli:cli"],
     }
 )
