@@ -12,13 +12,7 @@ logger = logging.getLogger()
 DICTIONARY_URL = "https://api.github.com/repos/pubg/api-assets/contents/dictionaries/telemetry?ref=master"
 
 DICTIONARY_PATH = os.path.join(
-    os.path.dirname(
-        os.path.dirname(
-            os.path.realpath(__file__)
-        )
-    ),
-    "assets",
-    "dictionary.json"
+    os.path.dirname(os.path.dirname(os.path.realpath(__file__))), "assets", "dictionary.json"
 )
 
 

@@ -35,22 +35,14 @@ setup(
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: Implementation :: CPython",
     ],
     keywords="pubg api wrapper playback animation chicken dinner",
     packages=find_packages(),
-    install_requires=[
-        "requests",
-    ],
-    extras_require={
-        "visual": [
-            "matplotlib",
-            "pillow",
-        ]
-    },
+    install_requires=["requests"],
+    extras_require={"visual": ["matplotlib", "pillow"]},
     include_package_data=True,
-    package_data={
-        "": ["*lowres.jpg", "dictionary.json"]
-    },
+    package_data={"": ["*lowres.jpg", "dictionary.json"]},
     zip_safe=False,
 )

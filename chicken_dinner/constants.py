@@ -45,6 +45,8 @@ map_to_map_name = {
     "Erangel_Main": "Erangel",
     "Savage_Main": "Sanhok",
     "DihorOtok_Main": "Vikendi",
+    "Range_Main": "Camp Jackal",
+    "Baltic_Main": "Erangel (Remastered)",
 }
 
 map_name_to_map = {
@@ -52,6 +54,8 @@ map_name_to_map = {
     "Erangel": "Erangel_Main",
     "Sanhok": "Savage_Main",
     "Vikendi": "DihorOtok_Main",
+    "Camp Jackal": "Range_Main",
+    "Erangel (Remastered)": "Baltic_Main",
 }
 
 map_dimensions = {
@@ -59,12 +63,11 @@ map_dimensions = {
     "Erangel_Main": [819200, 819200],
     "Savage_Main": [409600, 409600],
     "DihorOtok_Main": [614400, 614400],
+    "Range_Main": [204800, 204800],
+    "Baltic_Main": [819200, 819200],
 }
 
-true_false = {
-    "false": False,
-    "true": True,
-}
+true_false = {"false": False, "true": True}
 
 asset_map = json.load(open(DICTIONARY_PATH, "r"))
 
@@ -72,10 +75,7 @@ BASE_URL = "https://api.playbattlegrounds.com"
 SHARD_URL = BASE_URL + "/shards/"
 STATUS_URL = BASE_URL + "/status"
 TOURNAMENTS_URL = BASE_URL + "/tournaments"
-PLAYER_FILTERS = {
-    "player_ids": "playerIds",
-    "player_names": "playerNames",
-}
+PLAYER_FILTERS = {"player_ids": "playerIds", "player_names": "playerNames"}
 SHARDS = [
     # platform
     "kakao",

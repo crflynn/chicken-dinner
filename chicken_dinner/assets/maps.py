@@ -10,15 +10,7 @@ logger = logging.getLogger()
 
 MAPS_URL = "https://api.github.com/repos/pubg/api-assets/contents/Assets/Maps?ref=master"
 
-MAP_ASSET_PATH = os.path.join(
-    os.path.dirname(
-        os.path.dirname(
-            os.path.realpath(__file__)
-        )
-    ),
-    "assets",
-    "maps"
-)
+MAP_ASSET_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), "assets", "maps")
 
 
 def update_maps():
@@ -37,8 +29,8 @@ def update_maps():
         filename = filename.replace("Sanhok", "Savage")
         filename = filename.replace("Vikendi", "DihorOtok")
         filename = filename.replace("Miramar", "Desert")
-        # Vikendi badly named files in repo
-        filename = filename.replace(".png.png", ".png")
+        filename = filename.replace("Erangel_Remastered", "Baltic")
+        filename = filename.replace("Camp_Jackal", "Range")
         path = os.path.join(MAP_ASSET_PATH, filename)
 
         with open(path, "wb") as img:

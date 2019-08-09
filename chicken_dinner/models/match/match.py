@@ -37,10 +37,7 @@ class Match(object):
                 self.asset = Asset(pubg, self, item, shard)
 
         #: A list of Roster instances for this match
-        self.rosters = [
-            Roster(pubg, self, self.response["included"][idx], shard)
-            for idx in rosters_idx
-        ]
+        self.rosters = [Roster(pubg, self, self.response["included"][idx], shard) for idx in rosters_idx]
 
     @property
     def shard(self):
@@ -90,10 +87,7 @@ class Match(object):
     @property
     def participants(self):
         """A list of Participant instances for match participants."""
-        return [
-            participant for roster in self.rosters
-            for participant in roster.participants
-        ]
+        return [participant for roster in self.rosters for participant in roster.participants]
 
     @property
     def stats(self):
@@ -133,9 +127,7 @@ class Match(object):
     @property
     def rosters_player_names(self):
         """A mapping of roster_ids to player names for this match."""
-        return {
-            roster.id: roster.player_names for roster in self.rosters
-        }
+        return {roster.id: roster.player_names for roster in self.rosters}
 
     @property
     def winner(self):

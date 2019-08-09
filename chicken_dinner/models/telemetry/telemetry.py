@@ -58,10 +58,7 @@ class Telemetry(object):
         """
         events = None
         if event_type is not None:
-            events = [
-                event for event in self.events
-                if event.event_type == event_type
-            ]
+            events = [event for event in self.events if event.event_type == event_type]
         else:
             events = [event for event in self.events]
 
@@ -100,16 +97,11 @@ class Telemetry(object):
             damage for the match if true. if false return total damage done
             by each player. (default False)
         """
-        start = datetime.datetime.strptime(
-            self.filter_by("log_match_start")[0].timestamp,
-            "%Y-%m-%dT%H:%M:%S.%fZ"
-        )
+        start = datetime.datetime.strptime(self.filter_by("log_match_start")[0].timestamp, "%Y-%m-%dT%H:%M:%S.%fZ")
         damage = {}
         damage_events = self.filter_by("log_player_take_damage")
         for event in damage_events:
-            timestamp = datetime.datetime.strptime(
-                event.timestamp, "%Y-%m-%dT%H:%M:%S.%fZ"
-            )
+            timestamp = datetime.datetime.strptime(event.timestamp, "%Y-%m-%dT%H:%M:%S.%fZ")
             dt = (timestamp - start).total_seconds()
             if dt < 0 or event.attack_id == -1:
                 continue
@@ -146,16 +138,11 @@ class Telemetry(object):
             damage for the match if true. if false return total damage taken
             by each player. (default False)
         """
-        start = datetime.datetime.strptime(
-            self.filter_by("log_match_start")[0].timestamp,
-            "%Y-%m-%dT%H:%M:%S.%fZ"
-        )
+        start = datetime.datetime.strptime(self.filter_by("log_match_start")[0].timestamp, "%Y-%m-%dT%H:%M:%S.%fZ")
         damage = {}
         damage_events = self.filter_by("log_player_take_damage")
         for event in damage_events:
-            timestamp = datetime.datetime.strptime(
-                event.timestamp, "%Y-%m-%dT%H:%M:%S.%fZ"
-            )
+            timestamp = datetime.datetime.strptime(event.timestamp, "%Y-%m-%dT%H:%M:%S.%fZ")
             dt = (timestamp - start).total_seconds()
             if dt < 0 or event.attack_id == -1:
                 continue
@@ -279,10 +266,7 @@ class Telemetry(object):
         :param bool include_pregame: (default False) whether to include
             pre-game damage positions.
         """
-        start = datetime.datetime.strptime(
-            self.filter_by("log_match_start")[0].timestamp,
-            "%Y-%m-%dT%H:%M:%S.%fZ"
-        )
+        start = datetime.datetime.strptime(self.filter_by("log_match_start")[0].timestamp, "%Y-%m-%dT%H:%M:%S.%fZ")
         damages = {}
         attack_events = self.filter_by("log_player_attack")
         attackers = {}
@@ -296,9 +280,7 @@ class Telemetry(object):
             except AttributeError:
                 continue
             if attacker != "":
-                timestamp = datetime.datetime.strptime(
-                    event.timestamp, "%Y-%m-%dT%H:%M:%S.%fZ"
-                )
+                timestamp = datetime.datetime.strptime(event.timestamp, "%Y-%m-%dT%H:%M:%S.%fZ")
                 dt = (timestamp - start).total_seconds()
                 if (not include_pregame and dt < 0) or event.attack_id == -1:
                     continue
@@ -329,22 +311,14 @@ class Telemetry(object):
         :param bool include_pregame: (default False) whether to include
             pre-game player positions.
         """
-        start = datetime.datetime.strptime(
-            self.filter_by("log_match_start")[0].timestamp,
-            "%Y-%m-%dT%H:%M:%S.%fZ"
-        )
+        start = datetime.datetime.strptime(self.filter_by("log_match_start")[0].timestamp, "%Y-%m-%dT%H:%M:%S.%fZ")
         locations = self.filter_by("log_player_position")
         if not include_pregame:
-            locations = [
-                location for location in locations
-                if location.elapsed_time > 0
-            ]
+            locations = [location for location in locations if location.elapsed_time > 0]
         player_positions = {}
         dead = []
         for location in locations:
-            timestamp = datetime.datetime.strptime(
-                location.timestamp, "%Y-%m-%dT%H:%M:%S.%fZ"
-            )
+            timestamp = datetime.datetime.strptime(location.timestamp, "%Y-%m-%dT%H:%M:%S.%fZ")
             dt = (timestamp - start).total_seconds()
             player = location.character.name
             if player not in player_positions:
@@ -353,12 +327,7 @@ class Telemetry(object):
                 continue
             # (t, x, y, z)
             player_positions[player].append(
-                (
-                    dt,
-                    location.character.location.x,
-                    location.character.location.y,
-                    location.character.location.z,
-                )
+                (dt, location.character.location.x, location.character.location.y, location.character.location.z)
             )
             if location.character.ranking > 1:
                 dead.append(player)
@@ -387,18 +356,10 @@ class Telemetry(object):
         The circle colors are "white", "blue", and "red"
         """
         game_states = self.filter_by("log_game_state_periodic")
-        circle_positions = {
-            "white": [],
-            "blue": [],
-            "red": [],
-        }
-        start = datetime.datetime.strptime(
-            game_states[0].timestamp, "%Y-%m-%dT%H:%M:%S.%fZ"
-        )
+        circle_positions = {"white": [], "blue": [], "red": []}
+        start = datetime.datetime.strptime(game_states[0].timestamp, "%Y-%m-%dT%H:%M:%S.%fZ")
         for game_state in game_states:
-            timestamp = datetime.datetime.strptime(
-                game_state.timestamp, "%Y-%m-%dT%H:%M:%S.%fZ"
-            )
+            timestamp = datetime.datetime.strptime(game_state.timestamp, "%Y-%m-%dT%H:%M:%S.%fZ")
             dt = (timestamp - start).total_seconds()
             circle_positions["blue"].append(
                 (
@@ -437,10 +398,7 @@ class Telemetry(object):
         (t, x, y, z) coordinates where t is taken from the "elapsedTime"
         field in the JSON response.
         """
-        start = datetime.datetime.strptime(
-            self.filter_by("log_match_start")[0].timestamp,
-            "%Y-%m-%dT%H:%M:%S.%fZ"
-        )
+        start = datetime.datetime.strptime(self.filter_by("log_match_start")[0].timestamp, "%Y-%m-%dT%H:%M:%S.%fZ")
 
         if land:
             care_package_spawns = self.filter_by("log_care_package_land")
@@ -449,9 +407,7 @@ class Telemetry(object):
 
         care_package_positions = []
         for care_package in care_package_spawns:
-            package_time = datetime.datetime.strptime(
-                care_package.timestamp, "%Y-%m-%dT%H:%M:%S.%fZ"
-            )
+            package_time = datetime.datetime.strptime(care_package.timestamp, "%Y-%m-%dT%H:%M:%S.%fZ")
             time_elapsed = (package_time - start).total_seconds()
             care_package_positions.append(
                 (
@@ -532,10 +488,7 @@ class Telemetry(object):
         try:
             from chicken_dinner.visual.playback import create_playback_animation
         except ModuleNotFoundError as exc:
-            print(
-                "Use `pip install chicken_dinner[visual]` "
-                "for visualization dependencies."
-            )
+            print("Use `pip install chicken_dinner[visual]` " "for visualization dependencies.")
             raise exc
 
         return create_playback_animation(self, filename, **kwargs)

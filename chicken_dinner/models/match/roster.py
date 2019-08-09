@@ -26,10 +26,7 @@ class Roster(object):
             for participant in self.data["relationships"]["participants"]["data"]
         ]
         #: Stats for this roster
-        self.stats = {
-            camel_to_snake(k): v
-            for k, v in self.data["attributes"]["stats"].items()
-        }
+        self.stats = {camel_to_snake(k): v for k, v in self.data["attributes"]["stats"].items()}
         self.stats["won"] = self.data["attributes"]["won"]
 
     @property

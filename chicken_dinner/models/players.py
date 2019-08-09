@@ -23,12 +23,8 @@ class Players(object):
         #: The filter value for this Players query
         self.filter_value = filter_value
         #: The API response for this object
-        self.response = self._pubg._core.players(
-            filter_type, filter_value, shard
-        )
-        self._players = [
-            Player.from_data(pubg, p, shard=shard) for p in self.data
-        ]
+        self.response = self._pubg._core.players(filter_type, filter_value, shard)
+        self._players = [Player.from_data(pubg, p, shard=shard) for p in self.data]
 
     def __getitem__(self, idx):
         return self._players[idx]
