@@ -1,8 +1,8 @@
 Release History
 ---------------
 
-0.8.0: TBD
-~~~~~~~~~~
+0.8.0: 2019-08-11
+~~~~~~~~~~~~~~~~~
 
 * Replace map images with newer png files
 * Add Erangel (remastered)

@@ -42,8 +42,6 @@ classifiers = [
 ]
 include = [
     "CONTRIBUTORS.rst",
-    "README.rst",
-    "LICENSE.txt",
     "HISTORY.rst",
     "chicken_dinner/assets/maps/*Main_Low_Res.*",
     "chicken_dinner/assets/dictionary.json",
