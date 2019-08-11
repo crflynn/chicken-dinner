@@ -17,8 +17,18 @@ from chicken_dinner.constants import TRANSITION_SEASON
 SLEEP_BUFFER = 2
 MONTHNAMES = [
     None,  # placeholder index
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
 ]
 UTC = datetime.timezone(datetime.timedelta(0))
 
@@ -41,9 +51,7 @@ class PUBGCore(object):
         self.session = requests.Session()
         self.api_key = api_key
         if gzip:
-            self.session.headers.update({
-                "Accept-Encoding": "gzip",
-            })
+            self.session.headers.update({"Accept-Encoding": "gzip"})
         if shard is None or shard in SHARDS:
             self.shard = shard
         else:
@@ -60,10 +68,7 @@ class PUBGCore(object):
     @api_key.setter
     def api_key(self, value):
         self._api_key = value
-        self.session.headers = {
-            "Authorization": "Bearer " + value,
-            "Accept": "application/vnd.api+json",
-        }
+        self.session.headers = {"Authorization": "Bearer " + value, "Accept": "application/vnd.api+json"}
 
     def _check_shard(self, shard):
         shard = shard or self.shard
@@ -79,10 +84,7 @@ class PUBGCore(object):
             reset_time = self._rate_limit_reset - time.time()
             if self._rate_limit_remaining == 0 and reset_time > 0:
                 sleep_duration = reset_time + SLEEP_BUFFER
-                logging.warning(
-                    "Rate limited by PUBGCore. Sleeping for " +
-                    str(int(sleep_duration)) + " seconds."
-                )
+                logging.warning("Rate limited by PUBGCore. Sleeping for " + str(int(sleep_duration)) + " seconds.")
                 time.sleep(sleep_duration)
 
         response = self.session.get(url, params=params)
@@ -94,10 +96,7 @@ class PUBGCore(object):
             if response.status_code == 429:
                 reset_time = self._get_rate_limit_delta(response)
                 sleep_duration = int(reset_time) + SLEEP_BUFFER
-                logging.warning(
-                    "Rate limited by API (429). Sleeping for " +
-                    str(int(sleep_duration)) + " seconds."
-                )
+                logging.warning("Rate limited by API (429). Sleeping for " + str(int(sleep_duration)) + " seconds.")
                 time.sleep(sleep_duration)
             else:
                 raise exc
@@ -126,7 +125,7 @@ class PUBGCore(object):
             hour=int(server_hms[0]),
             minute=int(server_hms[1]),
             second=int(server_hms[2]),
-            tzinfo=UTC
+            tzinfo=UTC,
         ).timestamp()
 
         reset_time = int(response.headers["X-RateLimit-Reset"])

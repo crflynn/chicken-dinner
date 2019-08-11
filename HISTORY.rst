@@ -1,6 +1,14 @@
 Release History
 ---------------
 
+0.8.0: TBD
+~~~~~~~~~~
+
+* Replace map images with newer png files
+* Add Erangel (remastered)
+* Add Camp Jackal
+* Updated asset dictionary
+
 0.7.3: 2018-12-27
 ~~~~~~~~~~~~~~~~~
 

@@ -43,15 +43,11 @@ class Tournament(object):
     @property
     def match_ids(self):
         """The match ids associated with this tournament."""
-        return [
-            m["id"] for m in self.response["included"]
-        ]
+        return [m["id"] for m in self.response["included"]]
 
     def get_matches(self):
         """Get a list of match objects for the tournament matches."""
-        return [
-            Match(self._pubg, match_id, shard=self.shard) for match_id in self.match_ids
-        ]
+        return [Match(self._pubg, match_id, shard=self.shard) for match_id in self.match_ids]
 
     @property
     def meta(self):

@@ -47,12 +47,7 @@ class TelemetryObject(object):
 
     def dumps(self):
         """Serialize the event object to a JSON string."""
-        return json.dumps(
-            self,
-            default=lambda x: remove_from_dict(x.__dict__, ["reference"]),
-            sort_keys=True,
-            indent=4
-        )
+        return json.dumps(self, default=lambda x: remove_from_dict(x.__dict__, ["reference"]), sort_keys=True, indent=4)
 
     def to_dict(self):
         """Get the event object as a dict."""
