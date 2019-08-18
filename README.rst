@@ -118,6 +118,19 @@ Recommended playback settings:
 See the `documentation <http://chicken-dinner.readthedocs.io>`_ for more
 details.
 
+Updating Assets
+---------------
+
+This package uses PUBG map images and a dictionary of asset names/ids for use with generating
+telemetry visualizations as well as naming values in telemetry events and objects.
+
+To update the map images and asset dictionary, run the following commands.
+
+.. code-block:: bash
+
+    python -m chicken_dinner.assets.maps
+    python -m chicken_dinner.assets.dictionary
+
 More Examples
 -------------
 
