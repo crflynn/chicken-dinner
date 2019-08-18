@@ -28,7 +28,7 @@ Installation
 ------------
 
 To install chicken-dinner, use pip. This will install the core dependencies
-(``requests`` library) which provide functionality to the API wrapper classes.
+which provide functionality to the API wrapper and CLI.
 
 .. code-block:: bash
 
