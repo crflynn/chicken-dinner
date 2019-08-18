@@ -131,6 +131,12 @@ To update the map images and asset dictionary, run the following commands.
     python -m chicken_dinner.assets.maps
     python -m chicken_dinner.assets.dictionary
 
+Alternatively, use the CLI command:
+
+.. code-block:: bash
+
+   chicken-dinner assets
+
 
 .. toctree::
     :maxdepth: 2
@@ -145,6 +151,7 @@ To update the map images and asset dictionary, run the following commands.
     models/tournament
     visual/playback
     assets/assets
+    cli/cli
     sample_erangel
     sample_miramar
     sample_sanhok

@@ -14,19 +14,21 @@ Chicken Dinner
 
 Python PUBG JSON API Wrapper and (optional) playback visualizer.
 
+Also includes basic CLI functionality for replays, leaderboards, stats, and updating assets.
+
 Samples
 -------
 
 * `Erangel - squads <http://chicken-dinner.readthedocs.io/en/latest/sample_erangel.html>`_
 * `Miramar - solos <http://chicken-dinner.readthedocs.io/en/latest/sample_miramar.html>`_
 * `Sanhok - duos <http://chicken-dinner.readthedocs.io/en/latest/sample_sanhok.html>`_
-* `Vikendi - duos <http://chicken-dinner.readthedocs.io/en/latest/sample_vikendi.html>`_
+* `Vikendi - solos <http://chicken-dinner.readthedocs.io/en/latest/sample_vikendi.html>`_
 
 Installation
 ------------
 
 To install chicken-dinner, use pip. This will install the core dependencies
-(``requests`` library) which provide functionality to the API wrapper classes.
+which provide functionality to the API wrapper and CLI.
 
 .. code-block:: bash
 
@@ -118,18 +120,79 @@ Recommended playback settings:
 See the `documentation <http://chicken-dinner.readthedocs.io>`_ for more
 details.
 
-Updating Assets
----------------
+CLI
+---
 
-This package uses PUBG map images and a dictionary of asset names/ids for use with generating
-telemetry visualizations as well as naming values in telemetry events and objects.
-
-To update the map images and asset dictionary, run the following commands.
+For CLI commands using the PUBG API, an API Key is required.
+You may provide the API key via an environment variable
+named ``PUBG_API_KEY`` or with the CLI option ``--api-key``
 
 .. code-block:: bash
 
-    python -m chicken_dinner.assets.maps
-    python -m chicken_dinner.assets.dictionary
+    export PUBG_API_KEY=your_pubg_api_key
+    chicken-dinner [command] --shard=steam ...
+
+OR
+
+.. code-block:: bash
+
+    chicken-dinner [command] --api-key=your_pubg_api_key --shard=steam ...
+
+A shard is optional, but the default shard is ``steam``.
+
+
+Assets
+~~~~~~
+
+To update local assets, including hi-res maps and asset dictionaries:
+
+.. code-block:: bash
+
+    chicken-dinner assets
+
+
+Leaderboards
+~~~~~~~~~~~~
+
+Display the leaderboards for a game mode (shard default is steam):
+
+.. code-block:: bash
+
+    chicken-dinner leaderboard --shard=steam solo-fpp
+
+
+Player Stats
+~~~~~~~~~~~~
+
+Display player stats for lifetime or the current season (shard default is steam):
+
+.. code-block:: bash
+
+    # Get the lifetime stats for chocoTaco in solo-fpp
+    chicken-dinner stats --shard=steam --lifetime --group=solo --perspective=fpp chocoTaco
+
+    # Get the latest season stats for chocoTaco in solo-fpp
+    chicken-dinner stats -g solo -p fpp chocoTaco
+
+Replays
+~~~~~~~
+
+Generate html5 replays for matches (shard default is steam):
+
+.. code-block:: bash
+
+    # Generate a replay for the latest win of chocoTaco in specified path
+    chicken-dinner replay --latest --wins-only --size=6 --path=/path/to/my/replays chocoTaco
+
+    # Generate a replay for the latest game of chocoTaco
+    chicken-dinner replay -l chocoTaco
+
+    # Generate a replay for all of chocoTaco's wins in recent games
+    chicken-dinner replay -w chocoTaco
+
+    # Generate a replay for all of the recent games of chocoTaco
+    chicken-dinner replay chocoTaco
+
 
 More Examples
 -------------
@@ -274,6 +337,7 @@ Getting information about a player-season
 
 Leaderboards
 ~~~~~~~~~~~~
+
 
 Leaderboards give the top 25 players for a particular game mode.
 

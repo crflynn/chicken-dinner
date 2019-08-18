@@ -1,6 +1,12 @@
 Release History
 ---------------
 
+0.10.0: 2019-08-18
+~~~~~~~~~~~~~~~~~~
+
+* Add a command line interface for replays, assets, leaderboards, and stats
+* Add a method in Leaderboard which tabulates stats to text for the CLI
+
 0.9.0: 2019-08-18
 ~~~~~~~~~~~~~~~~~
 
