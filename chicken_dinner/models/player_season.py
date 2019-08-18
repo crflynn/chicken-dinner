@@ -111,7 +111,7 @@ class PlayerSeason(object):
                 if group in mode.lower():
                     match_ids[matches_to_gp[mode]] = [match["id"] for match in matches["data"]]
         else:
-            group_perspective = group + "_" + perspective
+            group_perspective = group + "-" + perspective
             mode = gp_to_matches[group_perspective]
             matches = data[mode]
             match_ids = [match["id"] for match in matches["data"]]
