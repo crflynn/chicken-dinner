@@ -476,7 +476,7 @@ Get a Telemetry instance from a particular match
     # Many more functions related to positions, circles, damages. Refer to docs
 
 
-Telemetry events and objects are generic class wrappers. They are constructed at
+Telemetry events and objects are generic class wrappers. They are constructed
 when the Telemetry instance is created. This makes them telemetry version-agnostic,
 but requires some work to inspect their contents and structure. The TelemetryEvent
 and TelemetryObject classes also transform the payload keys to snake_case.
