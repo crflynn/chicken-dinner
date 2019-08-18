@@ -16,8 +16,7 @@ class Tournaments(object):
         #: The API response for this object.
         self.response = self._pubg._core.tournaments()
         self._tournaments = [
-            Tournament(self._pubg, t["id"], t["attributes"]["createdAt"], self.shard)
-            for t in self.response["data"]
+            Tournament(self._pubg, t["id"], t["attributes"]["createdAt"], self.shard) for t in self.response["data"]
         ]
 
     def __getitem__(self, idx):
@@ -31,9 +30,7 @@ class Tournaments(object):
     @property
     def ids(self):
         """The tournament ids."""
-        return [
-            t["id"] for t in self.data
-        ]
+        return [t["id"] for t in self.data]
 
     @property
     def meta(self):

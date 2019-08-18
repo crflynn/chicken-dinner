@@ -15,8 +15,9 @@ class TelemetryObject(object):
     embedded telemetry objects recursively. Converts all event and object keys
     to snake-cased key names.
 
-    :param data: the JSON object data associated with the telemetry object
-    :param reference: the key from the parent object that refernces this object
+    :param dict data: the JSON object data associated with the telemetry object
+    :param str reference: the key from the parent object that refernces this object
+    :param bool map_assets: whether to map asset ids to asset names
     """
 
     def __init__(self, data, reference, map_assets=False):
@@ -47,13 +48,23 @@ class TelemetryObject(object):
 
     def dumps(self):
         """Serialize the event object to a JSON string."""
-        return json.dumps(
-            self,
-            default=lambda x: remove_from_dict(x.__dict__, ["reference"]),
-            sort_keys=True,
-            indent=4
-        )
+        return json.dumps(self, default=lambda x: remove_from_dict(x.__dict__, ["reference"]), sort_keys=True, indent=4)
 
     def to_dict(self):
         """Get the event object as a dict."""
         return json.loads(self.dumps())
+
+    def keys(self):
+        """Get all attributes names."""
+        return [k for k in self.__dict__.keys() if k[0] != "_"]
+
+    def values(self):
+        """Get all attribute values."""
+        return [self.__dict__[k] for k in self.__dict__.keys() if k[0] != "_"]
+
+    def items(self):
+        """Iterate through the attributes dictionary."""
+        for k, v in self.__dict__.items():
+            if k[0] == "_":
+                continue
+            yield k, v

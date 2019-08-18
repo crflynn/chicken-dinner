@@ -43,10 +43,7 @@ class Samples(object):
     @property
     def match_ids(self):
         """A list of match ids from the samples response."""
-        return [
-            match["id"] for match in
-            self.data["relationships"]["matches"]["data"]
-        ]
+        return [match["id"] for match in self.data["relationships"]["matches"]["data"]]
 
     @property
     def title_id(self):

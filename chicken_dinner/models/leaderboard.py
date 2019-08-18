@@ -18,10 +18,7 @@ class Leaderboard(object):
         self._game_mode = game_mode
         self._pubg = pubg
         self.response = self._pubg._core.leaderboard(game_mode)
-        self._rank_to_index = {
-            p["attributes"]["rank"]: idx
-            for idx, p in enumerate(self.response["included"])
-        }
+        self._rank_to_index = {p["attributes"]["rank"]: idx for idx, p in enumerate(self.response["included"])}
 
     @property
     def shard(self):

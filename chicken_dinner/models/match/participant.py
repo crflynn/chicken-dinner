@@ -22,10 +22,7 @@ class Participant(object):
         #: The data payload associated with this participant
         self.data = data
         #: Stats associated with this participant
-        self.stats = {
-            camel_to_snake(k): v
-            for k, v in self.data["attributes"]["stats"].items()
-        }
+        self.stats = {camel_to_snake(k): v for k, v in self.data["attributes"]["stats"].items()}
 
     @property
     def shard(self):
@@ -59,10 +56,7 @@ class Participant(object):
     @property
     def teammates(self):
         """A list of participant objects for this player's teammates."""
-        return [
-            p for p in self.roster.participants
-            if p.participant_id != self.participant_id
-        ]
+        return [p for p in self.roster.participants if p.participant_id != self.participant_id]
 
     @property
     def teammates_player_names(self):

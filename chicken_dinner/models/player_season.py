@@ -25,9 +25,7 @@ class PlayerSeason(object):
         if season_id == "lifetime":
             self.response = self._pubg._core.lifetime(player_id, shard)
         else:
-            self.response = self._pubg._core.player_season(
-                player_id, season_id, shard
-            )
+            self.response = self._pubg._core.player_season(player_id, season_id, shard)
 
     @property
     def shard(self):
@@ -40,10 +38,7 @@ class PlayerSeason(object):
 
         :return: a dict with keys ``player_id`` and ``season_id``
         """
-        return {
-            "player_id": self._player_id,
-            "season_id": self._season_id,
-        }
+        return {"player_id": self._player_id, "season_id": self._season_id}
 
     @property
     def data(self):
@@ -77,27 +72,19 @@ class PlayerSeason(object):
         new_stats = {}
         if group is None and perspective is None:
             for mode, stats in data.items():
-                new_stats[mode] = {
-                    camel_to_snake(stat): value for stat, value in stats.items()
-                }
+                new_stats[mode] = {camel_to_snake(stat): value for stat, value in stats.items()}
         elif group is None and perspective is not None:
             for mode, stats in data.items():
                 if perspective in mode:
-                    new_stats[mode] = {
-                        camel_to_snake(stat): value for stat, value in stats.items()
-                    }
+                    new_stats[mode] = {camel_to_snake(stat): value for stat, value in stats.items()}
         elif group is not None and perspective is None:
             for mode, stats in data.items():
                 if group in mode:
-                    new_stats[mode] = {
-                        camel_to_snake(stat): value for stat, value in stats.items()
-                    }
+                    new_stats[mode] = {camel_to_snake(stat): value for stat, value in stats.items()}
         else:
             group_perspective = group + "-" + perspective
             stats = data[group_perspective]
-            new_stats = {
-                camel_to_snake(stat): value for stat, value in stats.items()
-            }
+            new_stats = {camel_to_snake(stat): value for stat, value in stats.items()}
         return new_stats
 
     def match_ids(self, group=None, perspective=None, flat=False):
@@ -114,23 +101,17 @@ class PlayerSeason(object):
         if group is None and perspective is None:
             for mode, matches in data.items():
                 if "matches" in mode:
-                    match_ids[matches_to_gp[mode]] = [
-                        match["id"] for match in matches["data"]
-                    ]
+                    match_ids[matches_to_gp[mode]] = [match["id"] for match in matches["data"]]
         elif group is None and perspective is not None:
             for mode, matches in data.items():
                 if perspective in mode.lower():
-                    match_ids[matches_to_gp[mode]] = [
-                        match["id"] for match in matches["data"]
-                    ]
+                    match_ids[matches_to_gp[mode]] = [match["id"] for match in matches["data"]]
         elif group is not None and perspective is None:
             for mode, matches in data.items():
                 if group in mode.lower():
-                    match_ids[matches_to_gp[mode]] = [
-                        match["id"] for match in matches["data"]
-                    ]
+                    match_ids[matches_to_gp[mode]] = [match["id"] for match in matches["data"]]
         else:
-            group_perspective = group + "_" + perspective
+            group_perspective = group + "-" + perspective
             mode = gp_to_matches[group_perspective]
             matches = data[mode]
             match_ids = [match["id"] for match in matches["data"]]

@@ -16,43 +16,34 @@ from chicken_dinner.constants import map_dimensions
 rc("animation", embed_limit=100)
 
 
-MAP_ASSET_PATH = os.path.join(
-    os.path.dirname(
-        os.path.dirname(
-            os.path.realpath(__file__)
-        )
-    ),
-    "assets",
-    "maps"
-)
+MAP_ASSET_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), "assets", "maps")
 
 
 def create_playback_animation(
-        telemetry,
-        filename="playback.html",
-        labels=True,
-        disable_labels_after=None,
-        label_players=None,
-        dead_players=True,
-        dead_player_labels=False,
-        zoom=False,
-        zoom_edge_buffer=0.5,
-        use_hi_res=False,
-        use_no_text=False,
-        color_teams=True,
-        highlight_teams=None,
-        highlight_players=None,
-        highlight_color="#FFFF00",
-        highlight_winner=False,
-        label_highlights=True,
-        care_packages=True,
-        damage=True,
-        end_frames=20,
-        size=5,
-        dpi=100,
-        interpolate=True,
-        interval=1,
-        fps=30,
+    telemetry,
+    filename="playback.html",
+    labels=True,
+    disable_labels_after=None,
+    label_players=None,
+    dead_player_labels=False,
+    zoom=False,
+    zoom_edge_buffer=0.5,
+    use_hi_res=False,
+    use_no_text=False,
+    color_teams=True,
+    highlight_teams=None,
+    highlight_players=None,
+    highlight_color="#FFFF00",
+    highlight_winner=False,
+    label_highlights=True,
+    care_packages=True,
+    damage=True,
+    end_frames=20,
+    size=5,
+    dpi=100,
+    interpolate=True,
+    interval=1,
+    fps=30,
 ):
     """Create a playback animation from telemetry data.
 
@@ -181,23 +172,10 @@ def create_playback_animation(
     else:
         no_text = ""
 
-    # Sahnok (Savage_Main) high res is png for some reason; rest are jpg
-    # Also Vikendi (DihorOtok_Main) is all png
     if use_hi_res:
-        if map_id == "Savage_Main":
-            if use_no_text:
-                map_image = map_id + no_text + "_High_Res.jpg"
-            else:
-                map_image = map_id + no_text + "_High_Res.png"
-        elif map_id == "DihorOtok_Main":
-            map_image = map_id + no_text + "_High_Res.png"
-        else:
-            map_image = map_id + no_text + "_High_Res.jpg"
+        map_image = map_id + no_text + "_High_Res.png"
     else:
-        if map_id == "DihorOtok_Main":
-            map_image = map_id + no_text + "_Low_Res.png"
-        else:
-            map_image = map_id + no_text + "_Low_Res.jpg"
+        map_image = map_id + no_text + "_Low_Res.png"
     img_path = os.path.join(MAP_ASSET_PATH, map_image)
     try:
         img = mpimg.imread(img_path)
@@ -212,20 +190,22 @@ def create_playback_animation(
     players = ax.scatter(-10000, -10000, marker="o", c="w", edgecolor="k", s=60, linewidths=1, zorder=20)
     deaths = ax.scatter(-10000, -10000, marker="X", c="r", edgecolor="k", s=60, linewidths=1, alpha=0.5, zorder=10)
 
-    highlights = ax.scatter(-10000, -10000, marker="*", c=highlight_color, edgecolor="k", s=180, linewidths=1, zorder=25)
-    highlights_deaths = ax.scatter(-10000, -10000, marker="X", c=highlight_color, edgecolor="k", s=60, linewidths=1, zorder=15)
+    highlights = ax.scatter(
+        -10000, -10000, marker="*", c=highlight_color, edgecolor="k", s=180, linewidths=1, zorder=25
+    )
+    highlights_deaths = ax.scatter(
+        -10000, -10000, marker="X", c=highlight_color, edgecolor="k", s=60, linewidths=1, zorder=15
+    )
 
     if labels:
         if label_players is not None:
             name_labels = {
                 player_name: ax.text(0, 0, player_name, size=8, zorder=19)
-                for player_name in positions if player_name in label_players
+                for player_name in positions
+                if player_name in label_players
             }
         else:
-            name_labels = {
-                player_name: ax.text(0, 0, player_name, size=8, zorder=19)
-                for player_name in positions
-            }
+            name_labels = {player_name: ax.text(0, 0, player_name, size=8, zorder=19) for player_name in positions}
         for label in name_labels.values():
             label.set_path_effects([patheffects.withStroke(linewidth=2, foreground="w")])
 
@@ -233,13 +213,49 @@ def create_playback_animation(
     white_circle = plt.Circle((0, 0), 0, edgecolor="w", linewidth=2, fill=False, zorder=6)
     red_circle = plt.Circle((0, 0), 0, color="r", edgecolor=None, lw=0, fill=True, alpha=0.3, zorder=7)
 
-    care_package_spawns, = ax.plot(-10000, -10000, marker="s", c="w", markerfacecoloralt="w", fillstyle="bottom", mec="k", markeredgewidth=0.5, markersize=10, lw=0, zorder=8)
-    care_package_lands, = ax.plot(-10000, -10000, marker="s", c="r", markerfacecoloralt="b", fillstyle="bottom", mec="k", markeredgewidth=0.5, markersize=10, lw=0, zorder=9)
+    care_package_spawns, = ax.plot(
+        -10000,
+        -10000,
+        marker="s",
+        c="w",
+        markerfacecoloralt="w",
+        fillstyle="bottom",
+        mec="k",
+        markeredgewidth=0.5,
+        markersize=10,
+        lw=0,
+        zorder=8,
+    )
+    care_package_lands, = ax.plot(
+        -10000,
+        -10000,
+        marker="s",
+        c="r",
+        markerfacecoloralt="b",
+        fillstyle="bottom",
+        mec="k",
+        markeredgewidth=0.5,
+        markersize=10,
+        lw=0,
+        zorder=9,
+    )
 
     damage_slots = 50
     damage_lines = []
     for k in range(damage_slots):
-        dline, = ax.plot(-10000, -10000, marker="x", c="r", mec="r", markeredgewidth=5, markevery=-1, markersize=10, lw=2, alpha=0.5, zorder=50)
+        dline, = ax.plot(
+            -10000,
+            -10000,
+            marker="x",
+            c="r",
+            mec="r",
+            markeredgewidth=5,
+            markevery=-1,
+            markersize=10,
+            lw=2,
+            alpha=0.5,
+            zorder=50,
+        )
         damage_lines.append(dline)
 
     ax.add_patch(blue_circle)
@@ -256,7 +272,16 @@ def create_playback_animation(
     def init():
         if labels:
             if highlight_players or highlight_teams:
-                updates = players, deaths, highlights, highlights_deaths, blue_circle, red_circle, white_circle, *tuple(name_labels.values())
+                updates = (
+                    players,
+                    deaths,
+                    highlights,
+                    highlights_deaths,
+                    blue_circle,
+                    red_circle,
+                    white_circle,
+                    *tuple(name_labels.values()),
+                )
             else:
                 updates = players, deaths, blue_circle, red_circle, white_circle, *tuple(name_labels.values())
         else:
@@ -301,20 +326,20 @@ def create_playback_animation(
             if interpolate:
                 blue_circle.center = (
                     interpolate_coords(frame, circles["blue"], 0, 1),
-                    mapy - interpolate_coords(frame, circles["blue"], 0, 2))
+                    mapy - interpolate_coords(frame, circles["blue"], 0, 2),
+                )
                 red_circle.center = (
                     interpolate_coords(frame, circles["red"], 0, 1, True),
-                    mapy - interpolate_coords(frame, circles["red"], 0, 2, True))
+                    mapy - interpolate_coords(frame, circles["red"], 0, 2, True),
+                )
                 white_circle.center = (
                     interpolate_coords(frame, circles["white"], 0, 1, True),
-                    mapy - interpolate_coords(frame, circles["white"], 0, 2, True))
+                    mapy - interpolate_coords(frame, circles["white"], 0, 2, True),
+                )
 
-                blue_circle.set_radius(
-                    interpolate_coords(frame, circles["blue"], 0, 4))
-                red_circle.set_radius(
-                    interpolate_coords(frame, circles["red"], 0, 4, True))
-                white_circle.set_radius(
-                    interpolate_coords(frame, circles["white"], 0, 4, True))
+                blue_circle.set_radius(interpolate_coords(frame, circles["blue"], 0, 4))
+                red_circle.set_radius(interpolate_coords(frame, circles["red"], 0, 4, True))
+                white_circle.set_radius(interpolate_coords(frame, circles["white"], 0, 4, True))
             else:
                 blue_circle.center = circles["blue"][frame][1], mapy - circles["blue"][frame][2]
                 red_circle.center = circles["red"][frame][1], mapy - circles["red"][frame][2]
@@ -476,7 +501,9 @@ def create_playback_animation(
 
                 # Draw dead players names
                 if labels and dead_player_labels and player in label_players:
-                    name_labels[player].set_position((pos[-1][1] + 10000 * xwidth / mapx, mapy - pos[-1][2] - 10000 * ywidth / mapy))
+                    name_labels[player].set_position(
+                        (pos[-1][1] + 10000 * xwidth / mapx, mapy - pos[-1][2] - 10000 * ywidth / mapy)
+                    )
                     name_labels[player].set_path_effects([patheffects.withStroke(linewidth=1, foreground="gray")])
                 # Offscreen if labels are off
                 elif labels and player in label_players:
@@ -520,7 +547,16 @@ def create_playback_animation(
 
         if labels:
             if highlight_players or highlight_teams:
-                updates = players, deaths, highlights, highlights_deaths, blue_circle, red_circle, white_circle, *tuple(name_labels.values())
+                updates = (
+                    players,
+                    deaths,
+                    highlights,
+                    highlights_deaths,
+                    blue_circle,
+                    red_circle,
+                    white_circle,
+                    *tuple(name_labels.values()),
+                )
             else:
                 updates = players, deaths, blue_circle, red_circle, white_circle, *tuple(name_labels.values())
         else:
@@ -536,10 +572,12 @@ def create_playback_animation(
 
     # Create the animation
     animation = FuncAnimation(
-        fig, update,
+        fig,
+        update,
         frames=range(0, maxlength + end_frames, interval),
         interval=int(1000 / fps),
-        init_func=init, blit=True,
+        init_func=init,
+        blit=True,
     )
 
     # Write the html5 to buffer
