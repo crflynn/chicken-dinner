@@ -18,8 +18,8 @@ exclude = '''
 '''
 
 [tool.poetry]
-name = "chicken-dinner"
-version = "0.8.0"
+name = "chicken_dinner"
+version = "0.9.0"
 description = "PUBG JSON API Wrapper and Game Telemetry Visualizer"
 authors = ["Christopher Flynn <crf204@gmail.com>"]
 license = "MIT"
