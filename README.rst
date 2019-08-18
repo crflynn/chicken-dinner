@@ -423,7 +423,7 @@ Get all Participants from Match
 Telemetry
 ~~~~~~~~~
 
-Get Telemetry instance from a particular match
+Get a Telemetry instance from a particular match
 
 .. code-block:: python
 
@@ -464,12 +464,14 @@ Get Telemetry instance from a particular match
 
 
 Telemetry events and objects are generic class wrappers. They are constructed at
-the TelemetryEvents when the Telemetry instance is created. This makes them
-telemetry version-agnostic, but requires some work to inspect their contents and
-structure. The TelemetryEvent and TelemetryObject classes also transform the payload
-keys to snake_case. See the Telemetry documentation for more details.
+when the Telemetry instance is created. This makes them telemetry version-agnostic,
+but requires some work to inspect their contents and structure. The TelemetryEvent
+and TelemetryObject classes also transform the payload keys to snake_case.
 
-Telemetry Events
+TelemetryEvents are containers for event key-values and structures which contain a
+hierarchy of TelemetryObjects.
+
+`Telemetry Events <https://documentation.pubg.com/en/telemetry-events.html>`_
 
 .. code-block:: python
 
@@ -505,7 +507,11 @@ Telemetry Events
     # low
 
 
-Telemetry Objects
+TelemetryObjects refer to entities such as players or locations. Each TelemetryObject
+contains a ``reference`` attribute which is the key in the parent TelemetryEvent or
+TelemetryObject that refers to this TelemetryObject.
+
+`Telemetry Objects <https://documentation.pubg.com/en/telemetry-objects.html>`_
 
 .. code-block:: python
 
