@@ -12,7 +12,9 @@ Chicken Dinner
 .. |pyversions| image:: https://img.shields.io/pypi/pyversions/chicken-dinner.svg
     :target: https://pypi.python.org/pypi/chicken-dinner
 
-Python PUBG JSON API Wrapper and (optional) playback visualizer. Chicken dinner now includes basic CLI functionality.
+Python PUBG JSON API Wrapper and (optional) playback visualizer.
+
+Also includes basic CLI functionality for replays, leaderboards, stats, and updating assets.
 
 Samples
 -------

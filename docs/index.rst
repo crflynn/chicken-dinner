@@ -131,6 +131,12 @@ To update the map images and asset dictionary, run the following commands.
     python -m chicken_dinner.assets.maps
     python -m chicken_dinner.assets.dictionary
 
+Alternatively, use the CLI
+
+.. code-block:: bash
+
+   chicken-dinner assets
+
 
 .. toctree::
     :maxdepth: 2

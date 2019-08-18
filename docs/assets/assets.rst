@@ -20,7 +20,7 @@ directory:
 
     python -m chicken_dinner.assets.maps
 
-Starting in v0.8.0, they can also be downloaded using the chicken-dinner CLI:
+Starting in v0.10.0, they can also be downloaded using the chicken-dinner CLI:
 
 .. code-block:: bash
 
@@ -41,7 +41,7 @@ directory:
 
     python -m chicken_dinner.assets.dictionary
 
-Starting in v0.8.0, they can also be downloaded using the chicken-dinner CLI:
+Starting in v0.10.0, they can also be downloaded using the chicken-dinner CLI:
 
 .. code-block:: bash
 

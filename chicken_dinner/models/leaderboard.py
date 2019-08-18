@@ -1,4 +1,6 @@
 """Leaderboard model."""
+from tabulate import tabulate
+
 from chicken_dinner.models.player import Player
 from chicken_dinner.util import camel_to_snake
 
@@ -74,6 +76,35 @@ class Leaderboard(object):
     def data(self, rank):
         """The player raw data blob from the response for the player at the given rank."""
         return self.response["included"][rank - 1]
+
+    def to_table(self, exclude_fields=None):
+        """Create a string representing the leaderboard and stats.
+
+        fields are:
+            "rank", "id", "name", "rank_points", "wins", "games",
+            "win_ratio", "average_damage", "kills",
+            "kill_death_ratio", "average_rank"
+
+        :param list(str) exclude_fields: a list of fields to include
+        """
+        if exclude_fields is None:
+            exclude_fields = []
+        data = []
+        for player in self.response["included"]:
+            player_data = {
+                "rank": player["attributes"]["rank"],
+                "id": player["id"],
+                "name": player["attributes"]["name"],
+            }
+            for k, v in player["attributes"]["stats"].items():
+                player_data[camel_to_snake(k)] = v
+            data.append(player_data)
+        data = sorted(data, key=lambda x: x["rank"])
+        for f in exclude_fields:
+            for d in data:
+                d.pop(f, None)
+
+        return tabulate(data, headers="keys")
 
     def get_player(self, rank):
         """Get a player object for the player at the given rank."""

@@ -3,7 +3,6 @@
 Entry point: $ chicken-dinner [CMD] [OPTS] [player_name]
 """
 from collections import defaultdict
-import json
 import logging
 import os
 
@@ -45,16 +44,28 @@ def assets():
 @click.command(short_help="Display leaderboards")
 @click.option("--api-key", default=os.environ.get("PUBG_API_KEY", None), help="pubg api key")
 @click.option("--shard", default="steam", help="pubg api shard")
+@click.option("--show-ids", is_flag=True, help="show player ids")
 @click.argument("game_mode")
-def leaderboard(api_key, shard, game_mode):
+def leaderboard(api_key, shard, show_ids, game_mode):
     """Retrieve the latest leaderboard standings.
 
-    usage: $ chicken-dinner leaderboards --api-key=$PUBG_API_KEY --shard=steam solo-fpp
+    usage: $ chicken-dinner leaderboard --api-key=$PUBG_API_KEY --shard=steam --show-ids solo-fpp
     """
     pubg = get_pubg(api_key, shard)
     leaderboards = pubg.leaderboard(game_mode=game_mode)
-    click.secho(json.dumps(leaderboards.data))
-    # TODO endpoint still looks broken
+
+    if not show_ids:
+        exclude = ["id"]
+    else:
+        exclude = []
+
+    click.echo()
+    table = leaderboards.to_table(exclude_fields=exclude)
+    lines = table.split("\n")
+    for line in lines[:2]:
+        click.secho(line, fg="yellow")
+    for line in lines[2:]:
+        click.secho(line)
 
 
 @click.command(short_help="Display player stats")
@@ -84,7 +95,12 @@ def stats(api_key, shard, lifetime, group, perspective, player_name):
                 game_modes_stats["stats"].append(stat)
             game_modes_stats[game_mode].append(value)
     click.echo()
-    click.echo(tabulate(game_modes_stats, headers="keys"))
+    table = tabulate(game_modes_stats, headers="keys")
+    lines = table.split("\n")
+    for line in lines[:2]:
+        click.secho(line, fg="yellow")
+    for line in lines[2:]:
+        click.secho(line)
 
 
 @click.command(short_help="Generate replay visualizations")
