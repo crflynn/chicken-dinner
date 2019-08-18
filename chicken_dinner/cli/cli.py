@@ -14,7 +14,7 @@ from chicken_dinner.assets.maps import update_maps
 from chicken_dinner.assets.dictionary import update_dictionary
 
 
-CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
+CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 
 
 def get_pubg(api_key, shard):
@@ -133,8 +133,7 @@ def replay(api_key, shard, wins_only, latest, size, path, verbose, player_name):
             match_telemetry = match.get_telemetry()
             click.secho("Rendering: " + match_id, fg="yellow")
             filename = os.path.join(
-                path,
-                player_name + "_" + match.created_at.replace("-", "").replace(":", "") + "_" + match_id + ".html"
+                path, player_name + "_" + match.created_at.replace("-", "").replace(":", "") + "_" + match_id + ".html"
             )
             match_telemetry.playback_animation(
                 filename,
