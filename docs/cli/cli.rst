@@ -63,11 +63,11 @@ Display player stats for lifetime or the current season (shard default is steam)
 
 .. code-block:: bash
 
-    # Get the lifteime stats for shroud in solo-fpp
-    chicken-dinner stats --shard=steam --lifetime --group=solo --perspective=fpp shroud
+    # Get the lifteime stats for chocoTaco in solo-fpp
+    chicken-dinner stats --shard=steam --lifetime --group=solo --perspective=fpp chocoTaco
 
-    # Get the latest season stats for shroud in solo-fpp
-    chicken-dinner stats -g solo -p fpp shroud
+    # Get the latest season stats for chocoTaco in solo-fpp
+    chicken-dinner stats -g solo -p fpp chocoTaco
 
 Example
 
@@ -121,14 +121,14 @@ Generate html5 replays for matches (shard default is steam):
 
 .. code-block:: bash
 
-    # Generate a replay for the latest win of shroud in specified path
-    chicken-dinner replay --latest --wins-only --size=6 --path=/path/to/my/replays shroud
+    # Generate a replay for the latest win of chocoTaco in specified path
+    chicken-dinner replay --latest --wins-only --size=6 --path=/path/to/my/replays chocoTaco
 
-    # Generate a replay for the latest game of shroud
-    chicken-dinner replay -l shroud
+    # Generate a replay for the latest game of chocoTaco
+    chicken-dinner replay -l chocoTaco
 
-    # Generate a replay for all of shrouds wins in recent games
-    chicken-dinner replay -w shroud
+    # Generate a replay for all of chocoTaco's wins in recent games
+    chicken-dinner replay -w chocoTaco
 
-    # Generate a replay for all of the recent games of shroud
-    chicken-dinner replay shroud
+    # Generate a replay for all of the recent games of chocoTaco
+    chicken-dinner replay chocoTaco

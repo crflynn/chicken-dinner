@@ -131,7 +131,7 @@ To update the map images and asset dictionary, run the following commands.
     python -m chicken_dinner.assets.maps
     python -m chicken_dinner.assets.dictionary
 
-Alternatively, use the CLI
+Alternatively, use the CLI command:
 
 .. code-block:: bash
 
