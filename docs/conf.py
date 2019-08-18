@@ -25,7 +25,7 @@ import chicken_dinner
 # -- Project information -----------------------------------------------------
 
 project = "Chicken Dinner"
-copyright = "2018, Christopher Flynn"
+copyright = "2018-2019, Christopher Flynn"
 author = "Christopher Flynn"
 
 # The short X.Y version

@@ -118,10 +118,25 @@ Recommended playback settings:
         fps=30,
     )
 
+Updating Assets
+---------------
+
+This package uses PUBG map images and a dictionary of asset names/ids for use with generating
+telemetry visualizations as well as naming values in telemetry events and objects.
+
+To update the map images and asset dictionary, run the following commands.
+
+.. code-block:: bash
+
+    python -m chicken_dinner.assets.maps
+    python -m chicken_dinner.assets.dictionary
+
+
 .. toctree::
     :maxdepth: 2
     :caption: Contents:
 
+    examples
     pubgapi/core
     pubgapi/pubg
     models/api
