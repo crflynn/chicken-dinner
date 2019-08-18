@@ -1,6 +1,13 @@
 Release History
 ---------------
 
+0.9.0: 2019-08-18
+~~~~~~~~~~~~~~~~~
+
+* Fix a bug related to getting player-season stats output
+* Fix a bug related to how dBNOId key is transformed in telemetry
+* Add keys, values, and items methods to TelemetryEvent and TelemetryObject
+
 0.8.0: 2019-08-11
 ~~~~~~~~~~~~~~~~~
 

@@ -3,7 +3,7 @@ import copy
 import re
 
 
-stats_map = {"DBNOs": "dbnos", "dBNOs": "dbnos", "top10s": "top_10s"}
+stats_map = {"DBNOs": "dbnos", "dBNOs": "dbnos", "top10s": "top_10s", "dBNOId": "dbno_id"}
 
 
 def camel_to_snake(name):

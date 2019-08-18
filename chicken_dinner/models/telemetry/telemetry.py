@@ -56,7 +56,6 @@ class Telemetry(object):
 
         :param event_type: the event type to filter
         """
-        events = None
         if event_type is not None:
             events = [event for event in self.events if event.event_type == event_type]
         else:
