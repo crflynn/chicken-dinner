@@ -82,7 +82,7 @@ SHARDS = [
     "psn",
     "steam",
     "tournament",
-    "xbox"
+    "xbox",
     # platform-region
     "pc-as",
     "pc-eu",
