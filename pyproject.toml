@@ -19,7 +19,7 @@ exclude = '''
 
 [tool.poetry]
 name = "chicken_dinner"
-version = "0.10.1"
+version = "0.10.2"
 description = "PUBG JSON API Wrapper and Game Telemetry Visualizer"
 authors = ["Christopher Flynn <crf204@gmail.com>"]
 license = "MIT"
@@ -41,8 +41,8 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: CPython",
 ]
 include = [
+    "CHANGELOG.rst",
     "CONTRIBUTORS.rst",
-    "HISTORY.rst",
     "chicken_dinner/assets/maps/*Main_Low_Res.*",
     "chicken_dinner/assets/dictionary.json",
 ]
@@ -61,7 +61,7 @@ visual = ["matplotlib", "pillow"]
 python = "^3.6"
 requests = "^2.22"
 matplotlib = { version = "^3.1", optional = true }
-pillow = { version = "^6.1", optional = true }
+pillow = { version = "^6.2", optional = true }
 click = "^7.0"
 tabulate = "^0.8.3"
 
