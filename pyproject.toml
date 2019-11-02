@@ -41,8 +41,8 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: CPython",
 ]
 include = [
+    "CHANGELOG.rst",
     "CONTRIBUTORS.rst",
-    "HISTORY.rst",
     "chicken_dinner/assets/maps/*Main_Low_Res.*",
     "chicken_dinner/assets/dictionary.json",
 ]
