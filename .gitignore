@@ -141,7 +141,7 @@ cython_debug/
 .DS_Store
 
 # secret
-secret.html
+secret.*
 design*
 test.json
 debug*

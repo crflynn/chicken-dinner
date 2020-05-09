@@ -1,6 +1,6 @@
 .PHONY: docs
 docs:
-	poetry export -f requirements.txt > docs/requirements.txt && \
+	poetry export --dev -f requirements.txt > docs/requirements.txt && \
 	cd docs && \
 	make html && \
 	open _build/html/index.html
@@ -13,6 +13,6 @@ fmt:
 .PHONY: setup
 setup:
 	brew install asdf || True
-	asdf install
-	poetry install
+	asdf install && \
+	poetry install && \
 	poetry install --extras visual
