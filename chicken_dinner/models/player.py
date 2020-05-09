@@ -1,7 +1,6 @@
 """Individual player model."""
-from .season import Season
-
 from chicken_dinner.constants import SHARD_URL
+from chicken_dinner.models.season import Season
 
 
 class Player(object):

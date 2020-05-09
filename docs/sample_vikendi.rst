@@ -4,4 +4,4 @@ Sample (Vikendi - solos)
 (May take a few seconds to load)
 
 .. raw:: html
-   :file: vikendi.html
+   :file: samples/vikendi.html

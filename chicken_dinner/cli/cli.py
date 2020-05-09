@@ -2,17 +2,16 @@
 
 Entry point: $ chicken-dinner [CMD] [OPTS] [player_name]
 """
-from collections import defaultdict
 import logging
 import os
+from collections import defaultdict
 
 import click
 from tabulate import tabulate
 
-from chicken_dinner.pubgapi import PUBG
-from chicken_dinner.assets.maps import update_maps
 from chicken_dinner.assets.dictionary import update_dictionary
-
+from chicken_dinner.assets.maps import update_maps
+from chicken_dinner.pubgapi import PUBG
 
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 

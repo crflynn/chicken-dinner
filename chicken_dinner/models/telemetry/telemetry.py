@@ -1,8 +1,8 @@
 """Telemetry class."""
 import datetime
 
-from chicken_dinner.constants import map_to_map_name
 from chicken_dinner.constants import map_name_to_map
+from chicken_dinner.constants import map_to_map_name
 from chicken_dinner.models.telemetry.events import TelemetryEvent
 
 
@@ -175,8 +175,8 @@ class Telemetry(object):
         for event in self.events[::-1]:
             if event.event_type == "log_match_end":
                 for player in event.characters:
-                    team = player.team_id
-                    player_name = player.name
+                    team = player.character.team_id
+                    player_name = player.character.name
                     if team not in rosters:
                         rosters[team] = []
                     rosters[team].append(player_name)
@@ -201,10 +201,10 @@ class Telemetry(object):
         for event in self.events[::-1]:
             if event.event_type == "log_match_end":
                 for player in event.characters:
-                    ranking = player.ranking
+                    ranking = player.character.ranking
                     if ranking not in rankings:
                         rankings[ranking] = []
-                    rankings[ranking].append(player.name)
+                    rankings[ranking].append(player.character.name)
         if rank is not None:
             return rankings.get(rank, None)
         return rankings
@@ -285,7 +285,11 @@ class Telemetry(object):
                     continue
                 if attacker not in damages:
                     damages[attacker] = []
-                attacker_location = attackers[event.attack_id].location
+                # inconsistencies here can sometimes result in missing attack ids
+                try:
+                    attacker_location = attackers[event.attack_id].location
+                except KeyError:
+                    continue
                 damages[attacker].append(
                     (
                         dt,

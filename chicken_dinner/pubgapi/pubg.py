@@ -1,5 +1,4 @@
 """PUBG model-API interface."""
-from chicken_dinner.models.match import Match
 from chicken_dinner.models import Leaderboard
 from chicken_dinner.models import Player
 from chicken_dinner.models import Players
@@ -9,6 +8,7 @@ from chicken_dinner.models import Seasons
 from chicken_dinner.models import Status
 from chicken_dinner.models import Tournament
 from chicken_dinner.models import Tournaments
+from chicken_dinner.models.match import Match
 from chicken_dinner.models.telemetry import Telemetry
 from chicken_dinner.pubgapi.core import PUBGCore
 

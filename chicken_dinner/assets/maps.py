@@ -4,7 +4,6 @@ import os
 
 import requests
 
-
 logger = logging.getLogger()
 
 
@@ -26,11 +25,13 @@ def update_maps():
         response = requests.get(map_file)
 
         # Map names are inconsistent
+        # https://github.com/pubg/api-assets/blob/master/dictionaries/telemetry/mapName.json
         filename = filename.replace("Sanhok", "Savage")
         filename = filename.replace("Vikendi", "DihorOtok")
         filename = filename.replace("Miramar", "Desert")
         filename = filename.replace("Erangel_Remastered", "Baltic")
         filename = filename.replace("Camp_Jackal", "Range")
+        filename = filename.replace("Karakin", "Summerland")
         path = os.path.join(MAP_ASSET_PATH, filename)
 
         with open(path, "wb") as img:

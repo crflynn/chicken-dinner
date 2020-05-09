@@ -5,7 +5,6 @@ import os
 
 import requests
 
-
 logger = logging.getLogger()
 
 
