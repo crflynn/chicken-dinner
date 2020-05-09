@@ -1,6 +1,14 @@
 Release History
 ---------------
 
+0.11.0: 2020-05-09
+~~~~~~~~~~~~~~~~~~
+
+* Fix code related to changes in the API version 18.0.0
+* Format code with isort
+* Add Karakin map asset
+* Update map and dictionary assets to latest
+
 0.10.2: 2019-11-02
 ~~~~~~~~~~~~~~~~~~
 

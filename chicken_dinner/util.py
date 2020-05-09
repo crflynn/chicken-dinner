@@ -2,7 +2,6 @@
 import copy
 import re
 
-
 stats_map = {"DBNOs": "dbnos", "dBNOs": "dbnos", "top10s": "top_10s", "dBNOId": "dbno_id"}
 
 

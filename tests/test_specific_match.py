@@ -1,9 +1,10 @@
 import logging
 
 from chicken_dinner.pubgapi import PUBG
+
 from .secret import api_key
-from .secret import shard
 from .secret import match_id
+from .secret import shard
 
 # from tests.secret import api_key
 

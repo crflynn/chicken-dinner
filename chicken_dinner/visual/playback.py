@@ -12,7 +12,6 @@ from matplotlib.animation import FuncAnimation
 from chicken_dinner.constants import COLORS
 from chicken_dinner.constants import map_dimensions
 
-
 rc("animation", embed_limit=100)
 
 
@@ -89,7 +88,6 @@ def create_playback_animation(
     :param int interval: interval between gameplay frames in seconds
     :param int fps: the frames per second for the animation
     """
-
     # Extract data
     positions = telemetry.player_positions()
     circles = telemetry.circle_positions()

@@ -6,13 +6,12 @@ import time
 import requests
 from requests.exceptions import RequestException
 
+from chicken_dinner.constants import PLAYER_FILTERS
 from chicken_dinner.constants import SHARD_URL
+from chicken_dinner.constants import SHARDS
 from chicken_dinner.constants import STATUS_URL
 from chicken_dinner.constants import TOURNAMENTS_URL
-from chicken_dinner.constants import SHARDS
-from chicken_dinner.constants import PLAYER_FILTERS
 from chicken_dinner.constants import TRANSITION_SEASON
-
 
 SLEEP_BUFFER = 2
 MONTHNAMES = [

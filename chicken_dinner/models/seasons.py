@@ -1,5 +1,5 @@
 """Seasons model."""
-from .season import Season
+from chicken_dinner.models.season import Season
 
 
 class Seasons(object):

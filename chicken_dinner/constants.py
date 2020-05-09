@@ -3,7 +3,6 @@ import json
 
 from chicken_dinner.assets.dictionary import DICTIONARY_PATH
 
-
 PERSPECTIVES = ("tpp", "fpp")
 GROUPS = ("solo", "duo", "squad")
 
@@ -47,6 +46,7 @@ map_to_map_name = {
     "DihorOtok_Main": "Vikendi",
     "Range_Main": "Camp Jackal",
     "Baltic_Main": "Erangel (Remastered)",
+    "Summerland_Main": "Karakin",
 }
 
 map_name_to_map = {
@@ -56,6 +56,7 @@ map_name_to_map = {
     "Vikendi": "DihorOtok_Main",
     "Camp Jackal": "Range_Main",
     "Erangel (Remastered)": "Baltic_Main",
+    "Karakin": "Summerland_Main",
 }
 
 map_dimensions = {
@@ -65,6 +66,7 @@ map_dimensions = {
     "DihorOtok_Main": [614400, 614400],
     "Range_Main": [204800, 204800],
     "Baltic_Main": [819200, 819200],
+    "Summerland_Main": [204800, 204800],
 }
 
 true_false = {"false": False, "true": True}
@@ -83,6 +85,7 @@ SHARDS = [
     "steam",
     "tournament",
     "xbox",
+    "console",
     # platform-region
     "pc-as",
     "pc-eu",

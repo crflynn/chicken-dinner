@@ -26,6 +26,8 @@ Samples
 * `Miramar - solos <sample_miramar.html>`_
 * `Sanhok - duos <sample_sanhok.html>`_
 * `Vikendi - solos <sample_vikendi.html>`_
+* `Karakin - duos <sample_karakin.html>`_
+
 
 Installation
 ------------
@@ -156,6 +158,7 @@ Alternatively, use the CLI command:
     sample_miramar
     sample_sanhok
     sample_vikendi
+    sample_karakin
     notes
 
 

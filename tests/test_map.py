@@ -1,6 +1,7 @@
 import logging
 
 from chicken_dinner.pubgapi import PUBG
+
 from .secret import api_key
 
 # from tests.secret import api_key
@@ -23,7 +24,8 @@ if __name__ == "__main__":
         print(match.map_name)
         print(match.winner)
         # if match.map_name in ("Camp Jackal",):
-        if player in match.winner.player_names and match.map_name in ("Erangel (Remastered)", "Camp Jackal"):
+        # if player in match.winner.player_names and match.map_name in ("Sanhok"):
+        if True:
             print(match.map_name, match_id)
             match_telemetry = match.get_telemetry()
             # break
@@ -39,7 +41,7 @@ if __name__ == "__main__":
                 end_frames=60,
                 use_hi_res=False,
                 use_no_text=False,
-                color_teams=False,
+                color_teams=True,
                 interpolate=True,
                 damage=True,
                 interval=2,

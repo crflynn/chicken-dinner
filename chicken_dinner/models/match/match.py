@@ -1,7 +1,7 @@
 """Match model."""
-from .asset import Asset
-from .roster import Roster
 from chicken_dinner.constants import map_to_map_name
+from chicken_dinner.models.match.asset import Asset
+from chicken_dinner.models.match.roster import Roster
 from chicken_dinner.models.telemetry import Telemetry
 
 

@@ -15,11 +15,16 @@
 import os
 import sys
 
+# The theme to use for HTML and HTML Help pages.  See the documentation for
+# a list of builtin themes.
+#
+import sphinx_rtd_theme
+
+import chicken_dinner
+
 # sys.path.insert(0, os.path.abspath('.'))
 
 sys.path.insert(0, os.path.abspath(".."))
-
-import chicken_dinner
 
 
 # -- Project information -----------------------------------------------------
@@ -75,10 +80,6 @@ pygments_style = "friendly"
 
 # -- Options for HTML output -------------------------------------------------
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
-import sphinx_rtd_theme
 
 html_theme = "sphinx_rtd_theme"
 

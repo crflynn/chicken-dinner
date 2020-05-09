@@ -1,13 +1,12 @@
 """Module level object."""
-from .__version__ import __version__
-from .__version__ import __description__
-from .__version__ import __url__
-from .__version__ import __title__
-from .__version__ import __author__
-from .__version__ import __author_email__
-from .__version__ import __license__
-from .__version__ import __copyright__
-
+from chicken_dinner._version import __author__
+from chicken_dinner._version import __author_email__
+from chicken_dinner._version import __copyright__
+from chicken_dinner._version import __description__
+from chicken_dinner._version import __license__
+from chicken_dinner._version import __title__
+from chicken_dinner._version import __url__
+from chicken_dinner._version import __version__
 
 __all__ = (
     "__version__",

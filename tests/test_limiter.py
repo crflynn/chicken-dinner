@@ -1,10 +1,10 @@
 import json
 import logging
 
-from .secret import api_key
-
-from chicken_dinner.pubgapi import PUBGCore
 from chicken_dinner.pubgapi import PUBG
+from chicken_dinner.pubgapi import PUBGCore
+
+from .secret import api_key
 
 logger = logging.getLogger()
 logger.setLevel("DEBUG")

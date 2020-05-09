@@ -1,5 +1,5 @@
 """Players filtered results model."""
-from .player import Player
+from chicken_dinner.models.player import Player
 
 
 class Players(object):
