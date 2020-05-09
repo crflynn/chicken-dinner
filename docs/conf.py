@@ -12,20 +12,14 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+import importlib
 import os
 import sys
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
 import sphinx_rtd_theme
 
-import chicken_dinner
-
-# sys.path.insert(0, os.path.abspath('.'))
-
 sys.path.insert(0, os.path.abspath(".."))
-
+importlib.import_module("chicken_dinner")
 
 # -- Project information -----------------------------------------------------
 
