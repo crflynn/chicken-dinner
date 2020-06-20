@@ -175,8 +175,12 @@ class Telemetry(object):
         for event in self.events[::-1]:
             if event.event_type == "log_match_end":
                 for player in event.characters:
-                    team = player.character.team_id
-                    player_name = player.character.name
+                    try:
+                        team = player.character.team_id
+                        player_name = player.character.name
+                    except AttributeError:
+                        team = player.team_id
+                        player_name = player.name
                     if team not in rosters:
                         rosters[team] = []
                     rosters[team].append(player_name)
@@ -201,10 +205,16 @@ class Telemetry(object):
         for event in self.events[::-1]:
             if event.event_type == "log_match_end":
                 for player in event.characters:
-                    ranking = player.character.ranking
+                    try:
+                        ranking = player.character.ranking
+                    except AttributeError:
+                        ranking = player.ranking
                     if ranking not in rankings:
                         rankings[ranking] = []
-                    rankings[ranking].append(player.character.name)
+                    try:
+                        rankings[ranking].append(player.character.name)
+                    except AttributeError:
+                        rankings[ranking].append(player.name)
         if rank is not None:
             return rankings.get(rank, None)
         return rankings
