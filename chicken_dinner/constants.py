@@ -47,6 +47,9 @@ map_to_map_name = {
     "Range_Main": "Camp Jackal",
     "Baltic_Main": "Erangel (Remastered)",
     "Summerland_Main": "Karakin",
+    "Tiger_Main": "Taego",
+    "Chimera_Main" : "Paramo",
+    "Heaven_Main" : "Haven",
 }
 
 map_name_to_map = {
@@ -57,7 +60,10 @@ map_name_to_map = {
     "Camp Jackal": "Range_Main",
     "Erangel (Remastered)": "Baltic_Main",
     "Karakin": "Summerland_Main",
-}
+    "Taego" : "Tiger_Main",
+    "Paramo" : "Chimera_Main",
+    "Haven" : "Heaven_Main"
+ }
 
 map_dimensions = {
     "Desert_Main": [819200, 819200],
@@ -67,6 +73,9 @@ map_dimensions = {
     "Range_Main": [204800, 204800],
     "Baltic_Main": [819200, 819200],
     "Summerland_Main": [204800, 204800],
+    "Tiger_Main": [819200, 819200],
+    "Chimera_Main" : [819200, 819200],
+    "Heaven_Main" : [307200, 307200],
 }
 
 true_false = {"false": False, "true": True}
