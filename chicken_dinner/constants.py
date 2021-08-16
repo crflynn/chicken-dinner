@@ -74,8 +74,13 @@ map_dimensions = {
     "Baltic_Main": [819200, 819200],
     "Summerland_Main": [204800, 204800],
     "Tiger_Main": [819200, 819200],
+<<<<<<< HEAD
     "Chimera_Main" : [307200, 307200],
     "Heaven_Main" : [102400, 102400],
+=======
+    "Chimera_Main" : [819200, 819200],
+    "Heaven_Main" : [307200, 307200],
+>>>>>>> 472e15f557dfde7e59f5295995161fb4d4f43528
 }
 
 true_false = {"false": False, "true": True}
